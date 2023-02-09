@@ -46,7 +46,7 @@ export class CodePulse {
                 prompt: `CodePulse ${key}`,
                 placeHolder: 'level' === key ?
                     `Enter your log level, as one of: ${Object.keys(LEVELMAP).join(",")}`:
-                    `Enter your ${key} (token, url)`,
+                    `Enter your validate ${key}.`,
                 value: defaultVal,
                 ignoreFocusOut: true,
                 validateInput: ValidateUtils.validateFn(key).bind(this),

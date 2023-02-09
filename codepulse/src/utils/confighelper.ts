@@ -15,6 +15,7 @@ export class ConfigHelper {
     private constructor() {
         this.userInfo = new UserInfo();
         this.url = null;
+        this.config = {};
         this.updateFromConfigFile();
     }
 
@@ -37,11 +38,13 @@ export class ConfigHelper {
     }
 
     public set(key: string, value: string): void {
+        console.log('key', key, '  value:', value);
+        Logger.info(`set key=${key}, value=${value}`);
         // update memo instance variable first.
         if ('token' === key) {
             this.userInfo.setToken(value);
-        } else if ('id' === key) {
-            this.userInfo.setId(value);
+        } else if ('url' === key) {
+            this.setUrl(value);
         } else if ('level' === key) {
             Logger.setLevel(value);
         }
@@ -88,7 +91,7 @@ export class ConfigHelper {
 
     public getConfigAsync(key: string, callback: (_err: string, defaultVal: string) => void) {
         let cacheValue = this.config[key];
-        
+
         if (cacheValue === null) {
             this.updateFromConfigFile();
             cacheValue = '';
@@ -103,6 +106,12 @@ export class ConfigHelper {
 
     public getUrl(): string | null {
         return this.url;
+    }
+
+    public setUrl(url: string | null) {
+        if (url) {
+            this.url = url;
+        }
     }
 
     public getToken(): string | null {
@@ -157,10 +166,9 @@ export class ConfigHelper {
         this.readConfigFile().then(result => {
             let url = result['url'];
             let token = result['token'];
-            let level = result['level']; // log level 'debug', 'info', 'error'
+            let level = result['level']; // log level 'debug', 'info', 'error'            
             Logger.setLevel(level);
-            Logger.info(`Promise init id and token finished. { id: ${url}, token: ${token}, level: ${level} }`);
-
+            Logger.info(`Promise init id and token finished. { url: ${url}, token: ${token}, level: ${level} }`);
             callback(url, token, result);
         }).catch(error => {
             Logger.error('Promise error, ', error);

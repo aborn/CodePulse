@@ -31,11 +31,11 @@
       },
       {
         "command": "CodePulse.token",
-        "title": "CodePulse: Config Token"
+        "title": "CodePulse: Config token"
       },
       {
         "command": "CodePulse.url",
-        "title": "CodePulse: Config post url."
+        "title": "CodePulse: Config Base url"
       },
       {
         "command": "CodePulse.level",
