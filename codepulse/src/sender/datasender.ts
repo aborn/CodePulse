@@ -60,7 +60,7 @@ export class DataSender {
 
                 let info = dateutils.timeSpent(startTime);
                 if (result.httpCode !== 200) {
-                    Logger.error(`Post data error!, base url:${serverInfo.url}, token:${serverInfo.token}.`);
+                    Logger.error(`Post data error msg:${result.msg}!, base url:${serverInfo.url}, token:${serverInfo.token}.`);
                 }
                 Logger.info(`Post finished! time spent:${info.humanReadable}, slot:${daybitset.countOfCodingSlot()}, status:${result.status}, msg:${result.msg}, httpcode:${result.httpCode}`);
             }, (error) => {
