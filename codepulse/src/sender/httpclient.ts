@@ -6,10 +6,10 @@ import * as structs from "./structs";
 
 export async function doPostData(daybitset: DayBitSet, serverInfo: ServerInfo) {
     let token = serverInfo.token;
-    Logger.debug(`Posting data, url:${serverInfo.baseURL}, token:${token}, day: ${daybitset.getDay()}, slot: ${daybitset.countOfCodingSlot()}`);
+    Logger.debug(`Posting data, url:${serverInfo.url}, token:${token}, day: ${daybitset.getDay()}, slot: ${daybitset.countOfCodingSlot()}`);
 
     return await axios({
-        baseURL: serverInfo.baseURL,
+        baseURL: serverInfo.url,
         url: 'postUserAction',
         method: 'post',
         headers: {

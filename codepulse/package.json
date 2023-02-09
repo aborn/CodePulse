@@ -34,8 +34,8 @@
         "title": "CodePulse: Config Token"
       },
       {
-        "command": "CodePulse.id",
-        "title": "CodePulse: Config ID"
+        "command": "CodePulse.url",
+        "title": "CodePulse: Config post url."
       },
       {
         "command": "CodePulse.level",

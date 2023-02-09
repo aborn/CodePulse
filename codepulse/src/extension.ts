@@ -36,8 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('CodePulse.id', function () {
-			codePulse.promptConfig('id');
+		vscode.commands.registerCommand('CodePulse.url', function () {
+			codePulse.promptConfig('url');
 		}),
 	);
 

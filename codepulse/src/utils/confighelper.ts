@@ -10,18 +10,21 @@ export class ConfigHelper {
 
     private userInfo: UserInfo;
     private config: any;
+    private url: string | null;
 
     private constructor() {
         this.userInfo = new UserInfo();
-        this.updateIdAndTokenFromConfigFile();
+        this.url = null;
+        this.updateFromConfigFile();
     }
 
-    public updateIdAndTokenFromConfigFile() {
-        this.read((id, token, config) => {
+    public updateFromConfigFile() {
+        this.read((url, token, config) => {
             if (token !== null) {
-                this.userInfo.update(id, token);
+                this.userInfo.setToken(token);
             }
             this.config = config;
+            this.url = url;
         });
     }
 
@@ -87,7 +90,7 @@ export class ConfigHelper {
         let cacheValue = this.config[key];
         
         if (cacheValue === null) {
-            this.updateIdAndTokenFromConfigFile();
+            this.updateFromConfigFile();
             cacheValue = '';
         }
 
@@ -96,6 +99,10 @@ export class ConfigHelper {
         }
 
         callback('', cacheValue);
+    }
+
+    public getUrl(): string | null {
+        return this.url;
     }
 
     public getToken(): string | null {
@@ -146,15 +153,15 @@ export class ConfigHelper {
         });
     }
 
-    private read(callback: (id: string, token: string, config: {}) => void): void {
+    private read(callback: (url: string, token: string, config: {}) => void): void {
         this.readConfigFile().then(result => {
-            let id = result['id'];
+            let url = result['url'];
             let token = result['token'];
-            let level = result['level']; // log level
+            let level = result['level']; // log level 'debug', 'info', 'error'
             Logger.setLevel(level);
-            Logger.info(`Promise init id and token finished. { id: ${id}, token: ${token}, level: ${level} }`);
+            Logger.info(`Promise init id and token finished. { id: ${url}, token: ${token}, level: ${level} }`);
 
-            callback(id, token, result);
+            callback(url, token, result);
         }).catch(error => {
             Logger.error('Promise error, ', error);
         });
@@ -174,8 +181,7 @@ export class ConfigHelper {
 
     public static getConfigFile(): string {
         let homePath = ConfigHelper.getUserHomeDir();
-        let fileWebx = path.join(homePath, '.webx.cfg');
-        let fileCodePulse = path.join(homePath, '.CodePulse.cfg');
-        return fileWebx;
+        let fileCodePulse = path.join(homePath, '.codepulse.cfg');
+        return fileCodePulse;
     }
 }

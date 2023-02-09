@@ -46,7 +46,7 @@ export class DataSender {
                     let bizCode = resData.code;
 
                     if (result.httpCode === 200) {
-                        
+
                         this.scaleInterval(1);
                         this.lastPostData.clearIfNotToday(); // Note: clear if not today
                         this.lastPostData.getBitSet().or(daybitset.getBitSet());
@@ -101,12 +101,19 @@ export class DataSender {
         return true;
     }
 
+    // 需要获取两个信息，一个是 api 地址，另一个是 token
     private getServerInfo(): servers.ServerInfo {
         let token = ConfigHelper.getInstance().getToken();
+        let url = ConfigHelper.getInstance().getUrl();
         // let serverInfo = servers.REMOTE_SERVER;
         // 本地开发
         let serverInfo = servers.LOCAL_SERVER;
-        serverInfo.token = token;
+        if (token) {
+            serverInfo.token = token;
+        }
+        if (url) {
+            serverInfo.url = url;
+        }
         return serverInfo;
     }
 
