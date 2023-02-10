@@ -1,6 +1,7 @@
 package com.github.aborn.codepulse.common.datatypes;
 
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -44,6 +45,37 @@ public class DayBitSet implements Serializable {
         this.codingBitSet = BitSet.valueOf(dayBitSetArray);
         this.day = day;
         this.uid = uid;
+    }
+
+    private BitSet valueOf(String codeInfo) {
+        BitSet likeBit;
+        int initValue = 0;
+        if (StringUtils.isBlank(codeInfo)) {
+            likeBit = BitSet.valueOf(new long[]{initValue});
+        } else {
+            String[] bitStrArr = codeInfo.split(",");
+            long[] bitLong = new long[bitStrArr.length];
+            for (int i = 0; i < bitStrArr.length; i++) {
+                bitLong[i] = StringUtils.isBlank(bitStrArr[i]) ? 0L : Long.parseLong(bitStrArr[i]);
+            }
+            likeBit = BitSet.valueOf(bitLong);
+        }
+        return likeBit;
+    }
+
+    public String getLikeInfo() {
+        long[] bitLong = this.codingBitSet.toLongArray();
+        String[] bitStr = new String[bitLong.length];
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < bitLong.length; i++) {
+            long bitV = bitLong[i];
+            if (bitV == 0L) {
+                bitStr[i] = "";
+            } else {
+                bitStr[i] = String.valueOf(bitLong[i]);
+            }
+        }
+        return String.join(",", bitStr);
     }
 
     public boolean isToday() {
