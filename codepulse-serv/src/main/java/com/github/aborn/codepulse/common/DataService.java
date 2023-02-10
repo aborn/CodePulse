@@ -10,7 +10,7 @@ import com.github.aborn.codepulse.common.datatypes.DayBitSet;
  */
 public interface DataService {
 
-    void save(DayBitSet dayBitSet);
+    DayBitSet save(DayBitSet dayBitSet);
 
     DayBitSet get(String token, String day);
 }

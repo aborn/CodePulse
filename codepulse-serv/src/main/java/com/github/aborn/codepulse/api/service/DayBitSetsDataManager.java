@@ -3,8 +3,10 @@ package com.github.aborn.codepulse.api.service;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
-import com.github.aborn.codepulse.common.utils.UserManagerUtils;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -12,56 +14,40 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author aborn
  * @date 2023/02/10 10:25
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class DayBitSetsDataManager {
+    private static final int MAX_USER_CACHE_SIZE = 2000;
 
     private final CodePulseDataService dataService;
 
     /**
-     * 只存储当前的数据, key为用户token（用户id）
+     * 只存储当前的数据, key为用户token
      */
-    private static final ConcurrentHashMap<String, DayBitSet> DAYBITSETS = new ConcurrentHashMap();
-    private static final int MAX_USER_CACHE_SIZE = 1000;
-
-    public DayBitSet getDefaultCachedBitSetData() {
-        return DAYBITSETS.get(UserManagerUtils.DEFAULT_TEST_UID_TOKEN);
-    }
-
-    public DayBitSet getBitSetData(@NonNull String token, @NonNull String day) {
-        DayBitSet result;
-
-        if (CodePulseDateUtils.isToday(day)) {
-            DayBitSet dayBitSet = DAYBITSETS.get(token);
-            if (dayBitSet == null || !dayBitSet.isToday()) {
-                // 数据不是今天，存储起来，因为可能隔天了
-                if (dayBitSet != null) {
-                    // DataStoreManager.save(dayBitSet);
-                }
-
-                // 从文件里读今天的数据
-                result = null; // DataStoreManager.read(token, day);
-                if (result != null && DAYBITSETS.size() < MAX_USER_CACHE_SIZE) {
-                    DAYBITSETS.put(token, result);
-                }
-            } else {
-                result = dayBitSet;
-            }
-        } else {
-            result = null;// DataStoreManager.read(token, day);
-        }
-
-        return result;
-    }
+    Cache<String, CacheData<DayBitSet>> cache = Caffeine.newBuilder()
+            // 初始数量
+            .initialCapacity(10)
+            // 最大条数
+            .maximumSize(MAX_USER_CACHE_SIZE)
+            // 最后一次读或写操作后经过指定时间过期
+            .expireAfterAccess(24, TimeUnit.HOURS)
+            //监听缓存被移除
+            .removalListener((key, val, removalCause) -> {
+            })
+            //记录命中
+            .recordStats()
+            .build();
 
     /**
      * 用户上报数据
+     *
      * @param dayBitSet
      * @return
      */
@@ -72,37 +58,78 @@ public class DayBitSetsDataManager {
         }
 
         String token = dayBitSet.getToken();
-        DayBitSet dayBitSetCached = DAYBITSETS.get(token);
-        if (dayBitSetCached != null) {
+        CacheData<DayBitSet> cacheData = cache.getIfPresent(token);
+        if (cacheData != null) {
+            // 内存缓存 存在时
+            DayBitSet dayBitSetCached = cacheData.getData();
             if (dayBitSetCached.isToday()) {
                 dayBitSetCached.or(dayBitSet);
-                return BaseResponse.success("Post Success");
+                cacheData.setData(dayBitSetCached);
+                cache.put(token, cacheData);
+                if (cacheData.getPersistTime() == null || CodePulseDateUtils.isPersistTimeout(cacheData.getPersistTime())) {
+                    log.info("{}: 内存缓存超时，持久化到DB", token);
+                    DayBitSet dayBitSetSaved = dataService.save(dayBitSet);
+                    cacheData.setData(dayBitSetSaved);
+                    cacheData.updatePersistTime();
+                    cache.put(token, cacheData);
+                }
             } else {
-                // 缓存里的数据已经不是今天的数据，持久化到文件里
-                dataService.save(dayBitSet);
-                DAYBITSETS.remove(token);
+                // 缓存里的数据已经不是今天的数据，持久化到数据库
+                log.info("{}: 内存数据非今天数据，持久化到DB", token);
+                DayBitSet dayBitSetSaved = dataService.save(dayBitSet);
+                cacheData.setData(dayBitSetSaved);
+                cacheData.updatePersistTime();
+                cache.put(token, cacheData);
             }
+        } else {
+            // 内存缓存数据不存在
+            log.info("{}: 内存不存在，从DB里获取", token);
+            DayBitSet dayBitSetDb = dataService.get(dayBitSet.getToken(), dayBitSet.getDay());
+            if (dayBitSetDb == null) {
+                dayBitSetDb = new DayBitSet();
+            }
+            dayBitSetDb.or(dayBitSet);
+            cacheData = new CacheData<>();
+            cacheData.setData(dayBitSetDb);
+            // 更新数据库
+            dataService.save(dayBitSetDb);
+            cacheData.updatePersistTime();
+            // 更新本地缓存
+            cache.put(token, cacheData);
+        }
+        return BaseResponse.success("Post Success");
+    }
+
+    public DayBitSet getBitSetData(@NonNull String token, @NonNull String day) {
+        if (!CodePulseDateUtils.isToday(day)) {
+            // 说明获取的历史天的数据，直接从数据库里获取
+            return dataService.get(token, day);
         }
 
-        DayBitSet fileReadCached = null;// ataStoreManager.read(token, dayBitSet.getDay());
-        if (fileReadCached != null) {
-            fileReadCached.or(dayBitSet);
+        CacheData<DayBitSet> cacheData = cache.getIfPresent(token);
+        if (cacheData != null) {
+            DayBitSet dayBitSet = cacheData.getData();
+            if (dayBitSet.isToday()) {
+                return dayBitSet;
+            } else {
+                // 数据不是今天，存储起来，因为可能隔天了
+                dataService.save(dayBitSet);
+                return dataService.get(token, day);
+            }
         } else {
-            fileReadCached = dayBitSet;
-        }
-
-        if (DAYBITSETS.size() < MAX_USER_CACHE_SIZE) {
-            DAYBITSETS.put(token, fileReadCached);
-            return BaseResponse.success("Post Success");
-        } else {
-            System.out.println("max cached. current token=" + token);
-            return BaseResponse.fail("Post failed: store error", 502);
+            // 直接从数据库里获取，获取后保存到本地缓存里
+            DayBitSet dayBitSet = dataService.get(token, day);
+            if (dayBitSet != null) {
+                cacheData = new CacheData<>();
+                cacheData.setData(dayBitSet);
+                cache.put(token, cacheData);
+            }
+            return dayBitSet;
         }
     }
 
     public List<String> cachedTokens() {
         List<String> result = new ArrayList<>();
-        DAYBITSETS.forEach((k, v) -> result.add(k));
         return result;
     }
 

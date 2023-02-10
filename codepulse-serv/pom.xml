@@ -74,6 +74,12 @@
 			<artifactId>bson</artifactId>
 			<version>4.8.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>3.1.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

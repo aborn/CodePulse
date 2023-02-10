@@ -6,6 +6,7 @@ import com.github.aborn.codepulse.common.DataService;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author aborn (jiangguobao)
  * @date 2023/02/10 10:30
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CodePulseDataService implements DataService {
@@ -26,9 +28,15 @@ public class CodePulseDataService implements DataService {
         return codePulseInfo;
     }
 
+    /**
+     * 持久化数据到数据库，返回最新数据，不修改原始传入数据
+     * @param dayBitSet
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(@NonNull DayBitSet dayBitSet) {
+    public DayBitSet save(@NonNull DayBitSet dayBitSet) {
+        DayBitSet result;
         String token = dayBitSet.getToken();
         String day = dayBitSet.getToken();
 
@@ -36,17 +44,20 @@ public class CodePulseDataService implements DataService {
         if (codePulseInfo == null) {
             codePulseInfo = new CodePulseInfo(dayBitSet);
             codePulseMapper.insert(codePulseInfo);
+            result = new DayBitSet(dayBitSet);
         } else {
             // 说明数据存在，做下or操作，防止从不同的渠道过来打点不一致导致当前天历史数据丢失
-            DayBitSet dayBitSetDB = new DayBitSet(codePulseInfo);
-            dayBitSet.or(dayBitSetDB);
-            codePulseInfo.setCodeInfo(dayBitSet.getCodeInfo());
+            result = new DayBitSet(codePulseInfo);
+            result.or(dayBitSet);
+            codePulseInfo.setCodeInfo(result.getCodeInfo());
             codePulseMapper.update(codePulseInfo);
         }
+        return result;
     }
 
     @Override
     public DayBitSet get(String token, String day) {
-        return null;
+        CodePulseInfo codePulseInfo = codePulseMapper.findByTokenAndDay(token, day);
+        return codePulseInfo == null ? null : new DayBitSet(codePulseInfo);
     }
 }

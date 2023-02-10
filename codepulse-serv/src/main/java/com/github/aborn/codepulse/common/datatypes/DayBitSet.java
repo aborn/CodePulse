@@ -42,6 +42,12 @@ public class DayBitSet implements Serializable {
         this.day = simpleDateFormat.format(date);
     }
 
+    public DayBitSet(DayBitSet dayBitSet) {
+        this.day = dayBitSet.getDay();
+        this.token = dayBitSet.getToken();
+        this.or(dayBitSet);
+    }
+
     public DayBitSet(CodePulseInfo codePulseInfo) {
         this.codingBitSet = this.valueOf(codePulseInfo.getCodeInfo());
         this.day = codePulseInfo.getDay();
