@@ -11,7 +11,10 @@
 </template>
 
 <script lang="ts" setup>
+import * as echarts from 'echarts'
+import { provide } from 'vue'
 import { ConfigProvider } from 'ant-design-vue';
 import { AppProvider } from '/@/components/Application';
 import DefaultLayout from './layouts/default.vue';
+provide('echarts', echarts);
 </script>

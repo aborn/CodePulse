@@ -1,20 +1,6 @@
-<template>
-    <div class="section-container">
-        <div>
-            <span style="font-size: 2.5rem">
-                nanta-ui: Ant-design based UI framework.
-            </span>
-            <div class="fbox-line">
-                <div v-for="item in menus" :key="item.key">
-                    <NantaButton type="dashed" :icon="item.icon">
-                        <router-link :to="item.path" style="margin-left: .5rem">{{ item.name }}</router-link>
-                    </NantaButton>
-                </div>
-            </div>
-        </div>
-    </div>
+<template>    
     <div class="section-container" style="background-color: #fff; margin-top: 10px;">
-        <NantaTable @register="registerTable" />
+        <div id="home-page-traffic_chart" style="width: 600px; height: 280px"/>
     </div>
 </template>
 
@@ -23,15 +9,63 @@ import { getMenus, getMenuList } from "/@/layouts/menu"
 import { NantaButton, useTable, NantaTable, BasicColumn, FormSchema } from "@nanta/ui";
 import { version as docsVersion, dependencies } from '../../package.json'
 import { version as nantaVersion, dependencies as nantaDeps } from '../../node_modules/@nanta/ui/package.json'
-import { h } from "vue";
+import { h, ref, inject, onMounted } from "vue";
 
-const nantaLocalVersion = dependencies['@nanta/ui'];
 const vueVersion = nantaDeps["vue"];
 const antdVersion = nantaDeps["ant-design-vue"];
 const versions = [{ nantaVersion }, { vueVersion }, { antdVersion }, { antdVersion }];
 console.log(versions);
 
 const menus = getMenuList(getMenus());
+const trafficData = ref({})
+const echarts = inject('echarts') as any
+
+onMounted(() => {    
+    const myChart = echarts.init(document.getElementById('home-page-traffic_chart'))
+      // 绘制图表
+      myChart.setOption({
+        title: {
+          text: '今日编程时间统计'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: '直接访问',
+            type: 'bar',
+            barWidth: '60%',
+            data: [10, 52, 200, 334, 390, 330, 220]
+          }
+        ]
+      })
+      window.onresize = function () {
+        myChart.resize()
+      }
+})
 
 const columns: BasicColumn[] = [
     {
