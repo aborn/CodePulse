@@ -1,0 +1,16 @@
+server:
+  port: 8000
+  session-timeout: 1800
+
+spring:
+  freemarker:
+    check-template-location: false
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+  data:
+    redis:
+      repositories:
+        enabled: false
+
