@@ -5,7 +5,10 @@
 ## codepulse
 为 VSCode 插件
 
-## codepulse-api
+## codepulse-serv
 后端Java实现的API
+
+## codepulse-vue
+数据展示工作
 
 
