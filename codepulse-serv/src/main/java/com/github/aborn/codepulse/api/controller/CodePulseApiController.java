@@ -1,7 +1,9 @@
 package com.github.aborn.codepulse.api.controller;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.api.UserActionRequest;
+import com.github.aborn.codepulse.api.service.CodePulseDataService;
 import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
@@ -28,6 +30,8 @@ public class CodePulseApiController {
 
     private final DayBitSetsDataManager dayBitSetsDataManager;
 
+    private final CodePulseDataService codePulseDataService;
+
     @PostMapping(value = "userAction")
     @ResponseBody
     public BaseResponse<String> postUserAction(@RequestBody UserActionRequest request) {
@@ -43,7 +47,7 @@ public class CodePulseApiController {
         return BaseResponse.success("Post success.");
     }
 
-    // http://127.0.0.1:8080/webx/status
+    // http://127.0.0.1:8000/api/codepulse/v1/status
     @RequestMapping(value = "status")
     @ResponseBody
     public String status() {
@@ -53,6 +57,7 @@ public class CodePulseApiController {
         map.put("app", "codepulse");
         map.put("timestamp", simpleDateFormat.format(new Date()));
         map.put("boot_time", bootTime == null ? "null" : simpleDateFormat.format(bootTime));
+        CodePulseInfo codePulseInfo = codePulseDataService.findById(1);
         return JSONObject.toJSONString(map);
     }
 
