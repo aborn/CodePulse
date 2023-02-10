@@ -1,7 +1,6 @@
 package com.github.aborn.codepulse.api.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.api.UserActionRequest;
 import com.github.aborn.codepulse.api.service.CodePulseDataService;
 import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
@@ -9,6 +8,7 @@ import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -16,8 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 /**
  * 作为各个插件上报打点数据的API
@@ -63,7 +61,17 @@ public class CodePulseApiController {
         return JSONObject.toJSONString(map);
     }
 
-    // http://127.0.0.1:8080/webx/test
+    // http://127.0.0.1:8000/api/codepulse/v1/i
+    @RequestMapping(value = "i")
+    public BaseResponse<String> getI(String token, String day) {
+        if (StringUtils.isBlank(day)) {
+            day = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        }
+        DayBitSet dayBitSet = codePulseDataService.get(token, day);
+        return BaseResponse.success(dayBitSet.toString());
+    }
+
+    // http://127.0.0.1:8000/api/codepulse/v1/test
     @RequestMapping(value = "test")
     @ResponseBody
     public String test(Integer slot) {

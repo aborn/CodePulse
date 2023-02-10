@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * @author aborn (jiangguobao)
  * @date 2023/02/10 10:30
@@ -50,6 +52,7 @@ public class CodePulseDataService implements DataService {
             result = new DayBitSet(codePulseInfo);
             result.or(dayBitSet);
             codePulseInfo.setCodeInfo(result.getCodeInfo());
+            codePulseInfo.setUpdateTime(new Date());
             codePulseMapper.update(codePulseInfo);
         }
         return result;

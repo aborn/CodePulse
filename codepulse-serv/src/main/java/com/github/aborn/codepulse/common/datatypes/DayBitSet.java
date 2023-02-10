@@ -79,7 +79,6 @@ public class DayBitSet implements Serializable {
     public String getCodeInfo() {
         long[] bitLong = this.codingBitSet.toLongArray();
         String[] bitStr = new String[bitLong.length];
-        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < bitLong.length; i++) {
             long bitV = bitLong[i];
             if (bitV == 0L) {

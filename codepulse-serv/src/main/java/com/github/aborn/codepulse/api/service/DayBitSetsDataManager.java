@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -138,8 +139,18 @@ public class DayBitSetsDataManager {
 
     }
 
+    /**
+     * 应用关闭之前将数据存储到DB里
+     */
     @PreDestroy
     public void saveStaticsBeforeShutDown() {
-
+        Set<String> tokens = cache.asMap().keySet();
+        for (String token : tokens) {
+            log.info("{}: 应用关闭，缓存数据持久化到DB.", token);
+            CacheData<DayBitSet> cacheData = cache.getIfPresent(token);
+            if (cacheData != null && cacheData.getData() != null) {
+                dataService.save(cacheData.getData());
+            }
+        }
     }
 }
