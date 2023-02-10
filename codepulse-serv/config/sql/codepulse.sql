@@ -4,6 +4,7 @@ CREATE TABLE `cp_user_coding_daily`
     `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `token`       varchar(128)    NOT NULL DEFAULT '' COMMENT '用户token',
     `day`         varchar(16)     NOT NULL DEFAULT '' COMMENT '数据日期,格式为：yyyyMMdd，如：20230210',
+    `code_Time`   int             NOT NULL DEFAULT '0' COMMENT '每日的编程时间，单位秒S',
     `code_info`   varchar(2048)   NOT NULL DEFAULT '' COMMENT '每日数据，bitset的字符串存储',
     `create_by`   varchar(255)    NOT NULL DEFAULT '' COMMENT '创建者',
     `update_by`   varchar(255)    NOT NULL DEFAULT '' COMMENT '更新者',

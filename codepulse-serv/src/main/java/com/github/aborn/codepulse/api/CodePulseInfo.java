@@ -22,6 +22,7 @@ public class CodePulseInfo implements Serializable {
     private Date updateTime;
     private String createBy = "auto";
     private String updateBy = "auto";
+    private int codeTime = 0;
 
     public CodePulseInfo(DayBitSet dayBitSet) {
         this.codeInfo = dayBitSet.getCodeInfo();
@@ -29,5 +30,6 @@ public class CodePulseInfo implements Serializable {
         this.day = dayBitSet.getDay();
         this.createTime = new Date();
         this.updateTime = new Date();
+        this.codeTime = dayBitSet.codingTimeSeconds();
     }
 }
