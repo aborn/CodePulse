@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * 作为各个插件上报打点数据的API
+ *
  * @author aborn (jiangguobao)
  * @date 2023/02/10 09:48
  */
@@ -35,16 +36,15 @@ public class CodePulseApiController {
     @PostMapping(value = "userAction")
     @ResponseBody
     public BaseResponse<String> postUserAction(@RequestBody UserActionRequest request) {
-        // TODO token 校验
+        // TODO token 校验，校验不通过直接返回
 
         DayBitSet dayBitSet = new DayBitSet(request.getDay(), request.getDayBitSetArray(), request.getToken());
         if (dayBitSet.isEmptySlot()) {
             return BaseResponse.fail("编程数据为空slotCount=0", 402);
         }
 
-        // TODO 数据保存到数据库
-
-        return BaseResponse.success("Post success.");
+        // 用户上报数据存储
+        return dayBitSetsDataManager.postBitSetData(dayBitSet);
     }
 
     // http://127.0.0.1:8000/api/codepulse/v1/status
@@ -57,7 +57,6 @@ public class CodePulseApiController {
         map.put("app", "codepulse");
         map.put("timestamp", simpleDateFormat.format(new Date()));
         map.put("boot_time", bootTime == null ? "null" : simpleDateFormat.format(bootTime));
-        CodePulseInfo codePulseInfo = codePulseDataService.findById(1);
         return JSONObject.toJSONString(map);
     }
 

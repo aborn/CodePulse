@@ -1,5 +1,6 @@
 package com.github.aborn.codepulse.common.datatypes;
 
+import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,7 +31,7 @@ public class DayBitSet implements Serializable {
     /**
      * 用户信息，默认为token，全局唯一
      */
-    String uid;
+    String token;
 
     public DayBitSet() {
         this(new Date());
@@ -41,10 +42,16 @@ public class DayBitSet implements Serializable {
         this.day = simpleDateFormat.format(date);
     }
 
+    public DayBitSet(CodePulseInfo codePulseInfo) {
+        this.codingBitSet = this.valueOf(codePulseInfo.getCodeInfo());
+        this.day = codePulseInfo.getDay();
+        this.token = codePulseInfo.getToken();
+    }
+
     public DayBitSet(String day, byte[] dayBitSetArray, String uid) {
         this.codingBitSet = BitSet.valueOf(dayBitSetArray);
         this.day = day;
-        this.uid = uid;
+        this.token = uid;
     }
 
     private BitSet valueOf(String codeInfo) {
@@ -63,7 +70,7 @@ public class DayBitSet implements Serializable {
         return likeBit;
     }
 
-    public String getLikeInfo() {
+    public String getCodeInfo() {
         long[] bitLong = this.codingBitSet.toLongArray();
         String[] bitStr = new String[bitLong.length];
         StringBuilder stringBuilder = new StringBuilder();
@@ -241,8 +248,8 @@ public class DayBitSet implements Serializable {
         return day;
     }
 
-    public String getUid() {
-        return uid;
+    public String getToken() {
+        return token;
     }
 
     public byte[] getDayBitSetByteArray() {

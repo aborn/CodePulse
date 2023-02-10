@@ -60,14 +60,18 @@ public class DayBitSetsDataManager {
         return result;
     }
 
+    /**
+     * 用户上报数据
+     * @param dayBitSet
+     * @return
+     */
     public BaseResponse<String> postBitSetData(@NonNull DayBitSet dayBitSet) {
-
         // TODO 只能上报今天的，这里有一个本地时间时区问题
         if (!dayBitSet.isToday()) {
             return BaseResponse.fail("Post failed: time error", 501);
         }
 
-        String token = dayBitSet.getUid();
+        String token = dayBitSet.getToken();
         DayBitSet dayBitSetCached = DAYBITSETS.get(token);
         if (dayBitSetCached != null) {
             if (dayBitSetCached.isToday()) {
@@ -75,7 +79,7 @@ public class DayBitSetsDataManager {
                 return BaseResponse.success("Post Success");
             } else {
                 // 缓存里的数据已经不是今天的数据，持久化到文件里
-                // DataStoreManager.save(dayBitSetCached);
+                dataService.save(dayBitSet);
                 DAYBITSETS.remove(token);
             }
         }
