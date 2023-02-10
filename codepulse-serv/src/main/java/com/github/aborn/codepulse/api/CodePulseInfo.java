@@ -2,6 +2,7 @@ package com.github.aborn.codepulse.api;
 
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @date 2023/02/10 13:18
  */
 @Data
+@NoArgsConstructor
 public class CodePulseInfo implements Serializable {
     private long id;
     private String token;
