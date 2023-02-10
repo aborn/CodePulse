@@ -31,7 +31,7 @@ public class DayBitSetsDataManager {
     /**
      * 只存储当前的数据, key为用户token
      */
-    Cache<String, CacheData<DayBitSet>> cache = Caffeine.newBuilder()
+    private static final Cache<String, CacheData<DayBitSet>> cache = Caffeine.newBuilder()
             // 初始数量
             .initialCapacity(10)
             // 最大条数
@@ -86,7 +86,7 @@ public class DayBitSetsDataManager {
             log.info("{}: 内存不存在，从DB里获取", token);
             DayBitSet dayBitSetDb = dataService.get(dayBitSet.getToken(), dayBitSet.getDay());
             if (dayBitSetDb == null) {
-                dayBitSetDb = new DayBitSet();
+                dayBitSetDb = new DayBitSet(dayBitSet);
             }
             dayBitSetDb.or(dayBitSet);
             cacheData = new CacheData<>();

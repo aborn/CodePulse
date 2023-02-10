@@ -54,10 +54,10 @@ public class DayBitSet implements Serializable {
         this.token = codePulseInfo.getToken();
     }
 
-    public DayBitSet(String day, byte[] dayBitSetArray, String uid) {
+    public DayBitSet(String day, byte[] dayBitSetArray, String token) {
         this.codingBitSet = BitSet.valueOf(dayBitSetArray);
         this.day = day;
-        this.token = uid;
+        this.token = token;
     }
 
     private BitSet valueOf(String codeInfo) {
