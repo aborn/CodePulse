@@ -38,7 +38,7 @@ public class CodePulseDataService implements DataService {
     public DayBitSet save(@NonNull DayBitSet dayBitSet) {
         DayBitSet result;
         String token = dayBitSet.getToken();
-        String day = dayBitSet.getToken();
+        String day = dayBitSet.getDay();
 
         CodePulseInfo codePulseInfo = codePulseMapper.findByTokenAndDay(token, day);
         if (codePulseInfo == null) {
