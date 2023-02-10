@@ -18,8 +18,8 @@ public class CodePulseInfo implements Serializable {
     private String codeInfo;
     private Date createTime;
     private Date updateTime;
-    private String createBy;
-    private String updateBy;
+    private String createBy = "auto";
+    private String updateBy = "auto";
 
     public CodePulseInfo(DayBitSet dayBitSet) {
         this.codeInfo = dayBitSet.getCodeInfo();
