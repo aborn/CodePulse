@@ -53,6 +53,7 @@ public class CodePulseDataService implements DataService {
             result.or(dayBitSet);
             codePulseInfo.setCodeInfo(result.getCodeInfo());
             codePulseInfo.setUpdateTime(new Date());
+            codePulseInfo.setCodeTime(result.codingTimeSeconds());
             codePulseMapper.update(codePulseInfo);
         }
         return result;

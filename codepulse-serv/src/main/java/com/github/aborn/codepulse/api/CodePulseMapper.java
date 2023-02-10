@@ -23,7 +23,7 @@ public interface CodePulseMapper {
 
     @Update("<script>UPDATE cp_user_coding_daily SET <if test='token!=null'>`token`=#{token},</if>"
             + "<if test='codeInfo!=null'>code_info=#{codeInfo},</if>"
-            + "<if test='codeTime>0'>code_time=#{codeTime},</if>"
+            + "code_time=#{codeTime},"
             + "update_time=#{updateTime} WHERE id=#{id}</script>")
-    void update(CodePulseInfo flow);
+    void update(CodePulseInfo pulseInfo);
 }
