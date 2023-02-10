@@ -10,7 +10,7 @@ export async function doPostData(daybitset: DayBitSet, serverInfo: ServerInfo) {
 
     return await axios({
         baseURL: serverInfo.url,
-        url: 'postUserAction',
+        url: 'userAction',
         method: 'post',
         headers: {
             // eslint-disable-next-line @typescript-eslint/naming-convention
