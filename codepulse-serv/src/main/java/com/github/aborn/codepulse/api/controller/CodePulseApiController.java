@@ -8,6 +8,7 @@ import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -16,13 +17,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
+
 /**
  * 作为各个插件上报打点数据的API
  *
  * @author aborn (jiangguobao)
  * @date 2023/02/10 09:48
  */
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/codepulse/v1/")
 @AllArgsConstructor
@@ -37,7 +40,7 @@ public class CodePulseApiController {
     @ResponseBody
     public BaseResponse<String> postUserAction(@RequestBody UserActionRequest request) {
         // TODO token 校验，校验不通过直接返回
-
+        log.info("Request, content{}", JSONObject.toJSONString(request));
         DayBitSet dayBitSet = new DayBitSet(request.getDay(), request.getDayBitSetArray(), request.getToken());
         if (dayBitSet.isEmptySlot()) {
             return BaseResponse.fail("编程数据为空slotCount=0", 402);
