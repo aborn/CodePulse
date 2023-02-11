@@ -1,87 +1,88 @@
-<template>    
+<template>
     <div class="section-container" style="background-color: #fff; margin-top: 10px;">
-        <div id="home-page-traffic_chart" style="width: 600px; height: 280px"/>
+        <div style="width: 600px; height: 280px">
+            <BaseChart :options="option" class="h-right-three-chart"></BaseChart>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { getMenus, getMenuList } from "/@/layouts/menu"
-import { NantaButton, useTable, NantaTable, BasicColumn, FormSchema } from "@nanta/ui";
-import { version as docsVersion, dependencies } from '../../package.json'
+import { version as docsVersion } from '../../package.json'
 import { version as nantaVersion, dependencies as nantaDeps } from '../../node_modules/@nanta/ui/package.json'
-import { h, ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, onBeforeUnmount, reactive } from "vue";
+import { getDailyCodePulseInfo } from "/@/utils/http/codepulse"
+import { getYearMonthDay } from "/@/utils/dataformt";
+import BaseChart from "/@/components/echarts/BaseChart.vue";
 
 const vueVersion = nantaDeps["vue"];
 const antdVersion = nantaDeps["ant-design-vue"];
 const versions = [{ nantaVersion }, { vueVersion }, { antdVersion }, { antdVersion }];
 console.log(versions);
 
-const menus = getMenuList(getMenus());
-const trafficData = ref({})
-const echarts = inject('echarts') as any
+const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+const yAxisData = ref([0]);
 
-onMounted(() => {    
-    const myChart = echarts.init(document.getElementById('home-page-traffic_chart'))
-      // 绘制图表
-      myChart.setOption({
-        title: {
-          text: '今日编程时间统计'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
+const option = reactive({
+    title: {
+        text: '今日编程时间统计'
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
             type: 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [
+        {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: xAxisData,
             axisTick: {
-              alignWithLabel: true
+                alignWithLabel: true
             }
-          }
-        ],
-        yAxis: [
-          {
+        }
+    ],
+    yAxis: [
+        {
             type: 'value'
-          }
-        ],
-        series: [
-          {
+        }
+    ],
+    series: [
+        {
             name: '直接访问',
             type: 'bar',
             barWidth: '60%',
-            data: [10, 52, 200, 334, 390, 330, 220]
-          }
-        ]
-      })
-      window.onresize = function () {
-        myChart.resize()
-      }
+            data: yAxisData.value
+        }
+    ]
 })
 
-const columns: BasicColumn[] = [
-    {
-        title: "Package Name",
-        dataIndex: "name",
-        key: "name",
-    },
-    {
-        title: "Package Version",
-        dataIndex: "version",
-        key: "version",
-        format: (text) => {
-            return h('span', { class: 'version-style', style: "font-size: 1.5rem;color:#faad14" }, text)
-        }
-    },
-]
+const reload = () => {
+    getDailyCodePulseInfo({ token: '0x4af97338', day: getYearMonthDay() })
+        .then((res: any) => {
+            console.log(res)
+            option.series[0].data = res.data.dayStaticByHour;
+        });
+}
+reload();
+
+let timer: any = null;
+onBeforeUnmount(() => {
+    if (timer) {
+        clearInterval(timer);
+    }
+})
+
+onMounted(() => {
+    timer = setInterval(() => {
+        reload();
+    }, 30 * 1000);    
+})
 
 const data = [
     {
@@ -94,43 +95,12 @@ const data = [
     }
 ]
 
-const searchFormSchema: FormSchema[] = [
-    {
-        field: 'name',
-        label: 'Package Name',
-        component: 'Input',
-        colProps: { span: 12 },
-    },
-];
-
-const [registerTable] = useTable({
-    title: '@nant/ui version list.',
-    columns,
-    dataSource: data,
-    pagination: false,
-    useSearchForm: true,
-    searchFormConfig: {
-        labelWidth: 120,
-        schemas: searchFormSchema,
-        autoSubmitOnEnter: true,
-        colon: true,
-        submitButtonOptions: { text: 'search' },
-        actionColOptions: {
-            span: 12,
-            style: {
-                'text-align': 'left'
-            }
-        },
-    },
-})
-
 for (let [key, value] of Object.entries(nantaDeps)) {
     data.push({
         "name": key,
         "version": value,
     })
 }
-
 
 </script>
 
@@ -155,5 +125,10 @@ for (let [key, value] of Object.entries(nantaDeps)) {
 
 .fbox-line div {
     margin-right: .5rem;
+}
+
+.h-right-three-chart {
+  width: 100%;
+  height: 352px;
 }
 </style>

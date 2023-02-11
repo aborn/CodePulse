@@ -14,5 +14,15 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         "/@": path.resolve(__dirname, "./src"),
       }
     },
+    server: {
+      port: 8002,
+      proxy: {
+        "^/api/v1": {
+          target: `http://localhost:8000`,
+          ws: true,
+          changeOrigin: true,
+        },        
+      },
+    },
   }
 })

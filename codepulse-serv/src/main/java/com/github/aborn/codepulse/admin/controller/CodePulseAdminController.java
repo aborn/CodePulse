@@ -2,14 +2,18 @@ package com.github.aborn.codepulse.admin.controller;
 
 import com.github.aborn.codepulse.admin.datatypes.MonthActionResponse;
 import com.github.aborn.codepulse.admin.datatypes.UserActionResponse;
+import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import com.github.aborn.codepulse.common.utils.UserManagerUtils;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +23,12 @@ import java.util.Date;
  * @author aborn (jiangguobao)
  * @date 2023/02/10 10:12
  */
+@Slf4j
+@RestController
+@RequestMapping(value = "/api/v1/codepulse/admin")
+@AllArgsConstructor
 public class CodePulseAdminController {
+    private final DayBitSetsDataManager dayBitSetsDataManager;
 
     // http://127.0.0.1:8080/webx/getUserAction?token=8ba394513f8420e
     @RequestMapping(value = "getUserAction")
@@ -34,7 +43,7 @@ public class CodePulseAdminController {
             day = CodePulseDateUtils.getTodayDayInfo();
         }
 
-        DayBitSet result = null; // todo dayBitSetsDataManager.getBitSetData(token, day);
+        DayBitSet result = dayBitSetsDataManager.getBitSetData(token, day);
         // 201 无数据；  204 token非法；  205 token已过期；
         return result == null ? BaseResponse.successWithoutData() : BaseResponse.success(new UserActionResponse(result));
     }

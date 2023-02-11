@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/codepulse/v1/")
+@RequestMapping(value = "/api/v1/codepulse")
 @AllArgsConstructor
 public class CodePulseApiController {
     private static Date bootTime = null;
