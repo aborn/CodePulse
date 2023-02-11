@@ -1,14 +1,12 @@
 <template>
     <div class="section-container" style="background-color: #fff; margin-top: 10px;">
         <div style="height: 280px">
-            <BaseChart :options="option" class="h-right-three-chart"></BaseChart>
+            <BaseChart :options="option" class="cp-daily-chart"></BaseChart>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { version as docsVersion } from '../../package.json'
-import { version as nantaVersion, dependencies as nantaDeps } from '../../node_modules/@nanta/ui/package.json'
 import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
 import { getDailyCodePulseInfo } from "/@/utils/http/codepulse"
 import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
@@ -17,7 +15,6 @@ import BaseChart from "/@/components/echarts/BaseChart.vue";
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 const yAxisData = ref([0]);
 const codeTimeRef = ref(0);
-
 const option = reactive({
     title: {
         text: '今日编程时间趋势图'
@@ -73,7 +70,6 @@ const reload = () => {
             }
         });
 }
-reload();
 
 let timer: any = null;
 onBeforeUnmount(() => {
@@ -83,29 +79,11 @@ onBeforeUnmount(() => {
 })
 
 onMounted(() => {
+    reload();
     timer = setInterval(() => {
         reload();
     }, 30 * 1000);
 })
-
-const data = [
-    {
-        "name": "Docs version",
-        "version": docsVersion
-    },
-    {
-        "name": "@nanta/ui",
-        "version": nantaVersion
-    }
-]
-
-for (let [key, value] of Object.entries(nantaDeps)) {
-    data.push({
-        "name": key,
-        "version": value,
-    })
-}
-
 </script>
 
 <style scoped>
@@ -131,7 +109,7 @@ for (let [key, value] of Object.entries(nantaDeps)) {
     margin-right: .5rem;
 }
 
-.h-right-three-chart {
+.cp-daily-chart {
     width: 100%;
     height: 352px;
 }
