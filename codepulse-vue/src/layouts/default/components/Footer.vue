@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer class="footer">
-    <a href="https://github.com/nantajs/nanta-ui" target="_blank">NANTA-UI</a> ©2022~{{new Date().getFullYear()}} Created by <a href="https://github.com/nantajs" target="_blank">nantajs</a>.
+    <a href="https://github.com/aborn/CodePulse" target="_blank">CodePulse</a> ©2023~{{new Date().getFullYear()}} Created by <a href="https://github.com/aborn" target="_blank">aborn</a>.
   </a-layout-footer>
 </template>
 

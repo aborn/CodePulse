@@ -2,7 +2,7 @@
   <a-layout-header class="header">
     <div class="logo" style="font-size: x-large; color: azure">
       <router-link to="/" aria-label="Back home">
-        <img src="/favicon.ico" class="nanta-logo" /> Nanta
+        <img src="/favicon.ico" class="nanta-logo" /> CodePulse
       </router-link>
     </div>
 
@@ -31,7 +31,7 @@
             </span>
             -->
           <span class="badge-item">
-            <a href="https://github.com/nantajs/nanta-ui" target="_blank">
+            <a href="https://github.com/aborn/CodePulse" target="_blank">
               <NantaIcon icon="mdi:github" size="36" style="display:flex;"></NantaIcon>
             </a>
           </span>
