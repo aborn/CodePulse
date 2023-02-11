@@ -45,13 +45,15 @@ const option = reactive({
     ],
     yAxis: [
         {
-            type: 'value'
+            type: 'value',
+            max: 60
         }
     ],
     series: [
         {
             name: '编程时间(分钟)',
             type: 'bar',
+            showBackground: true,
             barWidth: '60%',
             data: yAxisData.value
         }
