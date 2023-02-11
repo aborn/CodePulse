@@ -1,6 +1,6 @@
 <template>
     <div class="section-container" style="background-color: #fff; margin-top: 10px;">
-        <div style="width: 600px; height: 280px">
+        <div style="height: 280px">
             <BaseChart :options="option" class="h-right-three-chart"></BaseChart>
         </div>
     </div>
@@ -9,22 +9,18 @@
 <script lang="ts" setup>
 import { version as docsVersion } from '../../package.json'
 import { version as nantaVersion, dependencies as nantaDeps } from '../../node_modules/@nanta/ui/package.json'
-import { ref, inject, onMounted, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
 import { getDailyCodePulseInfo } from "/@/utils/http/codepulse"
-import { getYearMonthDay } from "/@/utils/dataformt";
+import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
-
-const vueVersion = nantaDeps["vue"];
-const antdVersion = nantaDeps["ant-design-vue"];
-const versions = [{ nantaVersion }, { vueVersion }, { antdVersion }, { antdVersion }];
-console.log(versions);
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 const yAxisData = ref([0]);
+const codeTimeRef = ref(0);
 
 const option = reactive({
     title: {
-        text: '今日编程时间统计'
+        text: '今日编程时间趋势图'
     },
     tooltip: {
         trigger: 'axis',
@@ -54,7 +50,7 @@ const option = reactive({
     ],
     series: [
         {
-            name: '直接访问',
+            name: '编程时间(分钟)',
             type: 'bar',
             barWidth: '60%',
             data: yAxisData.value
@@ -65,8 +61,14 @@ const option = reactive({
 const reload = () => {
     getDailyCodePulseInfo({ token: '0x4af97338', day: getYearMonthDay() })
         .then((res: any) => {
-            console.log(res)
-            option.series[0].data = res.data.dayStaticByHour;
+            const codeTime = res.data.codeTime;
+            // console.log(res)
+            if (codeTime != codeTimeRef.value) {
+                option.series[0].data = res.data.dayStaticByHour.map(i => i * 0.5);
+                option.title.text = "今日编程时间趋势图 （共" + toHumanReadble(codeTime) + "）";
+                codeTimeRef.value = res.data.codeTime;
+
+            }
         });
 }
 reload();
@@ -81,7 +83,7 @@ onBeforeUnmount(() => {
 onMounted(() => {
     timer = setInterval(() => {
         reload();
-    }, 30 * 1000);    
+    }, 30 * 1000);
 })
 
 const data = [
@@ -128,7 +130,7 @@ for (let [key, value] of Object.entries(nantaDeps)) {
 }
 
 .h-right-three-chart {
-  width: 100%;
-  height: 352px;
+    width: 100%;
+    height: 352px;
 }
 </style>

@@ -1,4 +1,4 @@
-import {elementResizeDetectorMaker} from "element-resize-detector";
+import ElementResizeDetectorMaker from "element-resize-detector";
 
 export function debounce(fn, t = 100) {
     let lastTime;
@@ -12,11 +12,11 @@ export function debounce(fn, t = 100) {
     }
 }
 
-export function divListen(div, chart) {
+export function divListen(divElement, chart) {
     // let that = this
     return new Promise(() => {
-        let erd = elementResizeDetectorMaker();
-        erd.listenTo(document.getElementById(div), debounce(async () => {
+        let erd = ElementResizeDetectorMaker();
+        erd.listenTo(divElement, debounce(async () => {
             chart && chart.resize();
         }));
     })

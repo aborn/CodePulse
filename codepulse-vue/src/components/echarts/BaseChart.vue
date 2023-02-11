@@ -5,6 +5,7 @@
 
 <script setup lang="ts">
 import { defineProps, onBeforeUnmount, onMounted, ref, inject, nextTick, watch } from "vue";
+import { divListen } from "./divListen";
 const echarts = inject('echarts') as any
 
 const props = defineProps(["options"]);
@@ -21,8 +22,11 @@ onMounted(() => {
 
 const initChart = () => {
     nextTick(() => {
+
+        const divElement = chartRef.value as HTMLDivElement;
+        chart = echarts.init(divElement);
         // @ts-ignore
-        chart = echarts.init(chartRef.value as HTMLDivElement);
+        divListen(divElement, chart, this)
         props.options && chart && chart.setOption({
             ...props.options,
         }, true);
@@ -32,7 +36,6 @@ const initChart = () => {
 // 监听数据变化后重置数据
 watch(props.options,
     () => {
-        console.log('options 参数发生了变化！')
         chart && chart.clear();
         props.options && chart && chart.setOption({
             ...props.options,
