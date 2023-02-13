@@ -1,25 +1,37 @@
 <template>
-    <div class="section-container" style="background-color: #fff; margin-top: 0px;">
-        <div style="height: 380px">
-            <div class="cp-box-title">
-                <span class="cp-title">{{ title }}</span>
-                <div>
-                    <span style="font-size:medium">日期：</span>
-                    <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
-                        :disabledDate="disabledDate" />
+    <div>
+        <div class="section-container" style="background-color: #fff; margin-top: 0px;">
+            <div style="height: 380px">
+                <div class="cp-box-title">
+                    <span class="cp-title">{{ title }}</span>
+                    <div>
+                        <span style="font-size:medium">日期：</span>
+                        <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
+                            :disabledDate="disabledDate" />
+                    </div>
                 </div>
+                <BaseChart :options="option" class="cp-daily-chart"></BaseChart>
             </div>
-            <BaseChart :options="option" class="cp-daily-chart"></BaseChart>
+        </div>
+        <a-divider />
+        <div class="section-container" style="background-color: #fff; margin-top: 0px;">
+            <div style="height: 380px">
+                <div class="cp-box-title">
+                    <span class="cp-title">{{ titleWeek }}</span>                    
+                </div>
+                <BaseChart :options="optionWeek" class="cp-daily-chart"></BaseChart>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, onBeforeUnmount, reactive, computed } from "vue";
 import { getDailyCodePulseInfo } from "/@/utils/http/codepulse"
 import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
+import {daysWeek, dataWeek, getPunchCardOption} from './data'
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 const yAxisData = ref([0]);
@@ -73,6 +85,12 @@ const option = reactive({
         }
     ]
 })
+
+const titleWeek = ref("近一周编程趋势图");
+const xAxisDataWeek = daysWeek;
+const yAxisDataWeek = dataWeek;
+
+const optionWeek = computed(()=>getPunchCardOption(xAxisDataWeek, yAxisDataWeek))
 
 const reload = (day: string = getYearMonthDay()) => {
     const today = getYearMonthDay();

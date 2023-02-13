@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
  * @author aborn (jiangguobao)
  * @date 2023/02/10 13:15
@@ -26,4 +28,9 @@ public interface CodePulseMapper {
             + "code_time=#{codeTime},"
             + "update_time=#{updateTime} WHERE id=#{id}</script>")
     void update(CodePulseInfo pulseInfo);
+
+    @Select(
+            "<script>SELECT * FROM cp_user_coding_daily WHERE token=#{token} AND day IN "
+                    + "<foreach collection='days' item='day' open='(' separator=',' close=')'>#{day}</foreach></script>")
+    List<CodePulseInfo> queryList(String token, List<String> days);
 }

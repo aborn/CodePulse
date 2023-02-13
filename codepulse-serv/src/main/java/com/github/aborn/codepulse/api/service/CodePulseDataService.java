@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author aborn (jiangguobao)
@@ -32,6 +34,7 @@ public class CodePulseDataService implements DataService {
 
     /**
      * 持久化数据到数据库，返回最新数据，不修改原始传入数据
+     *
      * @param dayBitSet
      * @return
      */
@@ -64,4 +67,13 @@ public class CodePulseDataService implements DataService {
         CodePulseInfo codePulseInfo = codePulseMapper.findByTokenAndDay(token, day);
         return codePulseInfo == null ? null : new DayBitSet(codePulseInfo);
     }
+
+    @Override
+    public List<DayBitSet> queryList(String token, List<String> days) {
+        List<CodePulseInfo> infoList = codePulseMapper.queryList(token, days);
+        List<DayBitSet> result = new ArrayList<>();
+        infoList.forEach(item -> result.add(new DayBitSet(item)));
+        return result;
+    }
+
 }

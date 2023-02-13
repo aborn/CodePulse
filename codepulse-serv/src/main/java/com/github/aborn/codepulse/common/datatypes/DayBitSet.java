@@ -13,6 +13,7 @@ import java.util.Date;
 /**
  * 将一天分为 24*60*2 = 2880 个slot，每个slot代表30S，slot=true表示编程时间
  * 相当于一分种拆分成2个slot
+ *
  * @author aborn
  * @date 2023/02/10 10:00
  */
@@ -52,6 +53,12 @@ public class DayBitSet implements Serializable {
         this.codingBitSet = this.valueOf(codePulseInfo.getCodeInfo());
         this.day = codePulseInfo.getDay();
         this.token = codePulseInfo.getToken();
+    }
+
+    public DayBitSet(String day, String token) {
+        this.codingBitSet = new BitSet(SLOT_SIZE);
+        this.day = day;
+        this.token = token;
     }
 
     public DayBitSet(String day, byte[] dayBitSetArray, String token) {
@@ -243,6 +250,22 @@ public class DayBitSet implements Serializable {
         // System.out.println("[读]" + dayBitSetRead);
 
         System.out.println(dayBitSet.getCurrentHourSlotInfo());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        Date today = new Date();
+        for (int i = 6; i > 0; i--) {
+            calendar.add(Calendar.DATE, -i);
+            String dayStr = sdf.format(calendar.getTime());
+            System.out.println(dayStr);
+            calendar.setTime(today);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        }
+
+
     }
 
     public BitSet getCodingBitSet() {
