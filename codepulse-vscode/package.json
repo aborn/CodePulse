@@ -15,6 +15,7 @@
   "categories": [
     "Other"
   ],
+  "icon": "images/logo.png",
   "activationEvents": [
     "onCommand:codepulse.helloWorld"
   ],
