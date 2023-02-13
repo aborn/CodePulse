@@ -1,6 +1,6 @@
 <template>
-    <div class="section-container" style="background-color: #fff; margin-top: 10px;">
-        <div style="height: 280px">
+    <div class="section-container" style="background-color: #fff; margin-top: 0px;">
+        <div style="height: 380px">
             <div class="cp-box-title">
                 <span class="cp-title">{{ title }}</span>
                 <div>

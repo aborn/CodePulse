@@ -60,8 +60,8 @@ const localMenus: Menu[] = [
 
 export const navItems: Nav[] = [
     {
-        name: "Get Started",
-        key: "getstarted",
+        name: "Dashboard",
+        key: "dashboard",
         path: "/",
         group: 'index',
     },
