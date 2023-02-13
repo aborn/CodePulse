@@ -1,14 +1,14 @@
 # CodePulse
-码脉，用来记录编程时间的插件
+码脉，编程足迹追踪。
 
 
-## codepulse
-为 VSCode 插件
+## codepulse-vscode
+为 VSCode 插件的源代码。
 
 ## codepulse-serv
-后端Java实现的API
+Java后端实现数据存储的API
 
 ## codepulse-vue
-数据展示工作
+码脉的管理后台，大图展示等
 
 
