@@ -8,3 +8,11 @@ export function getDailyCodePulseInfo(params) {
         params: params
     });
 }
+
+export function getWeeklyCodePulseInfo(params) {
+    return request({
+        url: '/api/v1/codepulse/admin/getWeekUserAction',
+        method: 'get',
+        params: params
+    });
+}

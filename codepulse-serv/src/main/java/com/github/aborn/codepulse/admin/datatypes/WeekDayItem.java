@@ -27,6 +27,8 @@ public class WeekDayItem {
     }
     private String day;
 
+    private String dayOfWeekChinese;
+
     private int dayOfWeek;
 
     private String title;
@@ -36,6 +38,8 @@ public class WeekDayItem {
         this.day = day;
         this.dayOfWeek = dayOfWeek;
         this.title = day + "（周" + WEEK_DAY.get(dayOfWeek) + "）";
+        // 给前端用
+        this.dayOfWeekChinese = WEEK_DAY.get(dayOfWeek);
     }
 
     public void setDefaultDayBitSet(String token) {
