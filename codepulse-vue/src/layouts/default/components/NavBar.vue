@@ -2,7 +2,7 @@
   <a-layout-header class="header">
     <div class="logo" style="font-size: x-large; color: azure">
       <router-link to="/" aria-label="Back home">
-        <img src="/favicon.ico" class="nanta-logo" /> CodePulse
+        <img src="/logo.png" class="cp-logo" /> CodePulse
       </router-link>
     </div>
 
@@ -59,7 +59,7 @@ const onSelect = ({ item, key, selectedKeys }) => {
 .logo {
   float: left;
   width: 188px;
-  height: 31px;
+  height: 64px;
   /*background: rgba(255, 255, 255, 0.3);*/
 }
 
@@ -71,9 +71,8 @@ const onSelect = ({ item, key, selectedKeys }) => {
   padding: 0 12px;
 }
 
-.nanta-logo {
-  height: 60px;
-  margin-bottom: 10px;
+.cp-logo {
+  height: 55px;
 }
 
 .badge-items {
