@@ -137,6 +137,13 @@ const reload = (day: string = getYearMonthDay()) => {
                     for (let j = 0; j < 24; j++) {
                         dataWeekInit.value[6 * 24 + j] = [6, j, dayData[j] * 0.5]
                     }
+                    const valueArray = dataWeekInit.value.map(item => item[2]);
+                    // 注意这里是分钟单位，不是秒单位
+                    const weekCodeTimeTotal = valueArray.reduce(
+                        (accumulator:number, currentValue: number) => accumulator + currentValue,
+                        0
+                    );
+                    titleWeek.value = "近一周编程趋势图（共" + toHumanReadble(weekCodeTimeTotal * 60) + ")"
                     optionWeek.series[0].data = dataWeekInit.value.map((item) => {
                         return [item[1], item[0], item[2]]; // 初始化数据
                     });
