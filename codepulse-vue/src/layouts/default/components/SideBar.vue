@@ -18,7 +18,7 @@ const props = defineProps({
   openKeys: Array as PropType<Array<string>>,
 })
 
-console.log(props.selectedKeys);
+// console.log(props.selectedKeys);
 
 const emit = defineEmits(['menu-selected']);
 const onSelect = e => {

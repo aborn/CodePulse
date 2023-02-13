@@ -1,17 +1,6 @@
 import { Menu, Nav } from './types/type'
 import { basicRouteItems } from '../router/routes'
 
-const componentsList = basicRouteItems.filter(item => 'components' === item.group
-    && item.hide !== true).map(item => {
-        return {
-            name: item.name,
-            icon: 'quill:creditcard',
-            path: item.path,
-            key: item.group + item.name,
-            group: item.group,
-        } as Menu
-    });
-
 // menu datas
 const localMenus: Menu[] = [
     {
@@ -20,42 +9,7 @@ const localMenus: Menu[] = [
         key: 'dashboard',
         path: '/',
         group: 'index'
-    },
-    {
-        name: 'Pages',
-        icon: 'ic:baseline-dashboard-customize',
-        key: 'sys-setting',
-        path: '',
-        children: [
-            {
-                name: 'Menu Level 2',
-                path: '/demo',
-                key: '1',
-                icon: 'ic:twotone-cable',
-                children: [
-                    {
-                        name: 'Demo Page',
-                        path: '/components/table/basic',
-                        key: 'dddd',
-                        icon: 'ic:baseline-chrome-reader-mode',
-                    }
-                ]
-            },
-            {
-                name: 'Demo',
-                path: '/demo',
-                key: 'demo',
-                icon: 'ic:twotone-local-dining',
-            },
-        ]
-    },
-    {
-        name: 'Components',
-        icon: 'ic:outline-featured-video',
-        key: 's',
-        path: '/components/table',
-        children: componentsList,
-    }
+    }    
 ]
 
 export const navItems: Nav[] = [

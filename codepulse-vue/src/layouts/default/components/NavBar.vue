@@ -15,11 +15,7 @@
       </a-col>
       <a-col :span="12">
 
-        <div class="badge-items">
-          <span class="badge-item">
-            <a href="https://www.npmjs.com/package/@nanta/ui"><img src="https://badgen.net/npm/v/@nanta/ui"
-                alt="Version"></a>
-          </span>
+        <div class="badge-items">         
           <!--
             <span class="badge-item">
               <a href="https://www.npmjs.com/package/@nanta/ui"><img src="https://badgen.net/npm/dm/@nanta/ui"
@@ -32,7 +28,7 @@
             -->
           <span class="badge-item">
             <a href="https://github.com/aborn/CodePulse" target="_blank">
-              <NantaIcon icon="mdi:github" size="36" style="display:flex;"></NantaIcon>
+              <NantaIcon icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
           </span>
         </div>

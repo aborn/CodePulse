@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, reactive, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
 import { getDailyCodePulseInfo, getWeeklyCodePulseInfo } from "/@/utils/http/codepulse"
 import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
@@ -100,7 +100,6 @@ const queryWeekly = () => {
             const data = res.data;
             const daysWeek = data.map(item => item.title);
             const daysWeekChn = data.map(item => item.dayOfWeekChinese);
-            console.log(data);
             optionWeek.yAxis.data = daysWeek;
             for (let i = 0; i < 7; i++) {
                 const dayData = data[i].action.dayStaticByHour;

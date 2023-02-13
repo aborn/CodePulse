@@ -69,7 +69,7 @@ export default defineComponent({
         );
       });
 
-      console.log(sideMenus);
+      // console.log(sideMenus);
 
       sideMenus.forEach((item: Menu) => {
         iteratorMenu(item, (item) => {
@@ -184,7 +184,7 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
-      console.log('change route from:' + from.path + ' -> to:' + to.path)
+      // console.log('change route from:' + from.path + ' -> to:' + to.path)
       this.initActiveNavAndSider(to.path)
     },
   },
