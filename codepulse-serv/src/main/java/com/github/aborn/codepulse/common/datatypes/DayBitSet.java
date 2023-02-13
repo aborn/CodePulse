@@ -37,7 +37,7 @@ public class DayBitSet implements Serializable {
         this(new Date());
     }
 
-    private DayBitSet(Date date) {
+    public DayBitSet(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.day = simpleDateFormat.format(date);
     }

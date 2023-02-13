@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * 管理后台的接口API
+ *
  * @author aborn (jiangguobao)
  * @date 2023/02/10 10:12
  */
@@ -38,14 +41,25 @@ public class CodePulseAdminController {
             return BaseResponse.fail("请求失败!", 501);
         }
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dayDate;
+        try {
+            dayDate = simpleDateFormat.parse(day);
+        } catch (ParseException e) {
+            return BaseResponse.fail("请求失败!", 500);
+        }
+
         // 如果day信息为空，初始化为今天
         if (StringUtils.isBlank(day)) {
             day = CodePulseDateUtils.getTodayDayInfo();
         }
 
         DayBitSet result = dayBitSetsDataManager.getBitSetData(token, day);
+        if (result == null) {
+            result = new DayBitSet(dayDate);
+        }
         // 201 无数据；  204 token非法；  205 token已过期；
-        return result == null ? BaseResponse.successWithoutData() : BaseResponse.success(new UserActionResponse(result));
+        return BaseResponse.success(new UserActionResponse(result));
     }
 
     /**
