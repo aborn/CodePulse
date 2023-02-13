@@ -16,13 +16,14 @@ import java.util.Map;
 public class WeekDayItem {
     public static final Map<Integer, String> WEEK_DAY = new HashMap<>();
     static {
-        WEEK_DAY.put(0, "一");
-        WEEK_DAY.put(1, "二");
-        WEEK_DAY.put(2, "三");
-        WEEK_DAY.put(3, "四");
-        WEEK_DAY.put(4, "五");
-        WEEK_DAY.put(5, "六");
-        WEEK_DAY.put(6, "日");
+        // dayOfWeek 是从周日开始算起的，周日是0
+        WEEK_DAY.put(1, "一");
+        WEEK_DAY.put(2, "二");
+        WEEK_DAY.put(3, "三");
+        WEEK_DAY.put(4, "四");
+        WEEK_DAY.put(5, "五");
+        WEEK_DAY.put(6, "六");
+        WEEK_DAY.put(0, "日");
     }
     private String day;
 
