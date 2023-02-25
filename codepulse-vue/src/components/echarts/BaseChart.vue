@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onBeforeUnmount, onMounted, ref, inject, nextTick, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, inject, nextTick, watch } from "vue";
 import { divListen } from "./divListen";
 const echarts = inject('echarts') as any
 
