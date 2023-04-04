@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/codepulse/v1/")
 public class HeartbeatController {
 
-    // http://127.0.0.1:8080/heartbeat/live
+    // http://localhost:8001/api/codepulse/v1/live
     @RequestMapping(value = "live")
     @ResponseBody
     public String live() {
