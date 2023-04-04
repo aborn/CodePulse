@@ -10,6 +10,7 @@ cd $DIR
 cd ../../../
 
 # 打jar包
+mvn clean
 mvn package
 
 # 将jar包copy到指定目录
