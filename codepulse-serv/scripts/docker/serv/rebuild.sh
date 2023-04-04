@@ -16,4 +16,4 @@ mvn package
 cp ./target/codepulse-serv-0.0.1-SNAPSHOT.jar /Users/aborn/docker/packages
 
 # 重启动容器，让jar包生效
-docker restart codepulse_serv
+docker restart codepulse-serv
