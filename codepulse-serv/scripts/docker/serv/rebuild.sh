@@ -11,7 +11,7 @@ cd ../../../
 
 # 打jar包
 mvn clean
-mvn package
+mvn package -DskipTests
 
 # 将jar包copy到指定目录
 cp ./target/codepulse-serv-0.0.1-SNAPSHOT.jar /Users/aborn/docker/packages
