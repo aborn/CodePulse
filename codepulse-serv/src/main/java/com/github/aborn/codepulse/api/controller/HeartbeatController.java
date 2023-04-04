@@ -25,7 +25,8 @@ public class HeartbeatController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map<String, Object> map = new HashMap<>();
         map.put("status", "success");
-        map.put("app", "buda");
+        map.put("app", "codepulse");
+        map.put("version", "1");
         map.put("timestamp", simpleDateFormat.format(new Date()));
         map.put("time", System.currentTimeMillis());
         return JSONObject.toJSONString(map);
