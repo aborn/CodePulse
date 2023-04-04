@@ -8,7 +8,7 @@ import Icons from 'unplugin-icons/vite'
 export default defineConfig(({ command, mode, ssrBuild }) => {
   return {
     plugins: [vue(), vueJsx(), Icons({ /* options */ })],
-    base: command === 'build' ? '/nanta-ui/' : '',
+    base: command === 'build' ? '' : '',
     resolve: {
       alias: {
         "/@": path.resolve(__dirname, "./src"),
