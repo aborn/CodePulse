@@ -7,7 +7,7 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 cd $DIR
-cd ..
+cd ../../../
 
 # 打jar包
 mvn package
