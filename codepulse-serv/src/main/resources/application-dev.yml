@@ -5,7 +5,7 @@ spring:
     name: codepulse-serv
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://127.0.0.1:3306/codepulse?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/codepulse?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: codepulse
     password: C0de123654@22
     hikari:
