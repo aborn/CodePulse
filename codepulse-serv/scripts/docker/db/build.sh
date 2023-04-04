@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # 构建数据库的docker镜像 （含有初始化数据）
 docker build -t codepulse_db:v1 .
 
