@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+########################################
+# 后端代码更新后重新运行下该脚本
+# /Users/aborn/github/CodePulse/codepulse-serv/scripts/rebuild.sh
+#########################################
+
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 cd $DIR
