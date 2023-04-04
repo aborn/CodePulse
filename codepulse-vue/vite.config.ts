@@ -18,7 +18,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       port: 8002,
       proxy: {
         "^/api/v1": {
-          target: `http://localhost:8000`,
+          target: `http://localhost:8001`,
           ws: true,
           changeOrigin: true,
         },        
