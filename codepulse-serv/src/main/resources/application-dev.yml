@@ -5,7 +5,7 @@ spring:
     name: hui-controller-manager
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3308/codepulse?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://codepulse_db:3306/codepulse?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: codepulse
     password: C0de123654@22
     hikari:
@@ -14,13 +14,6 @@ spring:
       validation-timeout: 3000
       maximum-pool-size: 10
       minimum-idle: 5
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    log_exchange: flow.log
-    log_routing_key: flow.operation.log
 mybatis:
   type-handlers-package: com.github.aborn.codepulse.mybatis
   configuration:
