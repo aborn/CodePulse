@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # 构建后端服务的docker镜像, FROM openjdk:17-oracle
 docker build -t codepulse_serv:v1 .
 
