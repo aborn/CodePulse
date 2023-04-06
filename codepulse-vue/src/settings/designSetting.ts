@@ -1,1 +1,1 @@
-export const prefixCls = 'nanta';
+export const prefixCls = 'codepulse';
