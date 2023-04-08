@@ -28,7 +28,7 @@ public class Settings extends DialogWrapper {
         super(project, true);
 
         this.project = project;
-        setTitle("WebX User Settings");
+        setTitle("CodePulse User Settings");
         setOKButtonText("Save");
         panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));

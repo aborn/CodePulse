@@ -14,7 +14,7 @@ public class UserEntity extends SenderEntity implements Serializable {
     public UserEntity(String token, String id) {
         this.token = token;
         this.id = id;
-        // WebX Validate actiontype Code as 101
+        // CodePulse Validate actiontype Code as 101
         this.actiontype = 101;
     }
 

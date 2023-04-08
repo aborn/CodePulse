@@ -11,16 +11,16 @@ package com.github.aborn.codepulse.utils;
 import java.io.*;
 
 public class ConfigFile {
-    private static final String fileName = ".webx.cfg";
+    private static final String fileName = ".codepulse.cfg";
     private static String cachedConfigFile = null;
 
     private static String getConfigFilePath() {
         if (ConfigFile.cachedConfigFile == null) {
-            if (System.getenv("WAKATIME_HOME") != null && !System.getenv("WAKATIME_HOME").trim().isEmpty()) {
-                File folder = new File(System.getenv("WAKATIME_HOME"));
+            if (System.getenv("CODEPULSE_HOME") != null && !System.getenv("CODEPULSE_HOME").trim().isEmpty()) {
+                File folder = new File(System.getenv("CODEPULSE_HOME"));
                 if (folder.exists()) {
                     ConfigFile.cachedConfigFile = new File(folder, ConfigFile.fileName).getAbsolutePath();
-                    System.out.println("Using $WAKATIME_HOME for config folder: " + ConfigFile.cachedConfigFile);
+                    System.out.printf("Using $CODEPULSE_HOME for config folder: %s%n", ConfigFile.cachedConfigFile);
                     return ConfigFile.cachedConfigFile;
                 }
             }

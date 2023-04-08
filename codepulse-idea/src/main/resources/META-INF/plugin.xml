@@ -43,6 +43,7 @@
         <action id="WebX.Settings" class="com.github.aborn.codepulse.actions.UserSettingAction"
                 text="Config User Token and ID"
                 icon="AllIcons.General.User">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
         </action>
 
         <group id="WebX.NavigatorActionsToolbar">
