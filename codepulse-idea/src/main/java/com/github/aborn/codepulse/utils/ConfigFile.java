@@ -35,20 +35,16 @@ public class ConfigFile {
         String val = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
-            String currentSection = "";
+            // 直接 key = value格式
             try {
                 String line = br.readLine();
                 while (line != null) {
-                    if (line.trim().startsWith("[") && line.trim().endsWith("]")) {
-                        currentSection = line.trim().substring(1, line.trim().length() - 1).toLowerCase();
-                    } else {
-                        if (section.toLowerCase().equals(currentSection)) {
-                            String[] parts = line.split("=");
-                            if (parts.length == 2 && parts[0].trim().equals(key)) {
-                                val = parts[1].trim();
-                                br.close();
-                                return val;
-                            }
+                    if (line.trim().contains("=")) {
+                        String[] parts = line.split("=");
+                        if (parts.length == 2 && parts[0].trim().equals(key)) {
+                            val = parts[1].trim();
+                            br.close();
+                            return val;
                         }
                     }
                     line = br.readLine();
@@ -62,7 +58,8 @@ public class ConfigFile {
                     e.printStackTrace();
                 }
             }
-        } catch (FileNotFoundException e1) { /* ignored */ }
+        } catch (
+                FileNotFoundException e1) { /* ignored */ }
         return val;
     }
 

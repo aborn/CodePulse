@@ -167,6 +167,7 @@ public class DataSenderHelper {
         } else {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
+            TimeTraceLogger.info("http post res:" + result);
             int code = jsonObject.get("code").getAsInt();
             boolean status = jsonObject.get("status").getAsBoolean();
             String msg = jsonObject.get("msg").getAsString();
