@@ -1,6 +1,6 @@
 package com.github.aborn.codepulse.tc;
 
-import com.github.aborn.webx.utils.DateBitSlotUtils;
+import com.github.aborn.codepulse.utils.DateBitSlotUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

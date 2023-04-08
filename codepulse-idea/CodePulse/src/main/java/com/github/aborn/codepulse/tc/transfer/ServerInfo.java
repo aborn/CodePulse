@@ -1,7 +1,7 @@
 package com.github.aborn.codepulse.tc.transfer;
 
-import com.github.aborn.webx.modules.tc.TimeTraceLogger;
-import com.github.aborn.webx.utils.ConfigFile;
+import com.github.aborn.codepulse.tc.TimeTraceLogger;
+import com.github.aborn.codepulse.utils.ConfigFile;
 import org.apache.commons.lang3.StringUtils;
 
 /**

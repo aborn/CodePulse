@@ -1,6 +1,6 @@
 package com.github.aborn.codepulse.listeners;
 
-import com.github.aborn.webx.modules.tc.TraceRecorder;
+import com.github.aborn.codepulse.tc.TraceRecorder;
 import com.intellij.openapi.application.ApplicationActivationListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.IdeFrame;

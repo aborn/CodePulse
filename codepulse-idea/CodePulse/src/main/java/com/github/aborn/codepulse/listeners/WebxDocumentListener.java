@@ -1,7 +1,7 @@
 package com.github.aborn.codepulse.listeners;
 
-import com.github.aborn.webx.modules.tc.TimeTrace;
-import com.github.aborn.webx.utils.ToolUtils;
+import com.github.aborn.codepulse.tc.TimeTrace;
+import com.github.aborn.codepulse.utils.ToolUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;

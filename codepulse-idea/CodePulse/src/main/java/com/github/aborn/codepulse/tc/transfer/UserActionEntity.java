@@ -1,6 +1,6 @@
 package com.github.aborn.codepulse.tc.transfer;
 
-import com.github.aborn.webx.modules.tc.DayBitSet;
+import com.github.aborn.codepulse.tc.DayBitSet;
 
 import java.io.Serializable;
 

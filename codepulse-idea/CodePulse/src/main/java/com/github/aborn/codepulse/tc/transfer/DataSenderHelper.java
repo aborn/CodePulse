@@ -1,8 +1,8 @@
 package com.github.aborn.codepulse.tc.transfer;
 
-import com.github.aborn.webx.modules.tc.DayBitSet;
-import com.github.aborn.webx.modules.tc.TimeTraceLogger;
-import com.github.aborn.webx.utils.DateBitSlotUtils;
+import com.github.aborn.codepulse.tc.DayBitSet;
+import com.github.aborn.codepulse.tc.TimeTraceLogger;
+import com.github.aborn.codepulse.utils.DateBitSlotUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang.StringUtils;

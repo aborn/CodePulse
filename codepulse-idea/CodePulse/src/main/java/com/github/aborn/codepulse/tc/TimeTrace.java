@@ -1,6 +1,6 @@
 package com.github.aborn.codepulse.tc;
 
-import com.github.aborn.webx.modules.tc.transfer.DataSenderHelper;
+import com.github.aborn.codepulse.tc.transfer.DataSenderHelper;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
@@ -8,7 +8,6 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.log4j.Level;
-import org.codehaus.groovy.transform.TimedInterruptibleASTTransformation;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;

@@ -1,8 +1,8 @@
 package com.github.aborn.codepulse.listeners;
 
 
-import com.github.aborn.webx.modules.tc.TimeTrace;
-import com.github.aborn.webx.modules.tc.TimeTraceLogger;
+import com.github.aborn.codepulse.tc.TimeTrace;
+import com.github.aborn.codepulse.tc.TimeTraceLogger;
 
 /**
  * @author aborn
