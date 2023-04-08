@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * @author aborn
  * @date 2021/01/29 2:56 PM
  */
-public class WebxProjectManagerListener extends UserActionBaseListener implements ProjectManagerListener {
-    public WebxProjectManagerListener() {}
+public class CodePulseProjectManagerListener extends UserActionBaseListener implements ProjectManagerListener {
+    public CodePulseProjectManagerListener() {}
 
     @Override
     public void projectOpened(@NotNull Project project) {

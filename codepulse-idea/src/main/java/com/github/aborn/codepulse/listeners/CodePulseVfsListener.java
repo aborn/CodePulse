@@ -10,8 +10,8 @@ import java.util.List;
  * @author aborn
  * @date 2021/02/08 2:26 PM
  */
-public class WebxVfsListener extends UserActionBaseListener implements BulkFileListener {
-    public WebxVfsListener() {}
+public class CodePulseVfsListener extends UserActionBaseListener implements BulkFileListener {
+    public CodePulseVfsListener() {}
 
     @Override
     public void after(@NotNull List<? extends VFileEvent> events) {

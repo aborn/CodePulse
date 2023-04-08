@@ -2,9 +2,6 @@ package com.github.aborn.codepulse.listeners;
 
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.event.EditorMouseListener;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.Date;
 
@@ -12,8 +9,8 @@ import java.util.Date;
  * @author aborn
  * @date 2021/02/08 4:09 PM
  */
-public class WebxEditorMouseListener extends UserActionBaseListener implements EditorMouseListener {
-    public WebxEditorMouseListener() {}
+public class CodePulseEditorMouseListener extends UserActionBaseListener implements EditorMouseListener {
+    public CodePulseEditorMouseListener() {}
 
     private static Date lastRecord = null;
 

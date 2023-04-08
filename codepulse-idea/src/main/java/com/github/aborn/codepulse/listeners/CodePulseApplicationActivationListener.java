@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * @author aborn
  * @date 2021/02/08 3:48 PM
  */
-public class WebxApplicationActivationListener extends UserActionBaseListener implements ApplicationActivationListener {
-    public WebxApplicationActivationListener(){}
+public class CodePulseApplicationActivationListener extends UserActionBaseListener implements ApplicationActivationListener {
+    public CodePulseApplicationActivationListener(){}
 
     @Override
     public void applicationActivated(@NotNull IdeFrame ideFrame) {
