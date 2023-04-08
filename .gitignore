@@ -4,3 +4,4 @@ node_modules
 .vscode-test/
 src/*.js
 .DS_Store
+codepulse-idea/CodePulse/.idea/
