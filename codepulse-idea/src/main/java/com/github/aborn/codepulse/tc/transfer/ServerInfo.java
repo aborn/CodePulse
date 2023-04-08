@@ -2,7 +2,6 @@ package com.github.aborn.codepulse.tc.transfer;
 
 import com.github.aborn.codepulse.tc.TimeTraceLogger;
 import com.github.aborn.codepulse.utils.ConfigFile;
-import kotlinx.serialization.StringFormat;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -11,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ServerInfo {
     private static final String POST_URL = "https://aborn.me/webx/postUserAction";
+    private static final String API = "userAction";
     private static String TOKEN = null;
     private static String BASE_URL = null;
     public static final String VALIDATE_URL = "https://aborn.me/webx/user/postUserConfig";
@@ -39,7 +39,7 @@ public class ServerInfo {
         // 调试的时候可使用LOCAL
         String token = TOKEN != null ? TOKEN : ConfigFile.get("settings", "token");
         String url = BASE_URL != null ? BASE_URL : ConfigFile.get("settings", "url");
-        String apiUrl = url + "postUserAction";
+        String apiUrl = url + API;
         TimeTraceLogger.info(String.format("current user token: %s, url: %s", token, apiUrl));
         if (StringUtils.isNotBlank(token)) {
             return new ServerInfo(apiUrl, token.trim());
