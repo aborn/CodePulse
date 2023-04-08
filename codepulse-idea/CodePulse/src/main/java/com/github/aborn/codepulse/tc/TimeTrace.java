@@ -4,10 +4,10 @@ import com.github.aborn.codepulse.tc.transfer.DataSenderHelper;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.LogLevel;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -196,9 +196,9 @@ public class TimeTrace implements Disposable {
 
     public static void setLoggingLevel() {
         if (TimeTrace.DEBUG) {
-            TimeTraceLogger.setLevel(Level.DEBUG);
+            TimeTraceLogger.setLevel(LogLevel.DEBUG);
         } else {
-            TimeTraceLogger.setLevel(Level.INFO);
+            TimeTraceLogger.setLevel(LogLevel.INFO);
         }
     }
 

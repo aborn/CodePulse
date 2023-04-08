@@ -1,7 +1,7 @@
 package com.github.aborn.codepulse.tc;
 
+import com.intellij.openapi.diagnostic.LogLevel;
 import com.intellij.openapi.diagnostic.Logger;
-import org.apache.log4j.Level;
 
 /**
  * @author aborn
@@ -14,10 +14,10 @@ public class TimeTraceLogger {
     protected static final Logger LOG = Logger.getInstance(TimeTraceLogger.class);
 
     public static void info(String message) {
-        LOG.info(" : #WebX : " + message);
+        LOG.info(" : #CodePulse : " + message);
     }
 
-    public static void setLevel(Level level) {
+    public static void setLevel(LogLevel level) {
         LOG.setLevel(level);
     }
 }
