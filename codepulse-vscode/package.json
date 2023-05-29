@@ -17,7 +17,7 @@
   ],
   "icon": "images/logo.png",
   "activationEvents": [
-    "onCommand:codepulse.helloWorld"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
