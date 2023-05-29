@@ -27,9 +27,10 @@ export class Logger {
     }
 
     public static setLevel(level: string): void {
-        if (LEVELMAP[level] !== undefined) {
+        const currentLevel = level || 'info';
+        if (LEVELMAP[currentLevel] !== undefined) {
             Logger.init();
-            Logger.instance.level = level;
+            Logger.instance.level = currentLevel;
             Logger.instance.ilog("info", "log level changed to: ", Logger.instance.level);
         } else {
             Logger.error(`setLevel error, level: ${level}`);
