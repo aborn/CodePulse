@@ -1,5 +1,5 @@
 # CodePulse
-![](codepulse-vscode/images/logo.png) 码脉，编程足迹追踪。
+![](docs/images/logo.png) 码脉，编程足迹追踪。
 
 
 ## codepulse-vscode
@@ -11,5 +11,5 @@ Java后端实现数据存储的API
 ## codepulse-vue
 码脉的管理后台，大图展示等  
 
-![](images/homepage.png)
+![](docs/images/homepage.png)
 
