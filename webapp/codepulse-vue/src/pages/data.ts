@@ -66,8 +66,8 @@ export function getPunchCardOption(days: string[], data: any[]) {
             {
                 name: 'Punch Card',
                 type: 'scatter',
-                symbolSize: function (val) {
-                    return val[2] * 1.5;
+                symbolSize: function (val) {                    
+                    return !val ? 0: val[2] * 1.5 ;
                 },
                 data: data,
                 animationDelay: function (idx) {
