@@ -6,6 +6,7 @@ import com.github.aborn.codepulse.api.service.CodePulseDataService;
 import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
+import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +49,12 @@ public class CodePulseApiController {
         return dayBitSetsDataManager.postBitSetData(dayBitSet);
     }
 
-    // http://127.0.0.1:8000/api/codepulse/v1/status
+    /**
+     * 服务器运行状态
+     * http://127.0.0.1:8000/api/v1/codepulse/status
+     * http://192.168.25.86:8001/api/v1/codepulse/status
+     * @return
+     */
     @RequestMapping(value = "status")
     @ResponseBody
     public String status() {
@@ -57,11 +63,13 @@ public class CodePulseApiController {
         map.put("status", "success");
         map.put("app", "codepulse");
         map.put("timestamp", simpleDateFormat.format(new Date()));
+        map.put("day", CodePulseDateUtils.getTodayDayInfo());
         map.put("boot_time", bootTime == null ? "null" : simpleDateFormat.format(bootTime));
+        log.info(String.format("log info: %s", CodePulseDateUtils.getTodayDayInfo()));
         return JSONObject.toJSONString(map);
     }
 
-    // http://127.0.0.1:8000/api/codepulse/v1/i
+    // http://127.0.0.1:8000/api/v1/codepulse/i
     @RequestMapping(value = "i")
     public BaseResponse<String> getI(String token, String day) {
         if (StringUtils.isBlank(day)) {
