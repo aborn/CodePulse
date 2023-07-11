@@ -42,6 +42,7 @@ public class CodePulseAdminController {
     /**
      * 每天的统计数据
      * http://127.0.0.1:8080/api/v1/codepulse/admin/getUserAction?token=8ba394513f8420e&day=2023-02-10
+     *
      * @param token
      * @param day
      * @return
@@ -77,6 +78,7 @@ public class CodePulseAdminController {
     /**
      * 每周的统计数据
      * http://127.0.0.1:8000/api/v1/codepulse/admin/getWeekUserAction?token=0x4af97338
+     *
      * @param token
      * @return
      */

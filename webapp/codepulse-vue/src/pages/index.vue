@@ -94,10 +94,11 @@ const token = '0x4af97338';
 const dataWeekInit = ref([] as any);
 
 // 获取最近一周的数据
-const queryWeekly = () => {
-    getWeeklyCodePulseInfo({ token })
-        .then((res: any) => {
+function queryWeekly() {
+    return new Promise((resolve, reject) => {
+        getWeeklyCodePulseInfo({ token }).then((res: any) => {
             const data = res.data;
+            console.log(data)
             const daysWeek = data.map(item => item.title);
             const daysWeekChn = data.map(item => item.dayOfWeekChinese);
             optionWeek.yAxis.data = daysWeek;
@@ -115,7 +116,12 @@ const queryWeekly = () => {
                     '周' + daysWeekChn[params.value[1]] + hours[params.value[0]] + '时，编程时间：' + params.value[2] + "分钟"
                 );
             }
+            resolve("finished");
+        }).catch(() => {
+            reject("error");
         })
+    })
+
 }
 
 const reload = (day: string = getYearMonthDay()) => {
@@ -139,7 +145,7 @@ const reload = (day: string = getYearMonthDay()) => {
                     const valueArray = dataWeekInit.value.map(item => item[2]);
                     // 注意这里是分钟单位，不是秒单位
                     const weekCodeTimeTotal = valueArray.reduce(
-                        (accumulator:number, currentValue: number) => accumulator + currentValue,
+                        (accumulator: number, currentValue: number) => accumulator + currentValue,
                         0
                     );
                     titleWeek.value = "近一周编程趋势图（共" + toHumanReadble(weekCodeTimeTotal * 60) + ")"
@@ -159,8 +165,13 @@ onBeforeUnmount(() => {
 })
 
 onMounted(() => {
-    queryWeekly();
-    reload();
+    queryWeekly().then((res: any) => {
+        console.log('resolved:', res)
+        reload();
+    }).catch(()=>{
+        console.error('Get data error!!')
+    })
+
     timer = setInterval(() => {
         reload();
     }, 30 * 1000);
