@@ -45,7 +45,7 @@ const yAxisData = ref([0]);
 const codeTimeRef = ref(0);
 const dateFormat = 'YYYY-MM-DD';
 const date = ref<Dayjs>(dayjs());
-const title = ref('编程趋势图');
+const title = ref('编程趋势');
 const dateChange = (date: Dayjs | string, dateString: string) => {
     console.log('date chaged!', dateString)
     reload(dateString)
@@ -141,7 +141,7 @@ const reload = (day: string = getYearMonthDay()) => {
             if (codeTime != codeTimeRef.value) {
                 const dayData = res.data.dayStaticByHour;
                 option.series[0].data = dayData.map(i => i * 0.5);
-                title.value = desPrefix + "编程趋势图 （共" + toHumanReadble(codeTime) + "）";
+                title.value = desPrefix + "趋势（共" + toHumanReadble(codeTime) + "）";
                 codeTimeRef.value = res.data.codeTime;
 
                 if (today === day) {
@@ -176,7 +176,7 @@ function queryMonthData() {
         // console.log(res)
         if (res.status) {
             dataMonthInit.value = res.data.dayStatic;
-            console.log(dataMonthInit.value)
+            // console.log(dataMonthInit.value)
         }
     })
 }
