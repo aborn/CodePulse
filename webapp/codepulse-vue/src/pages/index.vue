@@ -98,7 +98,6 @@ function queryWeekly() {
     return new Promise((resolve, reject) => {
         getWeeklyCodePulseInfo({ token }).then((res: any) => {
             const data = res.data;
-            console.log(data)
             const daysWeek = data.map(item => item.title);
             const daysWeekChn = data.map(item => item.dayOfWeekChinese);
             optionWeek.yAxis.data = daysWeek;
@@ -130,7 +129,6 @@ const reload = (day: string = getYearMonthDay()) => {
     getDailyCodePulseInfo({ token, day: day })
         .then((res: any) => {
             const codeTime = res.data.codeTime;
-            // console.log(res)
             if (codeTime != codeTimeRef.value) {
                 const dayData = res.data.dayStaticByHour;
                 option.series[0].data = dayData.map(i => i * 0.5);
@@ -164,16 +162,36 @@ onBeforeUnmount(() => {
     }
 })
 
+const dealNextDay = () => {
+    const curDate = dayjs();
+    const showDate = dayjs(date.value);
+    if (getYearMonthDay(showDate.toDate()) !== getYearMonthDay(curDate.toDate())) {
+        date.value = curDate;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 onMounted(() => {
     queryWeekly().then((res: any) => {
-        console.log('resolved:', res)
         reload();
-    }).catch(()=>{
+    }).catch(() => {
         console.error('Get data error!!')
     })
 
     timer = setInterval(() => {
-        reload();
+        if (dealNextDay()) {
+            // 处理跨天时页面没有刷新的处理，重新获取下
+            console.info('跨天处理...')
+            queryWeekly().then((res: any) => {
+                reload();
+            }).catch(() => {
+                console.error('Get data error!!')
+            })
+        } else {
+            reload();
+        }
     }, 30 * 1000);
 })
 </script>
