@@ -55,7 +55,7 @@ public class DayBitSetsDataManager {
     public BaseResponse<String> postBitSetData(@NonNull DayBitSet dayBitSet) {
         // TODO 只能上报今天的，这里有一个本地时间时区问题
         // TODO 这里有个Bug，客户端的时区和服务端时区不在一个时区时会导致这个判断出问题
-        log.info(String.format("dayBitSet.day=%s, server day=%s", dayBitSet.getDay()), CodePulseDateUtils.getTodayDayInfo());
+        log.info(String.format("dayBitSet.day=%s, server day=%s", dayBitSet.getDay(), CodePulseDateUtils.getTodayDayInfo()));
         if (!dayBitSet.isToday()) {
             log.error("Post failed: isNotToday");
             return BaseResponse.fail("Post failed: time error", 501);
