@@ -9,7 +9,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 cd ../../../../codepulse-vue
 
-# 打jar包
+# 打jar包，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
 yarn build
 
 # 将文件copy到指定目录
