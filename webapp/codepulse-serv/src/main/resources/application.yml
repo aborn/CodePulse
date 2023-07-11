@@ -2,6 +2,9 @@ server:
   port: 8001
   session-timeout: 1800
 
+logging:
+  file:
+    name: packages/codepulse.log
 spring:
   freemarker:
     check-template-location: false

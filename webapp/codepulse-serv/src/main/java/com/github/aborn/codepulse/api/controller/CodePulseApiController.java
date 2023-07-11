@@ -51,7 +51,7 @@ public class CodePulseApiController {
 
     /**
      * 服务器运行状态
-     * http://127.0.0.1:8000/api/v1/codepulse/status
+     * http://127.0.0.1:8001/api/v1/codepulse/status
      * http://192.168.25.86:8001/api/v1/codepulse/status
      * @return
      */
