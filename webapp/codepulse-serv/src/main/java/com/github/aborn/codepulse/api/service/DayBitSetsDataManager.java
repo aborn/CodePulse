@@ -104,6 +104,10 @@ public class DayBitSetsDataManager {
         return BaseResponse.success("Post Success");
     }
 
+    public DayBitSet getBitSetDataFromDB(@NonNull String token, @NonNull String day) {
+        return dataService.get(token, day);
+    }
+
     public DayBitSet getBitSetData(@NonNull String token, @NonNull String day) {
         if (!CodePulseDateUtils.isToday(day)) {
             // 说明获取的历史天的数据，直接从数据库里获取

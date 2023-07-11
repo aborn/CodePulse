@@ -40,7 +40,7 @@ public class CodePulseAdminController {
 
     /**
      * 每天的统计数据
-     * http://127.0.0.1:8080/api/v1/codepulse/admin/getUserAction?token=8ba394513f8420e&day=2023-02-10
+     * http://127.0.0.1:8081/api/v1/codepulse/admin/getUserAction?token=8ba394513f8420e&day=2023-02-10
      *
      * @param token
      * @param day
@@ -76,7 +76,7 @@ public class CodePulseAdminController {
 
     /**
      * 每周的统计数据
-     * http://127.0.0.1:8000/api/v1/codepulse/admin/getWeekUserAction?token=0x4af97338
+     * http://127.0.0.1:8001/api/v1/codepulse/admin/getWeekUserAction?token=0x4af97338
      *
      * @param token
      * @return
@@ -123,8 +123,8 @@ public class CodePulseAdminController {
     }
 
     /**
-     * http://127.0.0.1:8080/webx/getMonthActionStatus?token=8ba394513f8420e&month=2021-03
-     * 获取每月具体到每天的统计数据
+     * http://127.0.0.1:8001/api/v1/codepulse/admin/getMonthActionStatus?token=8ba394513f8420e&month=2021-03
+     * 获取每月具体到每天的统计数据，提供接口给小程序或者后台使用
      *
      * @param token
      * @param month 月，格式 2020-02
@@ -138,7 +138,7 @@ public class CodePulseAdminController {
         }
 
         String todayInfo = CodePulseDateUtils.getTodayDayInfo();
-        DayBitSet todayData = null; // todo dayBitSetsDataManager.getBitSetData(token, todayInfo);
+        DayBitSet todayData = dayBitSetsDataManager.getBitSetData(token, todayInfo);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         // calendar.get()  TODO
@@ -149,6 +149,20 @@ public class CodePulseAdminController {
             return BaseResponse.fail("请求失败!", 402);
         }
         result.setMonth(month);
+
+        for (int day = 0; day < result.getDayStatic().length; day++) {
+            String dayInfo = day < 9 ? month + "-0" + (day + 1) : month + "-" + (day + 1);
+            DayBitSet dayBitSet = dayBitSetsDataManager.getBitSetDataFromDB(token, dayInfo);
+            if (dayBitSet != null && dayBitSet.countOfCodingSlot() > 0) {
+                result.setDay(day, dayBitSet.codingTimeSeconds());
+            }
+
+            // 处理今天
+            if (result.getDay(day) == 0 && todayInfo.equals(dayInfo)
+                    && todayData != null && !todayData.isEmptySlot()) {
+                result.setDay(day, todayData.codingTimeSeconds());
+            }
+        }
         return BaseResponse.success(result);
     }
 

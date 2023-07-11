@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class TipItem {
-    // 1 表示有编程记录
+    // >1 表示有编程记录，dot的值为当天的编程时间
     int dot;
 
     //  1休息，2补班，见DayType
