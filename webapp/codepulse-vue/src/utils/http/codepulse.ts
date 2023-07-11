@@ -16,3 +16,11 @@ export function getWeeklyCodePulseInfo(params) {
         params: params
     });
 }
+
+export function getMonthCodePulseInfo(params) {
+    return request({
+        url: '/api/v1/codepulse/admin/getMonthActionStatus',
+        method: 'get',
+        params: params
+    });
+}

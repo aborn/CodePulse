@@ -20,6 +20,11 @@ public class CodePulseDateUtils {
         return date == null ? simpleDateFormat.format(new Date()) : simpleDateFormat.format(date);
     }
 
+    public static String getMonthInfo(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+        return date == null ? simpleDateFormat.format(new Date()) : simpleDateFormat.format(date);
+    }
+
     public static String getTodayDayInfo() {
         return getDayInfo(new Date());
     }

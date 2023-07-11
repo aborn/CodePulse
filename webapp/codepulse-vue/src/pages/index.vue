@@ -7,7 +7,13 @@
                     <div>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
-                            :disabledDate="disabledDate" />
+                            :disabledDate="disabledDate">
+                            <template #dateRender="{ current }">
+                                <div class="ant-picker-cell-inner" :style="getCurrentStyle(current)">
+                                    {{ current.date() }}
+                                </div>
+                            </template>
+                        </a-date-picker>
                     </div>
                 </div>
                 <BaseChart :options="option" class="cp-daily-chart"></BaseChart>
@@ -27,7 +33,8 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
-import { getDailyCodePulseInfo, getWeeklyCodePulseInfo } from "/@/utils/http/codepulse"
+import type { CSSProperties } from 'vue';
+import { getDailyCodePulseInfo, getWeeklyCodePulseInfo, getMonthCodePulseInfo } from "/@/utils/http/codepulse"
 import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
@@ -92,6 +99,8 @@ const yAxisDataWeek = dataWeek;
 const optionWeek = reactive(getPunchCardOption(xAxisDataWeek, yAxisDataWeek))
 const token = '0x4af97338';
 const dataWeekInit = ref([] as any);
+
+const dataMonthInit = ref([] as any);
 
 // 获取最近一周的数据
 function queryWeekly() {
@@ -162,6 +171,16 @@ onBeforeUnmount(() => {
     }
 })
 
+function queryMonthData() {
+    getMonthCodePulseInfo({ token }).then((res: any) => {
+        // console.log(res)
+        if (res.status) {
+            dataMonthInit.value = res.data.dayStatic;
+            console.log(dataMonthInit.value)
+        }
+    })
+}
+
 const dealNextDay = () => {
     const curDate = dayjs();
     const showDate = dayjs(date.value);
@@ -173,12 +192,29 @@ const dealNextDay = () => {
     }
 }
 
+const getCurrentStyle = (current: Dayjs) => {
+    const style: CSSProperties = {};
+    const curTime = dayjs();
+    // console.log(current.date(), current.month(), curTime.month())
+    if (curTime.month() === current.month()
+        && current.date() !== curTime.date()
+        && dataMonthInit.value.length > 0) {
+        if (dataMonthInit.value[current.date() - 1].dot > 0) {
+            style.border = '1px solid #1890ff';
+            style.borderRadius = '50%';
+        }
+    }
+
+    return style;
+};
+
 onMounted(() => {
     queryWeekly().then((res: any) => {
         reload();
     }).catch(() => {
         console.error('Get data error!!')
     })
+    queryMonthData();
 
     timer = setInterval(() => {
         if (dealNextDay()) {

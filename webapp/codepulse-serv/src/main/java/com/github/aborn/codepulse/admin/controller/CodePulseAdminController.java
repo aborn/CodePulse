@@ -132,9 +132,14 @@ public class CodePulseAdminController {
      */
     @RequestMapping(value = "getMonthActionStatus")
     @ResponseBody
-    public BaseResponse<MonthActionResponse> getMonthActionStatus(@NonNull String token, @NonNull String month) {
-        if (!UserManagerUtils.isLegal(token) || StringUtils.isBlank(month)) {
+    public BaseResponse<MonthActionResponse> getMonthActionStatus(@NonNull String token, String month) {
+        if (!UserManagerUtils.isLegal(token)) {
             return BaseResponse.fail("请求失败!", 401);
+        }
+
+        if (StringUtils.isBlank(month)) {
+            // 默认为当月
+            month = CodePulseDateUtils.getMonthInfo(new Date());
         }
 
         String todayInfo = CodePulseDateUtils.getTodayDayInfo();
