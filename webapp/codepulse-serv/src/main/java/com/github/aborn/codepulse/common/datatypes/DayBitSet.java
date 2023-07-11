@@ -1,10 +1,15 @@
 package com.github.aborn.codepulse.common.datatypes;
 
 import com.github.aborn.codepulse.api.CodePulseInfo;
+import com.github.aborn.codepulse.common.utils.ByteUtils;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.BitSet;
 import java.util.Calendar;
@@ -76,7 +81,17 @@ public class DayBitSet implements Serializable {
             String[] bitStrArr = codeInfo.split(",");
             long[] bitLong = new long[bitStrArr.length];
             for (int i = 0; i < bitStrArr.length; i++) {
-                bitLong[i] = StringUtils.isBlank(bitStrArr[i]) ? 0L : Long.parseLong(bitStrArr[i]);
+                if (StringUtils.isBlank(bitStrArr[i])) {
+                    bitLong[i] = 0L;
+                } else {
+                    if (NumberUtils.isCreatable(bitStrArr[i])) {
+                        // 为了兼容老数据格式
+                        bitLong[i] = Long.parseLong(bitStrArr[i]);
+                    } else {
+                        byte[] bytes = bitStrArr[i].getBytes(StandardCharsets.UTF_16BE);
+                        bitLong[i] = ByteUtils.bytesToLong(bytes);
+                    }
+                }
             }
             likeBit = BitSet.valueOf(bitLong);
         }
@@ -84,6 +99,25 @@ public class DayBitSet implements Serializable {
     }
 
     public String getCodeInfo() {
+        long[] bitLong = this.codingBitSet.toLongArray();
+        String[] bitStr = new String[bitLong.length];
+        for (int i = 0; i < bitLong.length; i++) {
+            long bitV = bitLong[i];
+            if (bitV == 0L) {
+                bitStr[i] = "";
+            } else {
+                bitStr[i] = longToShortStr(bitLong[i]);
+            }
+        }
+        return String.join(",", bitStr);
+    }
+
+    /**
+     * V1版本序列化到数据的接口
+     * @return
+     */
+    @Deprecated
+    public String getCodeInfoByLong() {
         long[] bitLong = this.codingBitSet.toLongArray();
         String[] bitStr = new String[bitLong.length];
         for (int i = 0; i < bitLong.length; i++) {
@@ -265,7 +299,31 @@ public class DayBitSet implements Serializable {
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         }
 
+        DayBitSet dayBitSetValue = new DayBitSet();
 
+        long numL = -9223372036854775808L;
+        byte[] bytes1 = ByteUtils.longToBytes(numL);
+        String numLStr = dayBitSetValue.longToShortStr(numL);
+        byte[] bytes = numLStr.getBytes(StandardCharsets.UTF_16BE);
+        long numbL2 = ByteUtils.bytesToLong(bytes);
+
+
+        String valueT = ",,,,,,,,,,,,,,,,,,-9223372036854775808,-9223222636486852608,-4618456811031232511,7,70712341561344,,2251799813685248,,,18014398509481984,1835008,201326592,,,,,,,,8896512";
+
+        BitSet bitSet = dayBitSetValue.valueOf(valueT);
+        dayBitSetValue.or(bitSet);
+        String vs = dayBitSetValue.getCodeInfo();
+        System.out.println(vs);
+        DayBitSet dayBitSetValue2 = new DayBitSet();
+        BitSet bitSet2 = dayBitSetValue2.valueOf(vs);
+        dayBitSetValue2.or(bitSet2);
+        String vs2 = dayBitSetValue2.getCodeInfo();
+        System.out.println(vs2);
+    }
+
+    public String longToShortStr(long num) {
+        // 强制指定BE，或者LE不能用UTF8，否则反解出来会有问题
+        return new String(ByteUtils.longToBytes(num), StandardCharsets.UTF_16BE);
     }
 
     public BitSet getCodingBitSet() {
