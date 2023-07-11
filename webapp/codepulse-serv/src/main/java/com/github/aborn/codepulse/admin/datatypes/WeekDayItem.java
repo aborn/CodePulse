@@ -37,7 +37,7 @@ public class WeekDayItem {
     public WeekDayItem(String day, int dayOfWeek) {
         this.day = day;
         this.dayOfWeek = dayOfWeek;
-        this.title = day + "（周" + WEEK_DAY.get(dayOfWeek) + "）";
+        this.title = day.substring(4) + "（周" + WEEK_DAY.get(dayOfWeek) + "）";
         // 给前端用
         this.dayOfWeekChinese = WEEK_DAY.get(dayOfWeek);
     }

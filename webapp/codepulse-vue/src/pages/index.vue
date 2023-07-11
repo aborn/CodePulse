@@ -269,4 +269,21 @@ onMounted(() => {
     font-size: 1.35rem;
     font-weight: 400;
 }
+
+@media (max-width: 800px) {
+    .cp-title {
+        font-size: 1.2rem;
+        font-weight: 400;
+    }
+
+    .cp-box-title {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cp-daily-chart {
+    width: 120%;
+    height: 352px;
+}
+}
 </style>

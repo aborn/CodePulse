@@ -2,7 +2,7 @@
   <a-layout>
     <NavBar :navItems="navItems" :selectedKeys="selectedNavKeys" @selectd="onNavSelected" />
     <a-layout>
-      <SideBar :sideMenus="sideMenus" @menu-selected="onSideSelected" :selectedKeys="selectedKeys" :openKeys="openKeys" />
+      <SideBar class="sideBar" :sideMenus="sideMenus" @menu-selected="onSideSelected" :selectedKeys="selectedKeys" :openKeys="openKeys" />
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item v-for="item in breadcrumbList" :key="item">{{
@@ -193,5 +193,11 @@ export default defineComponent({
 <style>
 .site-layout-background {
   background: #fff;
+}
+
+@media (max-width: 800px) {
+  .sideBar {
+    display: none;
+  }
 }
 </style>
