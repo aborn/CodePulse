@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 /**
  * @author aborn (jiangguobao)
  * @date 2023/07/13 20:17
@@ -40,5 +45,23 @@ public class ThirdOauthLoginController {
          *     redirect_uri: string
          */
         return BaseResponse.success("good");
+    }
+
+    /**
+     * Java官方的http Post example
+     * @param uri
+     * @param data
+     * @throws Exception
+     */
+    // https://openjdk.org/groups/net/httpclient/recipes.html#post
+    private void getAccessToken(String uri, String data) throws Exception {
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .POST(HttpRequest.BodyPublishers.ofString(data))
+                .build();
+
+        HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+        System.out.println(response.statusCode());
     }
 }
