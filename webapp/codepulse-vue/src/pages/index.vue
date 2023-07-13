@@ -5,6 +5,7 @@
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
                     <div>
+                        <a-button type="primary" :onclick="loginAction">登录</a-button>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
@@ -39,6 +40,11 @@ import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
+import { loginWithGithubOauth2 } from '../utils/login'
+
+const loginAction = () => {
+    loginWithGithubOauth2()
+}
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 const yAxisData = ref([0]);
@@ -282,8 +288,8 @@ onMounted(() => {
     }
 
     .cp-daily-chart {
-    width: 120%;
-    height: 352px;
-}
+        width: 120%;
+        height: 352px;
+    }
 }
 </style>
