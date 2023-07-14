@@ -13,6 +13,7 @@ public class FileConfigUtils {
 
     private static final String fileName = "codepulse.cfg";
     private static String cachedConfigFile = null;
+    private static String ClientSecrets = null;
 
     public static void main(String[] args) {
         String cs = getClientSecrets();
@@ -20,7 +21,10 @@ public class FileConfigUtils {
     }
 
     public static String getClientSecrets() {
-        return get("ClientSecrets");
+        if (ClientSecrets == null) {
+            ClientSecrets = get("ClientSecrets");
+        }
+        return ClientSecrets;
     }
 
     private static String getConfigFilePath() {

@@ -1,7 +1,9 @@
 package com.github.aborn.codepulse.oauth2;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.github.aborn.codepulse.admin.datatypes.UserActionResponse;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
+import com.github.aborn.codepulse.common.utils.FileConfigUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -44,24 +46,38 @@ public class ThirdOauthLoginController {
          *     code: string
          *     redirect_uri: string
          */
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("client_id", "2645bbcd62a78528da2a");
+        jsonObject.put("client_secret", FileConfigUtils.getClientSecrets());
+        jsonObject.put("code", code);
+        // jsonObject.put("redirect_uri", )
+
+        try {
+            String accessToken = getAccessToken(jsonObject.toJSONString());
+        } catch (Exception e) {
+            log.error("Get access token failed.");
+        }
+
         return BaseResponse.success("good");
     }
 
     /**
-     * Java官方的http Post example
-     * @param uri
      * @param data
      * @throws Exception
      */
     // https://openjdk.org/groups/net/httpclient/recipes.html#post
-    private void getAccessToken(String uri, String data) throws Exception {
+    private String getAccessToken(String data) throws Exception {
+        String api = "https://github.com/login/oauth/access_token";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
+                .uri(URI.create(api))
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .build();
 
         HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        System.out.println(response.statusCode());
+
+        System.out.println(response);
+        return "accessToken";
     }
 }

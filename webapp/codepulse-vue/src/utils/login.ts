@@ -12,7 +12,7 @@ export function loginWithGithubOauth2() {
     const data: AuthData = {
         login: 'aborn',
         state: '88bb66aa',
-        redirect_uri: 'http://127.0.0.1:8002/#/'
+        redirect_uri: 'http://127.0.0.1:8001/api/v1/codepulse/oauth2/login/redirect'
     }
     githubOauthAuthorize(data);
 }
