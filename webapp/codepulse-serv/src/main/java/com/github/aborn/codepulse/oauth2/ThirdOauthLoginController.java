@@ -1,7 +1,6 @@
 package com.github.aborn.codepulse.oauth2;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.github.aborn.codepulse.admin.datatypes.UserActionResponse;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.utils.FileConfigUtils;
 import lombok.AllArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -45,13 +45,6 @@ public class ThirdOauthLoginController {
     @RequestMapping(value = "redirect")
     @ResponseBody
     public BaseResponse<Object> getUserAction(@NonNull String code, String state) {
-        /**
-         * client_id: string
-         *     client_secret: string
-         *     code: string
-         *     redirect_uri: string
-         */
-
         Map<String, Object> data = new HashMap<>();
         data.put("client_id", "2645bbcd62a78528da2a");
         data.put("client_secret", FileConfigUtils.getClientSecrets());
@@ -71,6 +64,21 @@ public class ThirdOauthLoginController {
         return BaseResponse.success("good");
     }
 
+    @RequestMapping(value = "testRedirect")
+    @ResponseBody
+    public BaseResponse<Object> testRedirect(HttpServletRequest request) {
+
+        return BaseResponse.success("good");
+    }
+
+    /**
+     * 通过accessToken获取用户信息
+     *
+     * @param accessToken
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private String getUserInfo(String accessToken) throws IOException, InterruptedException {
         String api = "https://api.github.com/user";
         HttpClient client = HttpClient.newBuilder().build();
@@ -92,6 +100,8 @@ public class ThirdOauthLoginController {
     }
 
     /**
+     * 通过code获取accessToken
+     *
      * @param data
      * @throws Exception
      */
