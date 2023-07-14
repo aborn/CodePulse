@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author aborn (jiangguobao)
@@ -47,14 +51,14 @@ public class ThirdOauthLoginController {
          *     redirect_uri: string
          */
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("client_id", "2645bbcd62a78528da2a");
-        jsonObject.put("client_secret", FileConfigUtils.getClientSecrets());
-        jsonObject.put("code", code);
-        // jsonObject.put("redirect_uri", )
+        Map<String, Object> data = new HashMap<>();
+        data.put("client_id", "2645bbcd62a78528da2a");
+        data.put("client_secret", FileConfigUtils.getClientSecrets());
+        data.put("code", code);
+        // data.put("redirect_uri", )
 
         try {
-            String accessToken = getAccessToken(jsonObject.toJSONString());
+            String accessToken = getAccessToken(data);
         } catch (Exception e) {
             log.error("Get access token failed.");
         }
@@ -67,17 +71,34 @@ public class ThirdOauthLoginController {
      * @throws Exception
      */
     // https://openjdk.org/groups/net/httpclient/recipes.html#post
-    private String getAccessToken(String data) throws Exception {
+    private String getAccessToken(Map<String, Object> data) throws Exception {
         String api = "https://github.com/login/oauth/access_token";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(api))
-                .POST(HttpRequest.BodyPublishers.ofString(data))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(ofForm(data))
                 .build();
 
         HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.discarding());
 
         System.out.println(response);
         return "accessToken";
+    }
+
+    public static HttpRequest.BodyPublisher ofForm(Map<String, Object> data) {
+        StringBuilder body = new StringBuilder();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if (body.length() > 0) {
+                body.append("&");
+            }
+            body.append(encode(entry.getKey())).append("=").append(encode(entry.getValue()));
+        }
+        return HttpRequest.BodyPublishers.ofString(body.toString());
+    }
+
+    private static String encode(Object obj) {
+        return URLEncoder.encode(obj.toString(), StandardCharsets.UTF_8);
     }
 }
