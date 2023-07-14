@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -59,6 +60,10 @@ public class ThirdOauthLoginController {
 
         try {
             String accessToken = getAccessToken(data);
+            if (accessToken != null) {
+                String userInfo = getUserInfo(accessToken);
+                System.out.println(userInfo);
+            }
         } catch (Exception e) {
             log.error("Get access token failed.");
         }
@@ -66,12 +71,32 @@ public class ThirdOauthLoginController {
         return BaseResponse.success("good");
     }
 
+    private String getUserInfo(String accessToken) throws IOException, InterruptedException {
+        String api = "https://api.github.com/user";
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(api))
+                .header("Accept", "application/json")
+                .header("Authorization", "token " + accessToken)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() == 200) {
+            JSONObject jsonObject = JSONObject.parseObject(response.body());
+            return jsonObject.toJSONString();
+        } else {
+            System.out.println("Status code: " + response.statusCode());
+            System.out.println("\n Body: " + response.body());
+            return null;
+        }
+    }
+
     /**
      * @param data
      * @throws Exception
      */
     // https://openjdk.org/groups/net/httpclient/recipes.html#post
-    private String getAccessToken(Map<String, Object> data) throws Exception {
+    private String getAccessToken(Map<String, Object> data) throws IOException, InterruptedException {
         String api = "https://github.com/login/oauth/access_token";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
@@ -81,10 +106,15 @@ public class ThirdOauthLoginController {
                 .POST(ofForm(data))
                 .build();
 
-        HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-
-        System.out.println(response);
-        return "accessToken";
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() == 200) {
+            JSONObject jsonObject = JSONObject.parseObject(response.body());
+            return jsonObject.getString("access_token");
+        } else {
+            System.out.println("Status code: " + response.statusCode());
+            System.out.println("\n Body: " + response.body());
+            return null;
+        }
     }
 
     public static HttpRequest.BodyPublisher ofForm(Map<String, Object> data) {
