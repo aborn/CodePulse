@@ -35,7 +35,7 @@ public class ThirdOauthLoginController {
      * @param state
      * @return
      */
-    @RequestMapping(value = "login")
+    @RequestMapping(value = "redirect")
     @ResponseBody
     public BaseResponse<Object> getUserAction(@NonNull String code, String state) {
         /**
