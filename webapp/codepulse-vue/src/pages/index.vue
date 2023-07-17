@@ -4,9 +4,7 @@
             <div style="height: 380px">
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
-                    <div>
-                        <a-button type="primary" :onclick="loginAction">登录</a-button>
-                        <a-button type="primary" :onclick="loginRedirect">回跳测试</a-button>
+                    <div>                    
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
