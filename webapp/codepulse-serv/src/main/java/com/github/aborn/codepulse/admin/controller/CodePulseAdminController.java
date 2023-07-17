@@ -79,25 +79,27 @@ public class CodePulseAdminController {
      * http://127.0.0.1:8001/api/v1/codepulse/admin/getWeekUserAction?token=0x4af97338
      *
      * @param token
+     * @param day   以客户端为准的今日信息 （因为服务端有可能与客户端所处的时区不一样）， 以这个信息往前一周
      * @return
      */
     @RequestMapping(value = "getWeekUserAction")
     @ResponseBody
-    public BaseResponse<List<WeekDayItem>> getWeekUserAction(@NonNull String token) {
+    public BaseResponse<List<WeekDayItem>> getWeekUserAction(@NonNull String token, String day) throws ParseException {
         if (!UserManagerUtils.isLegal(token)) {
             return BaseResponse.fail("请求失败!", 501);
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String day = sdf.format(new Date());
-        DayBitSet todayData = dayBitSetsDataManager.getBitSetData(token, day);
+        String dayInfo = StringUtils.isBlank(day) ? sdf.format(new Date()) : day;
+        DayBitSet todayData = dayBitSetsDataManager.getBitSetData(token, dayInfo);
         if (todayData == null) {
             todayData = new DayBitSet();
         }
 
         // 补充过去6天的数据
         Calendar calendar = Calendar.getInstance();
-        Date today = new Date();
+        Date dayDate = sdf.parse(dayInfo);
+        calendar.setTime(dayDate);
         List<WeekDayItem> result = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             calendar.add(Calendar.DATE, -i);
@@ -105,7 +107,7 @@ public class CodePulseAdminController {
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
             WeekDayItem weekDayItem = new WeekDayItem(dayStr, dayOfWeek);
             result.add(weekDayItem);
-            calendar.setTime(today);
+            calendar.setTime(dayDate);
             if (i == 0) {
                 // 处理当天数据
                 weekDayItem.setAction(todayData);

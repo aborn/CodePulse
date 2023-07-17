@@ -115,9 +115,9 @@ const dataWeekInit = ref([] as any);
 const dataMonthInit = ref([] as any);
 
 // 获取最近一周的数据
-function queryWeekly() {
+function queryWeekly(day: string = getYearMonthDay()) {
     return new Promise((resolve, reject) => {
-        getWeeklyCodePulseInfo({ token }).then((res: any) => {
+        getWeeklyCodePulseInfo({ token, day: day }).then((res: any) => {
             const data = res.data;
             const daysWeek = data.map(item => item.title);
             const daysWeekChn = data.map(item => item.dayOfWeekChinese);
