@@ -3,6 +3,7 @@ package com.github.aborn.codepulse.common.datatypes;
 import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.common.utils.ByteUtils;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -133,6 +134,10 @@ public class DayBitSet implements Serializable {
 
     public boolean isToday() {
         return CodePulseDateUtils.getTodayDayInfo().equals(day);
+    }
+
+    public boolean isSameDay(@NonNull DayBitSet dayBitSet) {
+        return dayBitSet.getDay().equals(this.day);
     }
 
     /**

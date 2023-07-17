@@ -48,37 +48,32 @@ public class DayBitSetsDataManager {
 
     /**
      * 用户上报数据
-     *
+     * 注意：这里有可能是 client所处的时区与服务端所处的时区不一样，以client的时区为准。
      * @param dayBitSet
      * @return
      */
     public BaseResponse<String> postBitSetData(@NonNull DayBitSet dayBitSet) {
-        // TODO 只能上报今天的，这里有一个本地时间时区问题
-        // TODO 这里有个Bug，客户端的时区和服务端时区不在一个时区时会导致这个判断出问题
         log.info(String.format("dayBitSet.day=%s, server day=%s", dayBitSet.getDay(), CodePulseDateUtils.getTodayDayInfo()));
-        if (!dayBitSet.isToday()) {
-            log.error("Post failed: isNotToday");
-            return BaseResponse.fail("Post failed: time error", 501);
-        }
 
         String token = dayBitSet.getToken();
         CacheData<DayBitSet> cacheData = cache.getIfPresent(token);
         if (cacheData != null) {
             // 内存缓存 存在时
             DayBitSet dayBitSetCached = cacheData.getData();
-            if (dayBitSetCached.isToday()) {
+            if (dayBitSetCached.isSameDay(dayBitSet)) {
+                // 当缓存的数据与上报的数据是 存储的是同一天时，更新缓存
                 dayBitSetCached.or(dayBitSet);
                 cacheData.setData(dayBitSetCached);
                 cache.put(token, cacheData);
                 if (cacheData.getPersistTime() == null || CodePulseDateUtils.isPersistTimeout(cacheData.getPersistTime())) {
-                    log.info("{}: 内存缓存超时，持久化到DB", token);
+                    log.info("{}: 内存缓存超时，数据持久化到DB", token);
                     DayBitSet dayBitSetSaved = dataService.save(dayBitSet);
                     cacheData.setData(dayBitSetSaved);
                     cacheData.updatePersistTime();
                     cache.put(token, cacheData);
                 }
             } else {
-                // 缓存里的数据已经不是今天的数据，持久化到数据库
+                // 缓存里的数据与上报的数据不是同一天时，持久化到数据库，并更新缓存
                 log.info("{}: 内存数据非今天数据，持久化到DB", token);
                 DayBitSet dayBitSetSaved = dataService.save(dayBitSet);
                 cacheData.setData(dayBitSetSaved);
