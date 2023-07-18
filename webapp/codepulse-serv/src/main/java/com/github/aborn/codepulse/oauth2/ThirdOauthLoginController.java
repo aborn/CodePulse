@@ -51,6 +51,7 @@ public class ThirdOauthLoginController {
     @RequestMapping(value = "getUserInfo")
     @ResponseBody
     public BaseResponse<Object> getUserAction(@NonNull String code, String state) {
+        log.info("code={}", code);
         Map<String, Object> data = new HashMap<>();
         data.put("client_id", GITHUB_CLIENT_ID);
         data.put("client_secret", FileConfigUtils.getClientSecrets());
@@ -58,6 +59,7 @@ public class ThirdOauthLoginController {
         // data.put("redirect_uri", )
 
         try {
+            log.info("data={}", data);
             String accessToken = getAccessToken(data);
             log.info("Get accessToken github. {}", accessToken);
             if (accessToken != null) {
