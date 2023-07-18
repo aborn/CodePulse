@@ -51,6 +51,7 @@ public class FileConfigUtils {
 
     public static String get(String key) {
         String file = getConfigFilePath();
+        log.info("file={}", file);
         String val = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -77,7 +78,9 @@ public class FileConfigUtils {
                     e.printStackTrace();
                 }
             }
-        } catch (FileNotFoundException e1) { /* ignored */ }
+        } catch (FileNotFoundException e1) {
+            log.error("file not found ex. {}", e1.getMessage());
+        }
         return val;
     }
 }
