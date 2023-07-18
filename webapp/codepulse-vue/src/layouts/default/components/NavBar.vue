@@ -15,7 +15,7 @@
       </a-col>
       <a-col :span="12">
 
-        <div class="badge-items">         
+        <div class="badge-items">
           <!--
             <span class="badge-item">
               <a href="https://www.npmjs.com/package/@nanta/ui"><img src="https://badgen.net/npm/dm/@nanta/ui"
@@ -27,10 +27,11 @@
             </span>
             -->
           <span class="badge-item">
-            <a href="https://github.com/aborn/CodePulse" target="_blank">
+            <a v-if="token" href="https://github.com/aborn/CodePulse" target="_blank" alt="uid">
               <img v-if="avatar" :src="avatar" style="height: 50px; max-width: 100%; border-radius: 50%" />
               <NantaIcon v-else icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
+            <a v-else @click="loginAction" style="font-size: large; color: azure">登录</a>
           </span>
         </div>
       </a-col>
@@ -41,6 +42,11 @@
 <script lang="ts" setup>
 import { Nav } from "../../types/type";
 import { PropType, Icon as NantaIcon } from "@nanta/ui";
+import { loginWithGithubOauth2, getUserInfo } from '../../../utils/oauth2';
+
+const loginAction = () => {
+  loginWithGithubOauth2()
+}
 
 const props = defineProps({
   navItems: Array as PropType<Array<Nav>>,
@@ -50,7 +56,11 @@ const props = defineProps({
 const emits = defineEmits(["selectd"])
 
 const avatar = localStorage.getItem('avatar');
+const token = localStorage.getItem('token');
+const uid = localStorage.getItem('uid');
 console.log('avatar', avatar)
+console.log('token', token)
+console.log('uid', uid)
 
 const onSelect = ({ item, key, selectedKeys }) => {
   console.log("selectd");

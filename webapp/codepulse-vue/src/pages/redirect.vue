@@ -31,6 +31,7 @@ if (uri.length == 2) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("avatar", data.avatar);
             localStorage.setItem("name", data.name);
+            localStorage.setItem("uid", data.uid);
             window.location.href = "/"; // 登录成功后回跳到首页
         } else {
             // 登录失败
