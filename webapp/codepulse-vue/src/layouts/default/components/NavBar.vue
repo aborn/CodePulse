@@ -28,7 +28,8 @@
             -->
           <span class="badge-item">
             <a href="https://github.com/aborn/CodePulse" target="_blank">
-              <NantaIcon icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
+              <img v-if="avatar" :src="avatar" style="height: 36px; max-width: 100%; border-radius: 50%" />
+              <NantaIcon v-else icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
           </span>
         </div>
@@ -47,6 +48,9 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["selectd"])
+
+const avatar = localStorage.getItem('avatar');
+console.log('avatar', avatar)
 
 const onSelect = ({ item, key, selectedKeys }) => {
   console.log("selectd");
