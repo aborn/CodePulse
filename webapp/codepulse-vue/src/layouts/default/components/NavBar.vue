@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import { Nav } from "../../types/type";
 import { PropType, Icon as NantaIcon } from "@nanta/ui";
-import { loginWithGithubOauth2, getUserInfo } from '../../../utils/oauth2';
+import { loginWithGithubOauth2, userLogout } from '../../../utils/oauth2';
 
 const loginAction = () => {
   loginWithGithubOauth2()

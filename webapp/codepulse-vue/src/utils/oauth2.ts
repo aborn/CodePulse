@@ -43,12 +43,14 @@ export function getUserInfo(params) {
 
 /**用户登出*/
 export async function userLogout() {
+    /**
     const res = await request({
       url: "/api/v1/codepulse/oauth2/logout",
       method: "post",
     });
-    if (res) {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-    }
-  }
+     */
+    localStorage.removeItem("token");
+    localStorage.removeItem("avatar");
+    localStorage.removeItem("name");
+    localStorage.removeItem("uid");
+}
