@@ -6,7 +6,6 @@
                     <span class="cp-title">{{ title }}</span>
                     <div>
                         <a-button type="primary" :onclick="loginAction">登录</a-button>
-                        <a-button type="primary" :onclick="loginRedirect">回跳测试</a-button>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
@@ -41,16 +40,14 @@ import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
-import { loginWithGithubOauth2 } from '../utils/login';
+import { loginWithGithubOauth2, getUserInfo } from '../utils/oauth2';
 import { useRoute } from "vue-router";
+
+const localToken = localStorage.getItem('token');
+console.log('local token:', localToken)
 
 const loginAction = () => {
     loginWithGithubOauth2()
-}
-
-const loginRedirect = () => {
-    const url = ``
-    window.location.href = url // 直接跳转
 }
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -112,7 +109,6 @@ const yAxisDataWeek = dataWeek;
 const optionWeek = reactive(getPunchCardOption(xAxisDataWeek, yAxisDataWeek))
 const token = '0x4af97338';
 const dataWeekInit = ref([] as any);
-
 const dataMonthInit = ref([] as any);
 
 // 获取最近一周的数据
@@ -221,25 +217,10 @@ const getCurrentStyle = (current: Dayjs) => {
     return style;
 };
 
-let uri = window.location.href.split('?');
-if (uri.length == 2) {
-    let vars = uri[1].split('&');
-    let getVars = {};
-    let tmp;
-    vars.forEach(function (v) {
-        tmp = v.split('=');
-        if (tmp.length == 2)
-            getVars[tmp[0]] = tmp[1];
-    });
-    console.log(getVars);
-    // do 
-}
-
 onMounted(() => {
     const code = useRoute().query.code
     const state = useRoute().query.state
     console.log('code:', code, "state:", state)
-
 
     queryWeekly().then((res: any) => {
         reload();
@@ -319,3 +300,4 @@ onMounted(() => {
     }
 }
 </style>
+../utils/oauth2

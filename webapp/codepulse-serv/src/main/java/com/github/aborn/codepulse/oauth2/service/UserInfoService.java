@@ -20,7 +20,7 @@ public class UserInfoService {
 
     private final UserInfoMapper userInfoMapper;
 
-    public void saveUserInfo(UserInfo userInfo) {
+    public UserInfo saveUserInfo(UserInfo userInfo) {
         // 先判断是否存在
         UserInfo userInfoExist = userInfoMapper.queryUserByOpenIdAndThirdType(userInfo.getOpenid(), userInfo.getThirdType());
         if (userInfoExist == null) {
@@ -28,6 +28,7 @@ public class UserInfoService {
             String token = UserTokenManager.generateToken(userInfo.getUid());
             userInfo.setToken(token);
             userInfoMapper.insert(userInfo);
+            return userInfoMapper.queryUserByToken(token);
         } else {
             // 否则更新用户信息 （前提是不允许用户手工修改）
             userInfoExist.setAvatar(userInfo.getAvatar());
@@ -36,6 +37,7 @@ public class UserInfoService {
             userInfoExist.setUpdateTime(new Date());
             userInfoExist.setUpdateBy(userInfo.getName());
             userInfoMapper.update(userInfo);
+            return userInfoExist;
         }
     }
 }

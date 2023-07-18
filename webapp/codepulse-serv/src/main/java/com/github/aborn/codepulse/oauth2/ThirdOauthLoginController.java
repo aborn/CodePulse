@@ -7,7 +7,9 @@ import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
 import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,20 +61,34 @@ public class ThirdOauthLoginController {
             String accessToken = getAccessToken(data);
             if (accessToken != null) {
                 JSONObject userInfo = getUserInfo(accessToken);
-                saveUserInfoToDb(userInfo);
-                System.out.println(userInfo);
+                if (userInfo != null) {
+                    UserInfo userInfoRes = saveUserInfoToDb(userInfo);
+                    return BaseResponse.success(userInfoRes);
+                }
+                log.info("userInfo = null");
             }
         } catch (Exception e) {
             log.error("Get access token failed.");
         }
 
+        return BaseResponse.fail("getUserInfo failed.");
+    }
+
+    /**
+     * 用户登出接口，待更新
+     * @param token
+     * @return
+     */
+    @PostMapping(value = "logout")
+    @ResponseBody
+    public BaseResponse<Object> getUserAction(@NonNull String token) {
         return BaseResponse.success("good");
     }
 
-    private void saveUserInfoToDb(JSONObject userInfo) {
-        if (userInfo == null) { return; }
+
+    private UserInfo saveUserInfoToDb(@NonNull JSONObject userInfo) {
         UserInfo userInfoDo = new UserInfo(userInfo);
-        userInfoService.saveUserInfo(userInfoDo);
+        return userInfoService.saveUserInfo(userInfoDo);
     }
 
     /**

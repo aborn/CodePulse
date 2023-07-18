@@ -16,8 +16,8 @@ public interface UserInfoMapper {
     @Select("SELECT * FROM cp_user_info WHERE token=#{token}")
     UserInfo queryUserByToken(String token);
 
-    @Select("SELECT * FROM cp_user_info WHERE openid=#{openid} and third_type=#{thirdType}}")
-    UserInfo queryUserByOpenIdAndThirdType(String openid, int thirdType);
+    @Select("SELECT * FROM cp_user_info WHERE openid=#{openid} AND third_type=#{thirdType}")
+    UserInfo queryUserByOpenIdAndThirdType(String openid, Integer thirdType);
 
     @Insert("INSERT INTO cp_user_info (`id`,token,openid,`third_type`,avatar, uid, name, team, corp,create_time,update_time,create_by,update_by) "
             + "VALUES(#{id},#{token},#{openid},#{thirdType}, #{avatar}, #{uid}, #{name}, #{team}, #{corp},#{createTime},#{updateTime},#{createBy},#{updateBy})")
