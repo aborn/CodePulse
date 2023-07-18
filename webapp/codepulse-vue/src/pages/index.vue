@@ -4,7 +4,9 @@
             <div style="height: 380px">
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
-                    <div>                    
+                    <div>
+                        <a-button type="primary" :onclick="loginAction">登录</a-button>
+                        <a-button type="primary" :onclick="loginRedirect">回跳测试</a-button>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
@@ -39,7 +41,8 @@ import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
-import { loginWithGithubOauth2 } from '../utils/login'
+import { loginWithGithubOauth2 } from '../utils/login';
+import { useRoute } from "vue-router";
 
 const loginAction = () => {
     loginWithGithubOauth2()
@@ -218,7 +221,26 @@ const getCurrentStyle = (current: Dayjs) => {
     return style;
 };
 
+let uri = window.location.href.split('?');
+if (uri.length == 2) {
+    let vars = uri[1].split('&');
+    let getVars = {};
+    let tmp;
+    vars.forEach(function (v) {
+        tmp = v.split('=');
+        if (tmp.length == 2)
+            getVars[tmp[0]] = tmp[1];
+    });
+    console.log(getVars);
+    // do 
+}
+
 onMounted(() => {
+    const code = useRoute().query.code
+    const state = useRoute().query.state
+    console.log('code:', code, "state:", state)
+
+
     queryWeekly().then((res: any) => {
         reload();
     }).catch(() => {

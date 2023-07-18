@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -32,9 +33,10 @@ import java.util.Map;
 public class ThirdOauthLoginController {
 
     private static final String LOGIN_URL = "https://github.com/login/oauth/access_token";
+    private static final String GITHUB_CLIENT_ID = "2645bbcd62a78528da2a";
 
     /**
-     * 调用第三方登录
+     * 通过code和state 获取用户信息
      * code=063c73729e3f07ef5fe8  用于获取accessToken
      * state=88bb66aa  用于校验
      *
@@ -42,11 +44,11 @@ public class ThirdOauthLoginController {
      * @param state
      * @return
      */
-    @RequestMapping(value = "redirect")
+    @RequestMapping(value = "getUserInfo")
     @ResponseBody
     public BaseResponse<Object> getUserAction(@NonNull String code, String state) {
         Map<String, Object> data = new HashMap<>();
-        data.put("client_id", "2645bbcd62a78528da2a");
+        data.put("client_id", GITHUB_CLIENT_ID);
         data.put("client_secret", FileConfigUtils.getClientSecrets());
         data.put("code", code);
         // data.put("redirect_uri", )
@@ -60,13 +62,6 @@ public class ThirdOauthLoginController {
         } catch (Exception e) {
             log.error("Get access token failed.");
         }
-
-        return BaseResponse.success("good");
-    }
-
-    @RequestMapping(value = "testRedirect")
-    @ResponseBody
-    public BaseResponse<Object> testRedirect(HttpServletRequest request) {
 
         return BaseResponse.success("good");
     }
