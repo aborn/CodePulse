@@ -3,7 +3,6 @@ package com.github.aborn.codepulse.oauth2;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.utils.FileConfigUtils;
-import com.github.aborn.codepulse.oauth2.datatypes.ThirdType;
 import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
 import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;

@@ -285,7 +285,7 @@ public class DayBitSet implements Serializable {
 
         System.out.println("[写]" + dayBitSet.toString());
         // System.out.println("数据保存结果：" + DataStoreManager.save(dayBitSet));
-        // DayBitSet dayBitSetRead = DataStoreManager.read(UserManager.DEFAULT_TEST_UID_TOKEN, null);
+        // DayBitSet dayBitSetRead = DataStoreManager.read(UserTokenManager.DEFAULT_TEST_UID_TOKEN, null);
         // System.out.println("[读]" + dayBitSetRead);
 
         System.out.println(dayBitSet.getCurrentHourSlotInfo());

@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class UserInfo extends BaseDTO implements Serializable {
     private static final long serialVersionUID = 14996675877480615L;
 
-    private int id;
+    private long id;
 
     private String token;
 
@@ -37,8 +37,8 @@ public class UserInfo extends BaseDTO implements Serializable {
     public UserInfo(JSONObject userInfo) {
         this.openid = String.valueOf(userInfo.getInteger("id"));
         this.avatar = userInfo.getString("avatar_url");
-        this.uid = userInfo.getString("login");
-        this.name = userInfo.getString("name");
+        this.uid = userInfo.getString("login");  // aborn
+        this.name = userInfo.getString("name");  // Aborn Jiang
         this.thirdType = ThirdType.GITHUB;
     }
 
