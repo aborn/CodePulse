@@ -13,6 +13,7 @@ import java.io.*;
 public class FileConfigUtils {
 
     private static final String DEFAULT_PATH = "/Users/aborn/docker/packages";
+    private static final String DOCKER_PATH = "/packages";  // 线上docker的部署文件路径
     private static final String fileName = "codepulse.cfg";
     private static String cachedConfigFile = null;
     private static String ClientSecrets = null;
@@ -33,27 +34,31 @@ public class FileConfigUtils {
 
     private static String getConfigFilePath() {
         String homePath = System.getProperty("user.home");
-        log.info("homePath={}", homePath);
         File folder = new File(homePath, fileName);
         if (folder.exists()) {
             cachedConfigFile = folder.getAbsolutePath();
             log.info("home path folder path {}", cachedConfigFile);
             return cachedConfigFile;
         } else {
-            folder = new File(DEFAULT_PATH);
-            if (folder.exists()) {
-                cachedConfigFile = new File(folder, fileName).getAbsolutePath();
-                log.info("config path is {}", cachedConfigFile);
-                return cachedConfigFile;
-            } else {
-                return DEFAULT_PATH + "/" + fileName;
+            String[] paths = new String[]{
+                    DEFAULT_PATH, DOCKER_PATH
+            };
+            for (String path : paths) {
+                folder = new File(path);
+                if (folder.exists()) {
+                    cachedConfigFile = new File(folder, fileName).getAbsolutePath();
+                    log.info("config path is {}", cachedConfigFile);
+                    return cachedConfigFile;
+                }
             }
+            return fileName;
         }
     }
 
     public static String get(String key) {
         String file = getConfigFilePath();
         log.info("file={}", file);
+
         String val = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
