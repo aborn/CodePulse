@@ -28,14 +28,17 @@ public class FileConfigUtils {
     }
 
     private static String getConfigFilePath() {
-        File folder = new File("~");
+        String homePath = System.getProperty("user.home");
+        File folder = new File(homePath, fileName);
         if (folder.exists()) {
-            cachedConfigFile = new File(folder, fileName).getAbsolutePath();
+            cachedConfigFile = folder.getAbsolutePath();
+            log.info("home path folder path {}", cachedConfigFile);
             return cachedConfigFile;
         } else {
             folder = new File("/Users/aborn/docker/packages");
             if (folder.exists()) {
                 cachedConfigFile = new File(folder, fileName).getAbsolutePath();
+                log.info("config path is {}", cachedConfigFile);
                 return cachedConfigFile;
             } else {
                 return fileName;

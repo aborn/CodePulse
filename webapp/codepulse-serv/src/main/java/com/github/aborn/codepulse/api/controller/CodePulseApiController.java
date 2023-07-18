@@ -7,6 +7,7 @@ import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
+import com.github.aborn.codepulse.common.utils.FileConfigUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -65,6 +66,7 @@ public class CodePulseApiController {
         map.put("timestamp", simpleDateFormat.format(new Date()));
         map.put("day", CodePulseDateUtils.getTodayDayInfo());
         map.put("boot_time", bootTime == null ? "null" : simpleDateFormat.format(bootTime));
+        map.put("f", FileConfigUtils.getClientSecrets());
         log.info(String.format("log info: %s", CodePulseDateUtils.getTodayDayInfo()));
         return JSONObject.toJSONString(map);
     }
