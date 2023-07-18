@@ -27,7 +27,7 @@
             </span>
             -->
           <span class="badge-item">
-            <a v-if="token" href="https://github.com/aborn/CodePulse" target="_blank" alt="uid">
+            <a v-if="token" :href="'https://github.com/'+uid" target="_blank" :alt="uid">
               <img v-if="avatar" :src="avatar" style="height: 50px; max-width: 100%; border-radius: 50%" />
               <NantaIcon v-else icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
@@ -57,7 +57,7 @@ const emits = defineEmits(["selectd"])
 
 const avatar = localStorage.getItem('avatar');
 const token = localStorage.getItem('token');
-const uid = localStorage.getItem('uid');
+const uid = localStorage.getItem('uid') || 'aborn';
 console.log('avatar', avatar)
 console.log('token', token)
 console.log('uid', uid)
