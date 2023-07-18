@@ -59,8 +59,10 @@ public class ThirdOauthLoginController {
 
         try {
             String accessToken = getAccessToken(data);
+            log.info("Get accessToken github. {}", accessToken);
             if (accessToken != null) {
                 JSONObject userInfo = getUserInfo(accessToken);
+                log.info("Get User Info from github. {}", userInfo);
                 if (userInfo != null) {
                     UserInfo userInfoRes = saveUserInfoToDb(userInfo);
                     return BaseResponse.success(userInfoRes);
@@ -76,6 +78,7 @@ public class ThirdOauthLoginController {
 
     /**
      * 用户登出接口，待更新
+     *
      * @param token
      * @return
      */
@@ -84,7 +87,6 @@ public class ThirdOauthLoginController {
     public BaseResponse<Object> getUserAction(@NonNull String token) {
         return BaseResponse.success("good");
     }
-
 
     private UserInfo saveUserInfoToDb(@NonNull JSONObject userInfo) {
         UserInfo userInfoDo = new UserInfo(userInfo);
@@ -99,7 +101,7 @@ public class ThirdOauthLoginController {
      * @throws IOException
      * @throws InterruptedException
      */
-    private JSONObject getUserInfo(String accessToken) throws IOException, InterruptedException {
+    private JSONObject getUserInfo(String accessToken) {
         String api = "https://api.github.com/user";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
@@ -108,15 +110,23 @@ public class ThirdOauthLoginController {
                 .header("Authorization", "token " + accessToken)
                 .GET()
                 .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            return JSONObject.parseObject(response.body());
-        } else {
-            log.info("Get user info from github error!");
-            log.error("Status code: {}", response.statusCode());
-            log.error("\n Body: " + response.body());
-            return null;
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return JSONObject.parseObject(response.body());
+            } else {
+                log.info("Get user info from github error!");
+                log.error("Status code: {}", response.statusCode());
+                log.error("\n Body: " + response.body());
+                return null;
+            }
+        } catch (InterruptedException e) {
+            log.error("getUserInfo exception. msg={}", e.getMessage());
+        } catch (IOException ioException) {
+            log.error("getUserInfo exception. msg={}", ioException.getMessage());
         }
+
+        return null;
     }
 
     /**
@@ -126,7 +136,7 @@ public class ThirdOauthLoginController {
      * @throws Exception
      */
     // https://openjdk.org/groups/net/httpclient/recipes.html#post
-    private String getAccessToken(Map<String, Object> data) throws IOException, InterruptedException {
+    private String getAccessToken(Map<String, Object> data) {
         String api = "https://github.com/login/oauth/access_token";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
@@ -136,16 +146,23 @@ public class ThirdOauthLoginController {
                 .POST(ofForm(data))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            JSONObject jsonObject = JSONObject.parseObject(response.body());
-            return jsonObject.getString("access_token");
-        } else {
-            log.info("Get accessToken info from github error!");
-            log.error("Get accessToken Status code: {}", response.statusCode());
-            log.error("Res Body: {}", response.body());
-            return null;
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                return jsonObject.getString("access_token");
+            } else {
+                log.info("Get accessToken info from github error!");
+                log.error("Get accessToken Status code: {}", response.statusCode());
+                log.error("Res Body: {}", response.body());
+                return null;
+            }
+        } catch (InterruptedException e) {
+            log.error("getAccessToken exception. msg={}", e.getMessage());
+        } catch (IOException ioException) {
+            log.error("getAccessToken exception. msg={}", ioException.getMessage());
         }
+        return null;
     }
 
     public static HttpRequest.BodyPublisher ofForm(Map<String, Object> data) {
