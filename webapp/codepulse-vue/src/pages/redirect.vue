@@ -12,7 +12,7 @@ import { getUserInfo } from '../utils/oauth2';
 
 let uri = window.location.href.split('?');
 if (uri.length == 2) {
-    let uriParams = uri[1].endsWith("#/") ? uri[1].substring(0, uri[1].length - 2) : uri[1];
+    let uriParams = uri[1].includes("#") ? uri[1].substring(0, uri[1].indexOf('#')) : uri[1];
     let vars = uriParams.split('&');
     let getVars = {};
     let tmp;
