@@ -5,16 +5,15 @@ export type AuthData = {
      * 提供用于登录和授权应用程序的特定账户【可空】。
      * 注意，经过试验后，这里要填的是 GitHub 用户名，这样跳转之后会向用户建议登录该账号。
      */
-    login: string
+    login?: string
     state: string
     redirect_uri: string
 }
 
 export function loginWithGithubOauth2() {
     const data: AuthData = {
-        login: 'aborn',
         state: '88bb66aa',
-        //redirect_uri: 'http://127.0.0.1:8002/#/redirect',
+        // redirect_uri: 'http://127.0.0.1:8002/#/redirect',
         redirect_uri: 'https://cp.popkit.org/#/redirect'
     }
     githubOauthAuthorize(data);
@@ -23,6 +22,7 @@ export function loginWithGithubOauth2() {
 export function githubOauthAuthorize(data: AuthData) {
     const query = new URLSearchParams({
         ...data,
+        // client_id: 'fe7f56774733081f2dd9',
         client_id: '2645bbcd62a78528da2a',
         scope: '',
         allow_signup: 'true',
@@ -53,4 +53,5 @@ export async function userLogout() {
     localStorage.removeItem("avatar");
     localStorage.removeItem("name");
     localStorage.removeItem("uid");
+    window.location.href = "/"; 
 }

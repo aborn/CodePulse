@@ -4,7 +4,7 @@
             <div style="height: 380px">
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
-                    <div>                        
+                    <div>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">

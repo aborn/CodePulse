@@ -26,6 +26,12 @@ public class UserInfoService {
         if (userInfoExist == null) {
             // 当用户不存在时，创建一个用户，并保存用户信息到DB
             String token = UserTokenManager.generateToken(userInfo.getUid());
+            UserInfo u = userInfoMapper.queryUserByToken(token);
+            if (u != null) {
+                // token重复，重新生成token
+                log.error("Token repeated, regenerate it! {}", token);
+                token = UserTokenManager.generateToken(userInfo.getUid(), userInfo.getOpenid());
+            }
             userInfo.setToken(token);
             userInfoMapper.insert(userInfo);
             return userInfoMapper.queryUserByToken(token);

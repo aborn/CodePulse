@@ -34,8 +34,6 @@ import java.util.Map;
 public class ThirdOauthLoginController {
 
     private static final String LOGIN_URL = "https://github.com/login/oauth/access_token";
-    private static final String GITHUB_CLIENT_ID = "2645bbcd62a78528da2a";
-
     private final UserInfoService userInfoService;
 
     /**
@@ -47,7 +45,7 @@ public class ThirdOauthLoginController {
     @ResponseBody
     public BaseResponse<Object> getUserAction(@NonNull String code) {
         Map<String, Object> data = new HashMap<>();
-        data.put("client_id", GITHUB_CLIENT_ID);
+        data.put("client_id", FileConfigUtils.getClientId());
         data.put("client_secret", FileConfigUtils.getClientSecrets());
         data.put("code", code);
         // data.put("redirect_uri", )
