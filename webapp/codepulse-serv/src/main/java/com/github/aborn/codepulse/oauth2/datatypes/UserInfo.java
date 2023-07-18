@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author aborn (jiangguobao)
@@ -30,9 +31,9 @@ public class UserInfo extends BaseDTO implements Serializable {
 
     private String name;
 
-    private String team;
+    private String team = "";
 
-    private String corp;
+    private String corp = "";
 
     public UserInfo(JSONObject userInfo) {
         this.openid = String.valueOf(userInfo.getInteger("id"));
@@ -40,6 +41,8 @@ public class UserInfo extends BaseDTO implements Serializable {
         this.uid = userInfo.getString("login");  // aborn
         this.name = userInfo.getString("name");  // Aborn Jiang
         this.thirdType = ThirdType.GITHUB;
+        this.createTime = new Date();
+        this.updateTime = new Date();
     }
 
 }
