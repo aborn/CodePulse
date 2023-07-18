@@ -28,7 +28,7 @@
             -->
           <span class="badge-item">
             <a href="https://github.com/aborn/CodePulse" target="_blank">
-              <img v-if="avatar" :src="avatar" style="height: 36px; max-width: 100%; border-radius: 50%" />
+              <img v-if="avatar" :src="avatar" style="height: 50px; max-width: 100%; border-radius: 50%" />
               <NantaIcon v-else icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
           </span>
