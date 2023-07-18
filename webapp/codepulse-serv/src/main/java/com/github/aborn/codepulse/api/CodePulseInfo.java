@@ -1,5 +1,6 @@
 package com.github.aborn.codepulse.api;
 
+import com.github.aborn.codepulse.common.datatypes.BaseDTO;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,15 +14,12 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-public class CodePulseInfo implements Serializable {
+public class CodePulseInfo extends BaseDTO implements Serializable {
     private long id;
     private String token;
     private String day;
     private String codeInfo;
-    private Date createTime;
-    private Date updateTime;
-    private String createBy = "auto";
-    private String updateBy = "auto";
+
     private int codeTime = 0;
 
     public CodePulseInfo(DayBitSet dayBitSet) {

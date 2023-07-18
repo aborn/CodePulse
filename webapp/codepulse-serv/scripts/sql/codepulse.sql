@@ -38,7 +38,7 @@ CREATE TABLE `cp_user_info`
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_openid_third_type` (`openid`,`third_type`),
     UNIQUE KEY `uniq_token` (`token`),
-    KEY           `idx_token` (`token`),
+    /** KEY           `idx_token` (`token`),*/
     KEY           `idx_create_time_index` (`create_time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='用户信息表';
 

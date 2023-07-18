@@ -3,6 +3,9 @@ package com.github.aborn.codepulse.oauth2;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.utils.FileConfigUtils;
+import com.github.aborn.codepulse.oauth2.datatypes.ThirdType;
+import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
+import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -35,6 +38,8 @@ public class ThirdOauthLoginController {
     private static final String LOGIN_URL = "https://github.com/login/oauth/access_token";
     private static final String GITHUB_CLIENT_ID = "2645bbcd62a78528da2a";
 
+    private final UserInfoService userInfoService;
+
     /**
      * 通过code和state 获取用户信息
      * code=063c73729e3f07ef5fe8  用于获取accessToken
@@ -56,7 +61,8 @@ public class ThirdOauthLoginController {
         try {
             String accessToken = getAccessToken(data);
             if (accessToken != null) {
-                String userInfo = getUserInfo(accessToken);
+                JSONObject userInfo = getUserInfo(accessToken);
+                saveUserInfoToDb(userInfo);
                 System.out.println(userInfo);
             }
         } catch (Exception e) {
@@ -64,6 +70,12 @@ public class ThirdOauthLoginController {
         }
 
         return BaseResponse.success("good");
+    }
+
+    private void saveUserInfoToDb(JSONObject userInfo) {
+        if (userInfo == null) { return; }
+        UserInfo userInfoDo = new UserInfo(userInfo);
+        userInfoService.saveUserInfo(userInfoDo);
     }
 
     /**
@@ -74,7 +86,7 @@ public class ThirdOauthLoginController {
      * @throws IOException
      * @throws InterruptedException
      */
-    private String getUserInfo(String accessToken) throws IOException, InterruptedException {
+    private JSONObject getUserInfo(String accessToken) throws IOException, InterruptedException {
         String api = "https://api.github.com/user";
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
@@ -85,8 +97,7 @@ public class ThirdOauthLoginController {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
-            JSONObject jsonObject = JSONObject.parseObject(response.body());
-            return jsonObject.toJSONString();
+            return JSONObject.parseObject(response.body());
         } else {
             System.out.println("Status code: " + response.statusCode());
             System.out.println("\n Body: " + response.body());
