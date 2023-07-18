@@ -68,7 +68,7 @@ public class ThirdOauthLoginController {
                 log.info("userInfo = null");
             }
         } catch (Exception e) {
-            log.error("Get access token failed.");
+            log.error("Get access token failed. msg={}", e.getMessage());
         }
 
         return BaseResponse.fail("getUserInfo failed.");
@@ -112,8 +112,9 @@ public class ThirdOauthLoginController {
         if (response.statusCode() == 200) {
             return JSONObject.parseObject(response.body());
         } else {
-            System.out.println("Status code: " + response.statusCode());
-            System.out.println("\n Body: " + response.body());
+            log.info("Get user info from github error!");
+            log.error("Status code: {}", response.statusCode());
+            log.error("\n Body: " + response.body());
             return null;
         }
     }
@@ -140,8 +141,9 @@ public class ThirdOauthLoginController {
             JSONObject jsonObject = JSONObject.parseObject(response.body());
             return jsonObject.getString("access_token");
         } else {
-            System.out.println("Status code: " + response.statusCode());
-            System.out.println("\n Body: " + response.body());
+            log.info("Get accessToken info from github error!");
+            log.error("Get accessToken Status code: {}", response.statusCode());
+            log.error("Res Body: {}", response.body());
             return null;
         }
     }
