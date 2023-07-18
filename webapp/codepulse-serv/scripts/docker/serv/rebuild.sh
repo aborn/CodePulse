@@ -8,6 +8,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 cd $DIR
 cd ../../../
+git pull
 
 # 打jar包
 mvn clean
