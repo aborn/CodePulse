@@ -66,7 +66,6 @@ public class CodePulseApiController {
         map.put("timestamp", simpleDateFormat.format(new Date()));
         map.put("day", CodePulseDateUtils.getTodayDayInfo());
         map.put("boot_time", bootTime == null ? "null" : simpleDateFormat.format(bootTime));
-        map.put("f", FileConfigUtils.getClientSecrets());
         log.info(String.format("log info: %s", CodePulseDateUtils.getTodayDayInfo()));
         return JSONObject.toJSONString(map);
     }

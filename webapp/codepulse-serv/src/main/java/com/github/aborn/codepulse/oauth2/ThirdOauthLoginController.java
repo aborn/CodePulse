@@ -7,7 +7,6 @@ import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
 import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,18 +39,13 @@ public class ThirdOauthLoginController {
     private final UserInfoService userInfoService;
 
     /**
-     * 通过code和state 获取用户信息
-     * code=063c73729e3f07ef5fe8  用于获取accessToken
-     * state=88bb66aa  用于校验
-     *
+     * 通过code获取用户信息
      * @param code
-     * @param state
      * @return
      */
     @RequestMapping(value = "getUserInfo")
     @ResponseBody
-    public BaseResponse<Object> getUserAction(@NonNull String code, String state) {
-        log.info("code={}", code);
+    public BaseResponse<Object> getUserAction(@NonNull String code) {
         Map<String, Object> data = new HashMap<>();
         data.put("client_id", GITHUB_CLIENT_ID);
         data.put("client_secret", FileConfigUtils.getClientSecrets());
@@ -59,7 +53,6 @@ public class ThirdOauthLoginController {
         // data.put("redirect_uri", )
 
         try {
-            log.info("data={}", data);
             String accessToken = getAccessToken(data);
             log.info("Get accessToken github. {}", accessToken);
             if (accessToken != null) {
@@ -86,7 +79,7 @@ public class ThirdOauthLoginController {
      */
     @PostMapping(value = "logout")
     @ResponseBody
-    public BaseResponse<Object> getUserAction(@NonNull String token) {
+    public BaseResponse<Object> logout(@NonNull String token) {
         return BaseResponse.success("good");
     }
 
