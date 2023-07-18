@@ -12,6 +12,7 @@ import java.io.*;
 @Slf4j
 public class FileConfigUtils {
 
+    private static final String DEFAULT_PATH = "/Users/aborn/docker/packages";
     private static final String fileName = "codepulse.cfg";
     private static String cachedConfigFile = null;
     private static String ClientSecrets = null;
@@ -32,19 +33,20 @@ public class FileConfigUtils {
 
     private static String getConfigFilePath() {
         String homePath = System.getProperty("user.home");
+        log.info("homePath={}", homePath);
         File folder = new File(homePath, fileName);
         if (folder.exists()) {
             cachedConfigFile = folder.getAbsolutePath();
             log.info("home path folder path {}", cachedConfigFile);
             return cachedConfigFile;
         } else {
-            folder = new File("/Users/aborn/docker/packages");
+            folder = new File(DEFAULT_PATH);
             if (folder.exists()) {
                 cachedConfigFile = new File(folder, fileName).getAbsolutePath();
                 log.info("config path is {}", cachedConfigFile);
                 return cachedConfigFile;
             } else {
-                return fileName;
+                return DEFAULT_PATH + "/" + fileName;
             }
         }
     }
