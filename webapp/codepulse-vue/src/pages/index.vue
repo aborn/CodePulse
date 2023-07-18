@@ -5,7 +5,7 @@
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
                     <div>
-                        <a-button type="primary" :onclick="loginAction">登录</a-button>
+                        <a-button v-if="!localToken" type="primary" :onclick="loginAction">登录</a-button>
                         <span style="font-size:medium">日期：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
