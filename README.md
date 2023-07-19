@@ -14,9 +14,12 @@
 
 1. 安装插件
 以VSCode为例，在插件市场搜索 **CodePulse** ，然后安装，如下图：  
+* VS Code 插件
 ![](docs/images/vscode.jpg)  
 
-**注意** ：如果没有插件市场找到，可在项目的 plugins 目录下载文件，进行本地安装。
+* Intellij IDEA 插件  
+![](docs/images/idea.jpg)    
+**注意** ：如果没有插件市场找到，可在项目的 plugins 目录下载文件，进行本地安装。  
 
 2. 配置插件
 打开 [CodePulse](https://cp.popkit.org/#/) 站点，点击右上角使用Github账号授权登录。    
