@@ -32,6 +32,6 @@ url = https://cp.popkit.org/api/v1/codepulse/
 id = aborn
 ```
 
-3. 上报的显示大图，如下  
+3. 重新启动下 *VS Code* 和 *Intellij IEDA* 后开始上报，编程趋势大图如下：   
 ![](docs/images/index.jpg)
 
