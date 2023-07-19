@@ -45,10 +45,12 @@ public class CodePulseApiController {
     public BaseResponse<String> postUserAction(@RequestBody UserActionRequest request) {
         log.info("Request, content{}", JSONObject.toJSONString(request));
         if (StringUtils.isBlank(request.getToken()) || StringUtils.isBlank(request.getDay())) {
+            log.warn("上报参数错误！！");
             return BaseResponse.fail("参数错误", 501);
         }
         UserInfo userInfo = userInfoService.queryUserInfo(request.getToken());
         if (userInfo == null) {
+            log.warn("非法上报，该用户不存在, token: {}", request.getToken());
             return BaseResponse.fail("非法上报，该用户不存在", 502);
         }
 
