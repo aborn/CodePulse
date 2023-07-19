@@ -13,8 +13,7 @@ export type AuthData = {
 export function loginWithGithubOauth2() {
     const data: AuthData = {
         state: '88bb66aa',
-        // redirect_uri: 'http://127.0.0.1:8002/#/redirect',
-        redirect_uri: 'https://cp.popkit.org/#/redirect'
+        redirect_uri: import.meta.env.VITE_OAUTH2_REDIRECT_URL,
     }
     githubOauthAuthorize(data);
 }
@@ -22,8 +21,7 @@ export function loginWithGithubOauth2() {
 export function githubOauthAuthorize(data: AuthData) {
     const query = new URLSearchParams({
         ...data,
-        // client_id: 'fe7f56774733081f2dd9',
-        client_id: '2645bbcd62a78528da2a',
+        client_id: import.meta.env.VITE_OAUTH2_CLIENT_ID,
         scope: '',
         allow_signup: 'true',
     })

@@ -41,7 +41,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
 
 const token = localStorage.getItem('token');
-console.log('login token:', token)
+// console.log('login token:', token)
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 const yAxisData = ref([0]);
@@ -211,7 +211,7 @@ const getCurrentStyle = (current: Dayjs) => {
 
 onMounted(() => {
     if (!token) {
-        console.error('not login, pls login first.')
+        console.error('not login, pls login first!')
         return;
     }
 

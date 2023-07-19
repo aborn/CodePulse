@@ -37,7 +37,7 @@ public class FileConfigUtils {
         if (ClientId == null) {
             ClientId = get("ClientId");
         }
-        log.info("ClientId {}", ClientSecrets);
+        log.info("ClientId {}", ClientId);
         return ClientId;
     }
 
