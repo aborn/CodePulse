@@ -1,6 +1,5 @@
 # CodePulse
-![](docs/images/logo.png) 码脉，编程足迹追踪。
-
+<img src="https://github.com/aborn/CodePulse/blob/main/docs/images/logo.png" alt="CodePulse" width="50"/> 码脉，编程足迹追踪。
 
 ## 源代码
 ### plugins
