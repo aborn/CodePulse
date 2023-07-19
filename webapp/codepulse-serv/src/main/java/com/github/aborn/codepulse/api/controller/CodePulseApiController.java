@@ -8,6 +8,8 @@ import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import com.github.aborn.codepulse.common.utils.FileConfigUtils;
+import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
+import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,14 +38,23 @@ public class CodePulseApiController {
 
     private final CodePulseDataService codePulseDataService;
 
+    private final UserInfoService userInfoService;
+
     @PostMapping(value = "userAction")
     @ResponseBody
     public BaseResponse<String> postUserAction(@RequestBody UserActionRequest request) {
-        // TODO token 校验，校验不通过直接返回
         log.info("Request, content{}", JSONObject.toJSONString(request));
+        if (StringUtils.isBlank(request.getToken()) || StringUtils.isBlank(request.getDay())) {
+            return BaseResponse.fail("参数错误", 501);
+        }
+        UserInfo userInfo = userInfoService.queryUserInfo(request.getToken());
+        if (userInfo == null) {
+            return BaseResponse.fail("非法上报，该用户不存在", 502);
+        }
+
         DayBitSet dayBitSet = new DayBitSet(request.getDay(), request.getDayBitSetArray(), request.getToken());
         if (dayBitSet.isEmptySlot()) {
-            return BaseResponse.fail("编程数据为空slotCount=0", 402);
+            return BaseResponse.fail("编程数据为空slotCount=0", 502);
         }
 
         // 用户上报数据存储
@@ -54,6 +65,7 @@ public class CodePulseApiController {
      * 服务器运行状态
      * http://127.0.0.1:8001/api/v1/codepulse/status
      * http://192.168.25.86:8001/api/v1/codepulse/status
+     *
      * @return
      */
     @RequestMapping(value = "status")

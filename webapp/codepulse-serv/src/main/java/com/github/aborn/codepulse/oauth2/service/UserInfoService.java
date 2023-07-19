@@ -20,6 +20,10 @@ public class UserInfoService {
 
     private final UserInfoMapper userInfoMapper;
 
+    public UserInfo queryUserInfo(String token) {
+        return userInfoMapper.queryUserByToken(token);
+    }
+
     public UserInfo saveUserInfo(UserInfo userInfo) {
         // 先判断是否存在
         UserInfo userInfoExist = userInfoMapper.queryUserByOpenIdAndThirdType(userInfo.getOpenid(), userInfo.getThirdType());
