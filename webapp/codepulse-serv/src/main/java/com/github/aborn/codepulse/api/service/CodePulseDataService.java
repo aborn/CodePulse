@@ -54,7 +54,8 @@ public class CodePulseDataService implements DataService {
             // 说明数据存在，做下or操作，防止从不同的渠道过来打点不一致导致当前天历史数据丢失
             result = new DayBitSet(codePulseInfo);
             result.or(dayBitSet);
-            codePulseInfo.setCodeInfo(result.getCodeInfo());
+            // codePulseInfo.setCodeInfo(result.getCodeInfo());
+            codePulseInfo.setCodeInfo(result.getCodeInfoByLong());
             codePulseInfo.setUpdateTime(new Date());
             codePulseInfo.setCodeTime(result.codingTimeSeconds());
             codePulseMapper.update(codePulseInfo);

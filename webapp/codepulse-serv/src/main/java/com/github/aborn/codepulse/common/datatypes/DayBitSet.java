@@ -117,7 +117,6 @@ public class DayBitSet implements Serializable {
      * V1版本序列化到数据的接口
      * @return
      */
-    @Deprecated
     public String getCodeInfoByLong() {
         long[] bitLong = this.codingBitSet.toLongArray();
         String[] bitStr = new String[bitLong.length];
