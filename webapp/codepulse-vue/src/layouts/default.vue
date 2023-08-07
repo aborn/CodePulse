@@ -2,7 +2,7 @@
   <a-layout>
     <NavBar :navItems="navItems" :selectedKeys="selectedNavKeys" @selectd="onNavSelected" />
     <a-layout>
-      <SideBar class="sideBar" :sideMenus="sideMenus" @menu-selected="onSideSelected" :selectedKeys="selectedKeys" :openKeys="openKeys" />
+      <SideBar v-if="showSideBar" class="sideBar" :sideMenus="sideMenus" @menu-selected="onSideSelected" :selectedKeys="selectedKeys" :openKeys="openKeys" />
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item v-for="item in breadcrumbList" :key="item">{{
@@ -37,6 +37,8 @@ export default defineComponent({
 
     const breadcrumbList = ref<string[]>([]);
     const sideMenus = getMenus();
+    const showSideBar = ref<Boolean>(false);
+    showSideBar.value = sideMenus.length > 0
     const route = useRoute();
     const path = route.path;
 
@@ -178,6 +180,7 @@ export default defineComponent({
       breadcrumbList,
       openKeys,
       sideMenus,
+      showSideBar,
       initActiveNavAndSider
     }
   },

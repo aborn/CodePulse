@@ -9,8 +9,10 @@ const localMenus: Menu[] = [
         key: 'dashboard',
         path: '/',
         group: 'index'
-    }    
+    }
 ]
+
+const noMenus: Menu[] = []
 
 export const navItems: Nav[] = [
     {
@@ -45,7 +47,7 @@ export function iteratorMenu(
 }
 
 export function getMenus() {
-    return localMenus;
+    return noMenus;
 }
 
 export function getMenuList(rootMenus: Menu[]): Menu[] {
