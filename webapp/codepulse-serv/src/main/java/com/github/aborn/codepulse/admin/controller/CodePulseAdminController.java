@@ -1,6 +1,7 @@
 package com.github.aborn.codepulse.admin.controller;
 
 import com.github.aborn.codepulse.admin.datatypes.MonthActionResponse;
+import com.github.aborn.codepulse.admin.datatypes.TrendingResponse;
 import com.github.aborn.codepulse.admin.datatypes.UserActionResponse;
 import com.github.aborn.codepulse.admin.datatypes.WeekDayItem;
 import com.github.aborn.codepulse.api.service.CodePulseDataService;
@@ -73,6 +74,32 @@ public class CodePulseAdminController {
         // 201 无数据；  204 token非法；  205 token已过期；
         return BaseResponse.success(new UserActionResponse(result));
     }
+
+    @RequestMapping(value = "getUserTrending")
+    @ResponseBody
+    public BaseResponse<TrendingResponse> getUserTrending(String token, String day) {
+        // 当token存在时返回公司的？？
+        // if (StringUtils.isNotBlank(token)) {
+        //    return BaseResponse.fail("请求失败!", 501);
+        //}
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dayDate;
+        try {
+            dayDate = simpleDateFormat.parse(day);
+        } catch (ParseException e) {
+            return BaseResponse.fail("请求失败!", 500);
+        }
+        TrendingResponse response = TrendingResponse.builder().build();
+        response.add(100, "kk");
+        response.add(200, "fae");
+        response.add(1000, "fa1000");
+        response.add(1, "eee");
+        response.add(5, "efaa55");
+
+        return BaseResponse.success(response);
+    }
+
 
     /**
      * 每周的统计数据

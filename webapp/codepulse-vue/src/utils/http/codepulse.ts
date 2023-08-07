@@ -24,3 +24,12 @@ export function getMonthCodePulseInfo(params) {
         params: params
     });
 }
+
+// 查询当天的编程信息
+export function getDailyTrendingInfo(params) {
+    return request({
+        url: '/api/v1/codepulse/admin/getUserTrending',
+        method: 'get',
+        params: params
+    });
+}

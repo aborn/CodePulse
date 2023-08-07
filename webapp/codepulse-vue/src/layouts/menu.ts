@@ -16,20 +16,21 @@ const noMenus: Menu[] = []
 
 export const navItems: Nav[] = [
     {
+        name: "Trending",
+        key: "trending",
+        path: "/trending",
+        group: 'api'
+    },
+    {
         name: "Dashboard",
         key: "dashboard",
-        path: "/",
+        path: "/dashboard",
         group: 'index',
     },
     {
         name: "Guide",
         key: "guide",
         group: "components",
-    },
-    {
-        name: "API",
-        key: "api",
-        group: 'api'
     }
 ];
 
