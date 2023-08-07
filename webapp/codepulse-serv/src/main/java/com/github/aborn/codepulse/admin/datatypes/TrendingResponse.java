@@ -16,10 +16,10 @@ import java.util.List;
 public class TrendingResponse implements Serializable {
     private static final long serialVersionUID = 7240365948051188412L;
 
-    private List<Integer> trendTimeList;
+    private List<Double> trendTimeList;
     private List<String> trendNameList;
 
-    public void add(Integer time, String name) {
+    public void add(Double time, String name) {
         if (this.trendTimeList == null) {
             this.trendTimeList = new ArrayList<>();
         }

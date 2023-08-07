@@ -4,6 +4,7 @@ import com.github.aborn.codepulse.admin.datatypes.MonthActionResponse;
 import com.github.aborn.codepulse.admin.datatypes.TrendingResponse;
 import com.github.aborn.codepulse.admin.datatypes.UserActionResponse;
 import com.github.aborn.codepulse.admin.datatypes.WeekDayItem;
+import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.api.service.CodePulseDataService;
 import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
@@ -91,12 +92,16 @@ public class CodePulseAdminController {
             return BaseResponse.fail("请求失败!", 500);
         }
         TrendingResponse response = TrendingResponse.builder().build();
-        response.add(100, "kk");
-        response.add(200, "fae");
-        response.add(1000, "fa1000");
-        response.add(1, "eee");
-        response.add(5, "efaa55");
+        // response.add(100, "kk");
+        // response.add(200, "fae");
+        // response.add(1000, "fa1000");
+        // response.add(1, "eee");
+        // response.add(5, "efaa55");
 
+        List<CodePulseInfo> data = dataService.queryDailyTrending(day);
+        for (CodePulseInfo item : data) {
+            response.add(new DayBitSet(item).codingTimeMinutes(), item.getToken());
+        }
         return BaseResponse.success(response);
     }
 

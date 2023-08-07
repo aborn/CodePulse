@@ -77,4 +77,8 @@ public class CodePulseDataService implements DataService {
         return result;
     }
 
+    @Override
+    public List<CodePulseInfo> queryDailyTrending(String day) {
+        return codePulseMapper.queryDailyTrending(day);
+    }
 }

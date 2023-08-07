@@ -1,7 +1,7 @@
 import { EXCEPTION_COMPONENT, PAGE_NOT_FOUND_NAME, E404_COMPONENT } from '/@/router/constant';
 
 export const basicRouteItems = [
-    { path: '/', name: 'Index', component: () => import('/@/pages/dashboard.vue') },
+    { path: '/', name: 'Index', component: () => import('/@/pages/trending.vue') },
     { path: '/dashboard', name: 'Dashboard', component: () => import('/@/pages/dashboard.vue') },      
     { path: '/trending', name: 'Trending', component: () => import('/@/pages/trending.vue') },      
     { path: '/redirect', name: 'Redirect', component: () => import('/@/pages/redirect.vue') },

@@ -33,4 +33,8 @@ public interface CodePulseMapper {
             "<script>SELECT * FROM cp_user_coding_daily WHERE token=#{token} AND day IN "
                     + "<foreach collection='days' item='day' open='(' separator=',' close=')'>#{day}</foreach></script>")
     List<CodePulseInfo> queryList(String token, List<String> days);
+
+    @Select(
+            "<script>SELECT * FROM cp_user_coding_daily WHERE day=#{day} order by code_time DESC limit 10</script>")
+    List<CodePulseInfo> queryDailyTrending(String day);
 }

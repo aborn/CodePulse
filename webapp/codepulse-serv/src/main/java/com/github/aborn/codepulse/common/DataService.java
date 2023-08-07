@@ -1,5 +1,6 @@
 package com.github.aborn.codepulse.common;
 
+import com.github.aborn.codepulse.api.CodePulseInfo;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface DataService {
     DayBitSet get(String token, String day);
 
     List<DayBitSet> queryList(String token, List<String> days);
+
+    List<CodePulseInfo> queryDailyTrending(String day);
 }
