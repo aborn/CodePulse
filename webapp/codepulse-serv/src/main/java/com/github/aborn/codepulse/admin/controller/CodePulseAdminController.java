@@ -90,7 +90,7 @@ public class CodePulseAdminController {
         //}
         TrendingResponse response = TrendingResponse.builder().build();
         List<CodePulseInfo> data = dataService.queryDailyTrending(day);
-        
+
         if (!CollectionUtils.isEmpty(data)) {
             for (CodePulseInfo item : data) {
                 UserInfo userInfo = userInfoService.queryUserInfo(item.getToken());

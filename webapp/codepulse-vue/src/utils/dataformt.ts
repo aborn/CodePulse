@@ -8,14 +8,17 @@ export function getYearMonthDay(date: Date = new Date()) {
 
 export function toHumanReadble(second: number): string {
     if (second < 60) {
-        return second + "秒";
+        const sec = second;
+        return second + (sec === 1 ? " second" : " seconds");
     } else if (second < 60 * 60) {
         const minutes = Math.floor(second / 60);
-        return minutes + "分" + (second - minutes * 60) + "秒";
+        const sec = (second - minutes * 60)
+        return minutes + (minutes === 1 ? " minute " : " minutes ") + sec + (sec === 1 ? " second" : " seconds");
     } else {
         const hours = Math.floor(second / (60 * 60));
         const minutes = Math.floor((second - hours * 60 * 60) / 60);
         const sec = second - (hours * 60 * 60) - (minutes * 60);
-        return hours + "时" + minutes + "分" + sec + "秒";
+        return hours + (hours === 1 ? " hour " : " hours ") + minutes + (minutes === 1 ? " minute " : " minutes ")
+            + (sec > 0 ? sec + (sec === 1 ? " second" : " seconds") : '');
     }
 }

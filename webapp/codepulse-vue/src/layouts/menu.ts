@@ -19,18 +19,19 @@ export const navItems: Nav[] = [
         name: "Trending",
         key: "trending",
         path: "/trending",
-        group: 'api'
+        group: 'trending'
     },
     {
         name: "Dashboard",
         key: "dashboard",
         path: "/dashboard",
-        group: 'index',
+        group: 'dashboard',
     },
     {
         name: "Guide",
         key: "guide",
-        group: "components",
+        path: "/guide",
+        group: "guide",
     }
 ];
 

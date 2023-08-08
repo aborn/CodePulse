@@ -49,8 +49,8 @@ const disabledDate = (currentDate: Dayjs) => {
 }
 
 const data: number[] = [];
-for (let i = 0; i < 5; ++i) {
-    data.push(Math.round(Math.random() * 200));
+for (let i = 0; i < 1; ++i) {
+    data.push(0);
 }
 
 const option = reactive({
@@ -59,7 +59,7 @@ const option = reactive({
     },
     yAxis: {
         type: 'category',
-        data: ['A', 'B', 'C', 'D', 'E'],
+        data: [''],
         inverse: true,
         animationDuration: 300,
         animationDurationUpdate: 300,
@@ -129,9 +129,7 @@ const reload = (day: string = getYearMonthDay()) => {
     const desPrefix = today === day ? "Today " : day + " "
     getDailyTrendingInfo({ day: day })
         .then((res: any) => {
-            console.log(res)
             const data = res.data;
-            console.log('max=' + data.trendNameList.length)
             option.series[0].data = data.trendTimeList;
             option.yAxis.data = data.trendNameList;
             option.yAxis.max = data.trendNameList.length;

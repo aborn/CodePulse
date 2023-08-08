@@ -5,7 +5,7 @@
                 <div class="cp-box-title">
                     <span class="cp-title">{{ title }}</span>
                     <div>
-                        <span style="font-size:medium">日期：</span>
+                        <span style="font-size:medium">Date：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
                             :disabledDate="disabledDate">
                             <template #dateRender="{ current }">
@@ -96,7 +96,7 @@ const option = reactive({
     ]
 })
 
-const titleWeek = ref("近一周编程趋势图");
+const titleWeek = ref("Weekly Coding Trending");
 const xAxisDataWeek = daysWeek;
 const yAxisDataWeek = dataWeek;
 const optionWeek = reactive(getPunchCardOption(xAxisDataWeek, yAxisDataWeek))
@@ -135,14 +135,14 @@ function queryWeekly(day: string = getYearMonthDay()) {
 
 const reload = (day: string = getYearMonthDay()) => {
     const today = getYearMonthDay();
-    const desPrefix = today === day ? "今日" : day + "日"
+    const desPrefix = today === day ? "Today" : day + " "
     getDailyCodePulseInfo({ token, day: day })
         .then((res: any) => {
             const codeTime = res.data.codeTime;
             if (codeTime != codeTimeRef.value) {
                 const dayData = res.data.dayStaticByHour;
                 option.series[0].data = dayData.map(i => i * 0.5);
-                title.value = desPrefix + "趋势（共" + toHumanReadble(codeTime) + "）";
+                title.value = desPrefix + " Coding Trending（Total:" + toHumanReadble(codeTime) + "）";
                 codeTimeRef.value = res.data.codeTime;
 
                 if (today === day) {
@@ -156,7 +156,7 @@ const reload = (day: string = getYearMonthDay()) => {
                         (accumulator: number, currentValue: number) => accumulator + currentValue,
                         0
                     );
-                    titleWeek.value = "近一周编程趋势图（共" + toHumanReadble(weekCodeTimeTotal * 60) + ")"
+                    titleWeek.value = "Weekly Coding Trending（Total:" + toHumanReadble(weekCodeTimeTotal * 60) + ")"
                     optionWeek.series[0].data = dataWeekInit.value.map((item) => {
                         return [item[1], item[0], item[2]]; // 初始化数据
                     });

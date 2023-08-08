@@ -2,7 +2,8 @@
   <a-layout>
     <NavBar :navItems="navItems" :selectedKeys="selectedNavKeys" @selectd="onNavSelected" />
     <a-layout>
-      <SideBar v-if="showSideBar" class="sideBar" :sideMenus="sideMenus" @menu-selected="onSideSelected" :selectedKeys="selectedKeys" :openKeys="openKeys" />
+      <SideBar v-if="showSideBar" class="sideBar" :sideMenus="sideMenus" @menu-selected="onSideSelected"
+        :selectedKeys="selectedKeys" :openKeys="openKeys" />
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item v-for="item in breadcrumbList" :key="item">{{
@@ -148,6 +149,18 @@ export default defineComponent({
       }
     }
 
+    function activeNavbarByPath(path?: string) {
+      console.log('path=' + path)
+      if ('/' === path) {
+        path = '/trending'
+      }
+      const activeNav = navItems.find(item => item.path === path);
+      if (activeNav && activeNav.key) {
+        selectedNavKeys.value.pop()
+        selectedNavKeys.value.push(activeNav.key);
+      }
+    }
+
     function activeSideBar(path: string | null, key?: string): Menu | undefined {
       const activeSide = findItemByPath(sideMenus, path, key);
       if (activeSide && activeSide.key) {
@@ -158,12 +171,9 @@ export default defineComponent({
     }
 
     function initActiveNavAndSider(path: string) {
-      const activeSide = activeSideBar(path);
-
+      // const activeSide = activeSideBar(path);
       initBreadcrumbList(findKeyPath(path));
-      if (activeSide && activeSide.group) {
-        activeNavbar(activeSide.group)
-      }
+      activeNavbarByPath(path)
     }
 
     onMounted(async () => {
