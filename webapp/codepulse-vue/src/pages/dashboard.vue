@@ -3,7 +3,8 @@
         <div class="section-container" style="background-color: #fff; margin-top: 0px;">
             <div style="height: 380px">
                 <div class="cp-box-title">
-                    <span class="cp-title">{{ title }}</span>
+                    <span v-if="!isLogin" class="cp-title-tips">{{ tips }}</span>
+                    <span v-else class="cp-title">{{ title }}</span>
                     <div>
                         <span style="font-size:medium">Date：</span>
                         <a-date-picker v-model:value="date" :format="dateFormat" @change="dateChange"
@@ -41,6 +42,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
 
 const token = localStorage.getItem('token');
+const isLogin: boolean = !!token
 // console.log('login token:', token)
 
 const xAxisData = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -49,6 +51,7 @@ const codeTimeRef = ref(0);
 const dateFormat = 'YYYY-MM-DD';
 const date = ref<Dayjs>(dayjs());
 const title = ref('Coding Trending');
+const tips = ref('This page show your coding trending, you need sign in first!')
 const dateChange = (date: Dayjs | string, dateString: string) => {
     console.log('date chaged!', dateString)
     reload(dateString)
@@ -274,6 +277,12 @@ onMounted(() => {
 .cp-title {
     font-size: 1.35rem;
     font-weight: 400;
+}
+
+.cp-title-tips {
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: grey;
 }
 
 @media (max-width: 800px) {

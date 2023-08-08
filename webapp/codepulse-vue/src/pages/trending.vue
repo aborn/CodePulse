@@ -30,7 +30,6 @@ import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
-import { it } from "node:test";
 
 const token = localStorage.getItem('token');
 // console.log('login token:', token)

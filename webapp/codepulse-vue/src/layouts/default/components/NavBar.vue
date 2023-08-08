@@ -31,7 +31,7 @@
               <img v-if="avatar" :src="avatar" style="height: 50px; max-width: 100%; border-radius: 50%" />
               <NantaIcon v-else icon="mdi:github" size="36" style="margin-top: 14px;"></NantaIcon>
             </a>
-            <a v-else @click="loginAction" style="font-size: large; color: azure">登录</a>
+            <a v-else @click="loginAction" style="font-size: large; color: azure">Sign in</a>
           </span>
         </div>
       </a-col>

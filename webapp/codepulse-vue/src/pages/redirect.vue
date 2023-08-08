@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="section-container" style="background-color: #fff; margin-top: 0px;">
-            用户登录中...
+            login...
             <a-divider />
         </div>
     </div>
