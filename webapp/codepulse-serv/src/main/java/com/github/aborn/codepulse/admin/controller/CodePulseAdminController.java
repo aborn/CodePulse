@@ -94,7 +94,7 @@ public class CodePulseAdminController {
         if (!CollectionUtils.isEmpty(data)) {
             for (CodePulseInfo item : data) {
                 UserInfo userInfo = userInfoService.queryUserInfo(item.getToken());
-                response.add(new DayBitSet(item).codingTimeMinutes(), userInfo.getName());
+                response.add(new DayBitSet(item).codingTimeMinutes(), userInfo.getName(), userInfo.getAvatar());
             }
         }
         return BaseResponse.success(response);

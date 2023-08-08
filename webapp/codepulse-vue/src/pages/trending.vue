@@ -30,6 +30,7 @@ import { getYearMonthDay, toHumanReadble } from "/@/utils/dataformt";
 import BaseChart from "/@/components/echarts/BaseChart.vue";
 import dayjs, { Dayjs } from 'dayjs';
 import { daysWeek, dataWeek, getPunchCardOption, hours } from './data'
+import { it } from "node:test";
 
 const token = localStorage.getItem('token');
 // console.log('login token:', token)
@@ -50,7 +51,11 @@ const disabledDate = (currentDate: Dayjs) => {
 
 const data: number[] = [];
 for (let i = 0; i < 1; ++i) {
-    data.push(0);
+    data.push(10);
+}
+
+const getRichStyleName = (name: string) => {
+    return name.replace(/\s+/g, "");
 }
 
 const option = reactive({
@@ -59,11 +64,28 @@ const option = reactive({
     },
     yAxis: {
         type: 'category',
-        data: [''],
+        data: ['Aborn J'],
         inverse: true,
         animationDuration: 300,
         animationDurationUpdate: 300,
-        max: 10 // only the largest 3 bars will be displayed
+        max: 10, // only the largest 3 bars will be displayed
+        axisLabel: {
+            fontSize: 14,
+            formatter: function (value: string) {
+                return '{value|' + value + '} ' + ' {' + getRichStyleName(value) + '|}';
+            },
+            margin: 20,
+            borderRadius: [10, 10, 10, 10],
+            rich: {
+                "AbornJ": {
+                    height: 40,
+                    align: 'center',
+                    backgroundColor: {
+                        image: 'https://avatars.githubusercontent.com/u/4122988?v=4',
+                    }
+                }
+            }
+        }
     },
     series: [
         {
@@ -74,8 +96,8 @@ const option = reactive({
             label: {
                 show: true,
                 position: 'right',
-                valueAnimation: true
-            }
+                valueAnimation: true,
+            },
         }
     ],
     legend: {
@@ -121,7 +143,6 @@ function queryWeekly(day: string = getYearMonthDay()) {
             reject("error");
         })
     })
-
 }
 
 const reload = (day: string = getYearMonthDay()) => {
@@ -130,9 +151,24 @@ const reload = (day: string = getYearMonthDay()) => {
     getDailyTrendingInfo({ day: day })
         .then((res: any) => {
             const data = res.data;
+            console.log(data)
             option.series[0].data = data.trendTimeList;
             option.yAxis.data = data.trendNameList;
             option.yAxis.max = data.trendNameList.length;
+            data.trendNameList.forEach((item, index) => {
+                if (data.avatarList && data.avatarList[index]) {
+                    console.log(item, index)
+                    console.log(data.avatarList[index])
+                    option.yAxis.axisLabel.rich[getRichStyleName(item)] = {
+                        height: 40,
+                        align: 'center',
+                        backgroundColor: {
+                            image: data.avatarList[index],
+                        }
+                    }
+                }
+            })
+
         });
 }
 
@@ -169,6 +205,7 @@ onMounted(() => {
         reload();
     }, 30 * 1000);
 })
+
 </script>
 
 <style scoped>

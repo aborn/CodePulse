@@ -18,8 +18,9 @@ public class TrendingResponse implements Serializable {
 
     private List<Double> trendTimeList;
     private List<String> trendNameList;
+    private List<String> avatarList;
 
-    public void add(Double time, String name) {
+    public void add(Double time, String name, String avatar) {
         if (this.trendTimeList == null) {
             this.trendTimeList = new ArrayList<>();
         }
@@ -30,5 +31,10 @@ public class TrendingResponse implements Serializable {
             this.trendNameList = new ArrayList<>();
         }
         this.trendNameList.add(name);
+
+        if (this.avatarList == null) {
+            this.avatarList = new ArrayList<>();
+        }
+        this.avatarList.add(avatar);
     }
 }

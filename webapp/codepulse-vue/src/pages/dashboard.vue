@@ -48,7 +48,7 @@ const yAxisData = ref([0]);
 const codeTimeRef = ref(0);
 const dateFormat = 'YYYY-MM-DD';
 const date = ref<Dayjs>(dayjs());
-const title = ref('编程趋势');
+const title = ref('Coding Trending');
 const dateChange = (date: Dayjs | string, dateString: string) => {
     console.log('date chaged!', dateString)
     reload(dateString)
