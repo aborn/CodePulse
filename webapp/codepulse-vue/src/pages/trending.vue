@@ -19,15 +19,6 @@
                 <BaseChart :options="option" class="td-daily-chart"></BaseChart>
             </div>
         </div>
-        <a-divider />
-        <div class="section-container" style="background-color: #fff; margin-top: 0px;">
-            <div style="height: 380px">
-                <div class="cp-box-title">
-                    <span class="cp-title">{{ titleWeek }}</span>
-                </div>
-                <BaseChart :options="optionWeek" class="cp-daily-chart"></BaseChart>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -96,7 +87,7 @@ const option = reactive({
     animationEasingUpdate: 'linear'
 })
 
-const titleWeek = ref("近一周编程趋势图");
+const titleWeek = ref("Weekly Coding");
 const xAxisDataWeek = daysWeek;
 const yAxisDataWeek = dataWeek;
 const optionWeek = reactive(getPunchCardOption(xAxisDataWeek, yAxisDataWeek))

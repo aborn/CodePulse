@@ -11,10 +11,13 @@ import com.github.aborn.codepulse.common.datatypes.BaseResponse;
 import com.github.aborn.codepulse.common.datatypes.DayBitSet;
 import com.github.aborn.codepulse.common.utils.CodePulseDateUtils;
 import com.github.aborn.codepulse.common.utils.UserManagerUtils;
+import com.github.aborn.codepulse.oauth2.datatypes.UserInfo;
+import com.github.aborn.codepulse.oauth2.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +42,8 @@ public class CodePulseAdminController {
     private final DayBitSetsDataManager dayBitSetsDataManager;
 
     private final CodePulseDataService dataService;
+
+    private final UserInfoService userInfoService;
 
     /**
      * 每天的统计数据
@@ -83,24 +88,14 @@ public class CodePulseAdminController {
         // if (StringUtils.isNotBlank(token)) {
         //    return BaseResponse.fail("请求失败!", 501);
         //}
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dayDate;
-        try {
-            dayDate = simpleDateFormat.parse(day);
-        } catch (ParseException e) {
-            return BaseResponse.fail("请求失败!", 500);
-        }
         TrendingResponse response = TrendingResponse.builder().build();
-        // response.add(100, "kk");
-        // response.add(200, "fae");
-        // response.add(1000, "fa1000");
-        // response.add(1, "eee");
-        // response.add(5, "efaa55");
-
         List<CodePulseInfo> data = dataService.queryDailyTrending(day);
-        for (CodePulseInfo item : data) {
-            response.add(new DayBitSet(item).codingTimeMinutes(), item.getToken());
+        
+        if (!CollectionUtils.isEmpty(data)) {
+            for (CodePulseInfo item : data) {
+                UserInfo userInfo = userInfoService.queryUserInfo(item.getToken());
+                response.add(new DayBitSet(item).codingTimeMinutes(), userInfo.getName());
+            }
         }
         return BaseResponse.success(response);
     }
