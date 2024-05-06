@@ -68,7 +68,7 @@ namespace CodePulse
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(286, 87);
+            this.btnOk.Location = new System.Drawing.Point(468, 87);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(87, 35);
             this.btnOk.TabIndex = 2;

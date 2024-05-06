@@ -24,9 +24,9 @@ namespace CodePulse
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(CodePulse.PackageGuidString)]
+    [Guid(CodePulsePackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    public sealed class CodePulse : AsyncPackage
+    public sealed class CodePulsePackage : AsyncPackage
     {
         /// <summary>
         /// codepulse_visualstudioPackage GUID string.

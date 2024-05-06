@@ -14,6 +14,11 @@ namespace CodePulse
     /// </summary>
     internal sealed class SettingCommand
     {
+
+        private ILogger _logger;
+
+        public readonly ConfigFile Config;
+
         /// <summary>
         /// Command ID.
         /// </summary>
@@ -92,14 +97,18 @@ namespace CodePulse
             string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
             string title = "SettingCommand";
 
+
+            var form = new TokenSettingForm(Config, _logger);
+            form.ShowDialog();
+
             // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            //VsShellUtilities.ShowMessageBox(
+            //    this.package,
+            //    message,
+            //    title,
+            //    OLEMSGICON.OLEMSGICON_INFO,
+            //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+            //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
     }
 }
