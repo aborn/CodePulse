@@ -9,10 +9,7 @@ namespace CodePulse
 {
     public static class GuidList
     {
-        public const string GuidWakaTimePkgString = "52d9c3ff-c893-408e-95e4-d7484ec7fa47";
-        public const string GuidWakaTimeUIString = "ADFC4E64-0397-11D1-9F4E-00A0C911004F";
-        public const string GuidWakaTimeCmdSetString = "054caf12-7fba-40d1-8dc8-bd69f838b910";
-        public static readonly Guid GuidWakatimeOutputPane = new Guid("a635ec18-1b8f-468d-832e-8e5eda489815");
+        public static readonly Guid GuidWakatimeOutputPane = new Guid("c74266cb-ac06-4f69-915e-503598095b0e");
     }
 
     internal static class NativeMethods
