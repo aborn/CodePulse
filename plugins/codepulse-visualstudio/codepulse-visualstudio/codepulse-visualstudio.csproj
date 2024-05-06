@@ -45,8 +45,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CodePulse\CliParameters.cs" />
     <Compile Include="CodePulse\CodePulse.cs" />
-    <Compile Include="ConfigFile.cs" />
+    <Compile Include="CodePulse\ConfigFile.cs" />
+    <Compile Include="CodePulse\Heartbeat.cs" />
     <Compile Include="Framework\Logger.cs" />
     <Compile Include="Framework\ILogger.cs" />
     <Compile Include="Framework\LogLevel.cs" />

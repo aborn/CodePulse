@@ -41,7 +41,7 @@ namespace CodePulse
         {
             try
             {
-                var matched = Regex.IsMatch(txtAPIKey.Text.Trim(), "(?im)^(waka_)?[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}$");
+                var matched = true; //Regex.IsMatch(txtAPIKey.Text.Trim(), "(?im)^(waka_)?[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}$");
 
                 if (matched)
                 {
@@ -49,7 +49,7 @@ namespace CodePulse
                 }
                 else
                 {
-                    MessageBox.Show("Please enter valid Api Key.");
+                    MessageBox.Show("请输入正确的TOKEN.");
 
                     DialogResult = DialogResult.None; // do not close dialog box
                 }
