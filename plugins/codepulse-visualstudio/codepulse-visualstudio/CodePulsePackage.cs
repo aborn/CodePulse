@@ -45,7 +45,7 @@ namespace CodePulse
         private TextEditorEvents _textEditorEvents;
         private ILogger _logger;
         private TokenSettingForm _settingsForm;
-        private CodePulse _wakatime;
+        private CodePulse _codepulse;
         private string _solutionName;
         private bool _isBuildRunning;
 
@@ -64,13 +64,15 @@ namespace CodePulse
 
             var objDte = await GetServiceAsync(typeof(DTE));
             _dte = objDte as DTE;
+            _codepulse = new CodePulse(_logger);
+            _logger = new Logger(CodePulse.CONFIG_FILE);
 
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             // await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await InitializeAsync(cancellationToken);
             await SettingCommand.InitializeAsync(this);
-            
+
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken)
@@ -96,7 +98,7 @@ namespace CodePulse
                 _textEditorEvents = _dte.Events.TextEditorEvents;
 
                 // Settings Form
-                _settingsForm = new TokenSettingForm(new ConfigFile(CodePulse.CONFIG_FILE), _logger);
+                // _settingsForm = new TokenSettingForm(new ConfigFile(CodePulse.CONFIG_FILE), _logger);
 
                 // setup event handlers
                 _docEvents.DocumentOpened += DocEventsOnDocumentOpened;
@@ -112,7 +114,7 @@ namespace CodePulse
             }
             catch (Exception ex)
             {
-                _logger.Error("Error Initializing WakaTime", ex);
+                _logger.Error("Error Initializing CodePulse", ex);
             }
         }
 
@@ -128,7 +130,7 @@ namespace CodePulse
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                _wakatime.HandleActivity(document.FullName, false, GetProjectName(), category);
+                _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
             }
             catch (Exception ex)
             {
@@ -146,7 +148,7 @@ namespace CodePulse
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                _wakatime.HandleActivity(document.FullName, true, GetProjectName(), category);
+                _codepulse.HandleActivity(document.FullName, true, GetProjectName(), category);
             }
             catch (Exception ex)
             {
@@ -167,7 +169,7 @@ namespace CodePulse
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                    _wakatime.HandleActivity(document.FullName, false, GetProjectName(), category);
+                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
                 }
             }
             catch (Exception ex)
@@ -195,7 +197,7 @@ namespace CodePulse
             {
                 var outputFile = GetCurrentProjectOutputForCurrentConfiguration();
 
-                _wakatime.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
+                _codepulse.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
             }
             catch (Exception ex)
             {
@@ -209,7 +211,7 @@ namespace CodePulse
             {
                 var outputFile = GetCurrentProjectOutputForCurrentConfiguration();
 
-                _wakatime.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
+                _codepulse.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
             }
             catch (Exception ex)
             {
@@ -223,7 +225,7 @@ namespace CodePulse
             {
                 var outputFile = GetCurrentProjectOutputForCurrentConfiguration();
 
-                _wakatime.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
+                _codepulse.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Debugging);
             }
             catch (Exception ex)
             {
@@ -262,7 +264,7 @@ namespace CodePulse
 
                 var outputFile = GetProjectOutputForConfiguration(project, platform, projectConfig);
 
-                _wakatime.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Building);
+                _codepulse.HandleActivity(outputFile, false, GetProjectName(), HeartbeatCategory.Building);
             }
             catch (Exception ex)
             {
@@ -279,7 +281,7 @@ namespace CodePulse
 
                 var outputFile = GetProjectOutputForConfiguration(project, platform, projectConfig);
 
-                _wakatime.HandleActivity(outputFile, success, GetProjectName(), HeartbeatCategory.Building);
+                _codepulse.HandleActivity(outputFile, success, GetProjectName(), HeartbeatCategory.Building);
             }
             catch (Exception ex)
             {
@@ -300,7 +302,7 @@ namespace CodePulse
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                    _wakatime.HandleActivity(document.FullName, false, GetProjectName(), category);
+                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
                 }
             }
             catch (Exception ex)
@@ -339,6 +341,5 @@ namespace CodePulse
                 return null;
             }
         }
-
     }
 }
