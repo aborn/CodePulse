@@ -38,6 +38,7 @@ namespace CodePulse
     public class CodePulse : IDisposable
     {
         public static string CONFIG_FILE = "D:\\temp\\codepulse.cfg";
+        public static string LOG_FILE = "D:\\temp\\codepulse.log";
         private string _lastFile;
         private DateTime _lastHeartbeat;
         public readonly ConcurrentQueue<Heartbeat> HeartbeatQueue;
@@ -63,7 +64,7 @@ namespace CodePulse
         public async Task InitializeAsync()
         {
             CodePulse wakaTime = this;
-            wakaTime.Logger.Info("Initializing WakaTime v");
+            wakaTime.Logger.Info("Initializing CodePulse...");
             try
             {
                 wakaTime._heartbeatsProcessTimer.Elapsed += new ElapsedEventHandler(wakaTime.ProcessHeartbeats);
@@ -71,7 +72,7 @@ namespace CodePulse
                 wakaTime.UpdateTotalTimeToday((object)null, (ElapsedEventArgs)null);
                 wakaTime._totalTimeTodayUpdateTimer.Elapsed += new ElapsedEventHandler(wakaTime.UpdateTotalTimeToday);
                 wakaTime._totalTimeTodayUpdateTimer.Start();
-                wakaTime.Logger.Info("Finished initializing WakaTime v");
+                wakaTime.Logger.Info("Finished initializing CodePulse.");
             }
             catch (WebException ex)
             {

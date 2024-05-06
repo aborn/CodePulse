@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace CodePulse
         {
             var configFile = new ConfigFile(configFilepath);
 
-            _isDebugEnabled = configFile.GetSettingAsBoolean("debug");
+            _isDebugEnabled = true; //configFile.GetSettingAsBoolean("debug");
         }
 
         private static IVsOutputWindowPane GetWakatimeOutputWindowPane()
@@ -29,7 +30,7 @@ namespace CodePulse
 
             var outputPaneGuid = new Guid(GuidList.GuidWakatimeOutputPane.ToByteArray());
 
-            outputWindow.CreatePane(ref outputPaneGuid, "WakaTime", 1, 1);
+            outputWindow.CreatePane(ref outputPaneGuid, "CodePulse", 1, 1);
             outputWindow.GetPane(ref outputPaneGuid, out var windowPane);
 
             return windowPane;
@@ -62,13 +63,30 @@ namespace CodePulse
 
         private void Log(LogLevel level, string message)
         {
+            write_log(message);
             var outputWindowPane = WakatimeOutputWindowPane;
             if (outputWindowPane == null) return;
 
             var outputMessage =
                 $"[CodePulse {Enum.GetName(level.GetType(), level)} {DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)}] {message}{Environment.NewLine}";
-
             outputWindowPane.OutputString(outputMessage);
+        }
+
+
+        public static void write_log(string str)
+        {
+            string strlog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ": " + str + "\r\n";
+            
+            using (FileStream fs = new FileStream(CodePulse.LOG_FILE, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.Write(strlog);
+                    sw.Flush();
+                    sw.Close();
+                    fs.Close();
+                }
+            }
         }
     }
 }
