@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -57,6 +58,29 @@ namespace CodePulse
             this._heartbeatsProcessTimer = new Timer(10000.0);
             this._totalTimeTodayUpdateTimer = new Timer(60000.0);
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
+        }
+
+        public async Task InitializeAsync()
+        {
+            CodePulse wakaTime = this;
+            wakaTime.Logger.Info("Initializing WakaTime v");
+            try
+            {
+                wakaTime._heartbeatsProcessTimer.Elapsed += new ElapsedEventHandler(wakaTime.ProcessHeartbeats);
+                wakaTime._heartbeatsProcessTimer.Start();
+                wakaTime.UpdateTotalTimeToday((object)null, (ElapsedEventArgs)null);
+                wakaTime._totalTimeTodayUpdateTimer.Elapsed += new ElapsedEventHandler(wakaTime.UpdateTotalTimeToday);
+                wakaTime._totalTimeTodayUpdateTimer.Start();
+                wakaTime.Logger.Info("Finished initializing WakaTime v");
+            }
+            catch (WebException ex)
+            {
+                wakaTime.Logger.Error("Are you behind a proxy? Try setting a proxy in WakaTime Settings with format https://user:pass@host:port", (Exception)ex);
+            }
+            catch (Exception ex)
+            {
+                wakaTime.Logger.Error("Error installing dependencies", ex);
+            }
         }
 
         public void HandleActivity(string currentFile, bool isWrite, string project, HeartbeatCategory? category = null, EntityType? entityType = null)
@@ -129,8 +153,28 @@ namespace CodePulse
             });
         }
 
+        private void UpdateTotalTimeToday(object sender, ElapsedEventArgs e) => Task.Run((Action)(() => this.UpdateTotalTimeToday()));
+
+        private void UpdateTotalTimeToday()
+        {
+           
+        }
+
         public void Dispose()
         {
+            if (this._heartbeatsProcessTimer != null)
+            {
+                this._heartbeatsProcessTimer.Stop();
+                this._heartbeatsProcessTimer.Elapsed -= new ElapsedEventHandler(this.ProcessHeartbeats);
+                this._heartbeatsProcessTimer.Dispose();
+            }
+            if (this._totalTimeTodayUpdateTimer != null)
+            {
+                this._totalTimeTodayUpdateTimer.Stop();
+                this._totalTimeTodayUpdateTimer.Elapsed -= new ElapsedEventHandler(this.UpdateTotalTimeToday);
+                this._totalTimeTodayUpdateTimer.Dispose();
+            }
+            this.ProcessHeartbeats();
         }
     }
 }
