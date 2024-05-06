@@ -125,6 +125,7 @@ namespace CodePulse
                 this._cliParameters.Category = result1.Category;
                 this._cliParameters.EntityType = result1.EntityType;
                 this._cliParameters.HasExtraHeartbeats = flag;
+                string currentToken = _token;
                 string stdin = (string)null;
 
                 if (flag)
