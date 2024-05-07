@@ -1,5 +1,6 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
 using System.Linq;
@@ -26,15 +27,17 @@ namespace CodePulse
     /// To get loaded into VS, the package must be referred by &lt;Asset Type="Microsoft.VisualStudio.VsPackage" ...&gt; in .vsixmanifest file.
     /// </para>
     /// </remarks>
+    [Guid(CodePulseConsts.PackageGuidString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(CodePulsePackage.PackageGuidString)]
+    [ProvideService(typeof(CodePulsePackage), IsAsyncQueryable = true)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class CodePulsePackage : AsyncPackage
     {
         /// <summary>
         /// codepulse_visualstudioPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "c74266cb-ac06-4f69-915e-503598095b0e";
+        
 
         private DTE _dte;
         private DocumentEvents _docEvents;
@@ -79,8 +82,19 @@ namespace CodePulse
             // Do any initialization that requires the UI thread after switching to the UI thread.
             // await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await InitializeAsync(cancellationToken);
-            
+
             await SettingCommand.InitializeAsync(this);
+
+            // Prompt for api key if not already set
+            if (string.IsNullOrEmpty(_codepulse.Config.GetSetting("api_key")))
+                PromptApiKey();
+        }
+
+        private void PromptApiKey()
+        {
+            _logger.Debug("It will ask for user to input its api key");
+            var form = new TokenSettingForm(_codepulse.Config, _logger);
+            form.ShowDialog();
         }
 
         private async Task InitializeAsync(CancellationToken cancellationToken)

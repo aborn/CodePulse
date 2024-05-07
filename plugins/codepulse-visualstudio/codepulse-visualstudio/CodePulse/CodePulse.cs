@@ -39,7 +39,7 @@ namespace CodePulse
 
     public class CodePulse : IDisposable
     {
-        
+
         public static string WINDOWN_ACTIVED_EVENT = "WindowEventsOnWindowActivated";
         private string _lastFile;
 
@@ -99,10 +99,10 @@ namespace CodePulse
 
         public void HandleActivity(string currentFile, bool isWrite, string project, HeartbeatCategory? category = null, EntityType? entityType = null, string eventName = "")
         {
-            this.Logger.Info("HandleActivity...:" + eventName);
+            this.Logger.Info("HandleActivity...:" + eventName + ", fileName:" + currentFile);
             if (currentFile == null)
                 return;
-            
+
             this.Record();
             DateTime utcNow = DateTime.UtcNow;
             if (WINDOWN_ACTIVED_EVENT.Equals(eventName))
@@ -193,7 +193,7 @@ namespace CodePulse
 
                 if (flag)
                 {
-                   
+
                 }
 
             }
