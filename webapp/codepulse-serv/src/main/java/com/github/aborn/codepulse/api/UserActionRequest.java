@@ -17,4 +17,9 @@ public class UserActionRequest extends UserRequest implements Serializable {
 
     @NonNull byte[] dayBitSetArray;
 
+    // IDE类型， 0:未知，1:表示 intellij, 2:表示 vscode, 3:表示 visual studio
+    int ide = 0;
+
+    // 扩展参数，留着以后用
+    String ext;
 }
