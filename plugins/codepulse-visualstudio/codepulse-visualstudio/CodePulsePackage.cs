@@ -136,18 +136,17 @@ namespace CodePulse
         {
             try
             {
-                _logger.Info("DocEventsOnDocumentOpened");
                 var category = _isBuildRunning
                         ? HeartbeatCategory.Building
                         : _dte.Debugger.CurrentMode == dbgDebugMode.dbgBreakMode
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
+                _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category, null, "DocEventsOnDocumentOpened");
             }
             catch (Exception ex)
             {
-                _logger.Error("DocEventsOnDocumentOpened", ex);
+                _logger.Error("DocEventsOnDocumentOpened ERROR", ex);
             }
         }
 
@@ -174,7 +173,6 @@ namespace CodePulse
         {
             try
             {
-                _logger.Info("WindowEventsOnWindowActivated");
                 var document = _dte.ActiveWindow.Document;
                 if (document != null)
                 {
@@ -312,19 +310,18 @@ namespace CodePulse
                 var document = startPoint.Parent.Parent;
                 if (document != null)
                 {
-                    _logger.Info("TextEditorEventsLineChanged");
                     var category = _isBuildRunning
                         ? HeartbeatCategory.Building
                         : _dte.Debugger.CurrentMode == dbgDebugMode.dbgBreakMode
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
+                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category, null, "TextEditorEventsLineChanged");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("TextEditorEventsLineChanged", ex);
+                _logger.Error("TextEditorEventsLineChanged ERROR", ex);
             }
         }
 

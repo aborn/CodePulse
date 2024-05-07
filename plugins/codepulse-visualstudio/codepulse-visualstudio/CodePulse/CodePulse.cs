@@ -102,17 +102,19 @@ namespace CodePulse
             this.Logger.Info("HandleActivity...:" + eventName);
             if (currentFile == null)
                 return;
+            
+            this.Record();
             DateTime utcNow = DateTime.UtcNow;
-            if (!isWrite && this._lastFile != null && !this.EnoughTimePassed(utcNow) && currentFile.Equals(this._lastFile))
-                return;
-            this._lastFile = currentFile;
-            this._lastHeartbeat = utcNow;
             if (WINDOWN_ACTIVED_EVENT.Equals(eventName))
             {
                 this._ideOpendedTime = utcNow;
             }
+
+            if (!isWrite && this._lastFile != null && !this.EnoughTimePassed(utcNow) && currentFile.Equals(this._lastFile))
+                return;
+            this._lastFile = currentFile;
+            this._lastHeartbeat = utcNow;
             this.AppendHeartbeat(currentFile, isWrite, utcNow, project, category, entityType);
-            this.Record();
         }
 
         // 记录
