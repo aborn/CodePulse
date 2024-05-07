@@ -1,20 +1,10 @@
-﻿using Microsoft.VisualStudio.Shell.Interop;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
 
 namespace CodePulse
 {
     public class Logger : ILogger
     {
-        private IVsOutputWindowPane _wakatimeOutputWindowPane;
-        private IVsOutputWindowPane WakatimeOutputWindowPane =>
-            _wakatimeOutputWindowPane ?? (_wakatimeOutputWindowPane = GetWakatimeOutputWindowPane());
         private readonly bool _isDebugEnabled;
 
         public Logger(string configFilepath)
@@ -22,18 +12,6 @@ namespace CodePulse
             var configFile = new ConfigFile(configFilepath);
 
             _isDebugEnabled = true; //configFile.GetSettingAsBoolean("debug");
-        }
-
-        private static IVsOutputWindowPane GetWakatimeOutputWindowPane()
-        {
-            if (!(Package.GetGlobalService(typeof(SVsOutputWindow)) is IVsOutputWindow outputWindow)) return null;
-
-            var outputPaneGuid = new Guid(GuidList.GuidWakatimeOutputPane.ToByteArray());
-
-            outputWindow.CreatePane(ref outputPaneGuid, "CodePulse", 1, 1);
-            outputWindow.GetPane(ref outputPaneGuid, out var windowPane);
-
-            return windowPane;
         }
 
         public void Debug(string message)
@@ -63,17 +41,11 @@ namespace CodePulse
 
         private void Log(LogLevel level, string message)
         {
-            write_log(message);
-            var outputWindowPane = WakatimeOutputWindowPane;
-            if (outputWindowPane == null) return;
-
-            var outputMessage =
-                $"[CodePulse {Enum.GetName(level.GetType(), level)} {DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)}] {message}{Environment.NewLine}";
-            outputWindowPane.OutputString(outputMessage);
+            WriteLogToFile(message);
         }
 
 
-        public static void write_log(string str)
+        public static void WriteLogToFile(string str)
         {
             string strlog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ": " + str + "\r\n";
             

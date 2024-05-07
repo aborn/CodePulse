@@ -34,11 +34,6 @@ namespace CodePulse
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class CodePulsePackage : AsyncPackage
     {
-        /// <summary>
-        /// codepulse_visualstudioPackage GUID string.
-        /// </summary>
-        
-
         private DTE _dte;
         private DocumentEvents _docEvents;
         private WindowEvents _windowEvents;
@@ -48,7 +43,6 @@ namespace CodePulse
         private TextEditorEvents _textEditorEvents;
         private SelectionEvents _selectionEvents;
         private ILogger _logger;
-        private TokenSettingForm _settingsForm;
         private CodePulse _codepulse;
         private string _solutionName;
         private bool _isBuildRunning;
@@ -108,13 +102,13 @@ namespace CodePulse
 
             try
             {
-                Task wakaTimeInitializationTask = _codepulse.InitializeAsync();
+                Task codePulseInitializationTask = _codepulse.InitializeAsync();
 
                 // When initialized asynchronously, the current thread may be a background thread at this point.
                 // Do any initialization that requires the UI thread after switching to the UI thread.
                 await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-                await wakaTimeInitializationTask;
+                await codePulseInitializationTask;
 
                 // Visual Studio Events              
                 _docEvents = _dte.Events.DocumentEvents;
@@ -124,9 +118,6 @@ namespace CodePulse
                 _buildEvents = _dte.Events.BuildEvents;
                 _textEditorEvents = _dte.Events.TextEditorEvents;
                 _selectionEvents = _dte.Events.SelectionEvents;
-
-                // Settings Form
-                // _settingsForm = new TokenSettingForm(new ConfigFile(CodePulse.CONFIG_FILE), _logger);
 
                 // setup event handlers
                 _docEvents.DocumentOpened += DocEventsOnDocumentOpened;

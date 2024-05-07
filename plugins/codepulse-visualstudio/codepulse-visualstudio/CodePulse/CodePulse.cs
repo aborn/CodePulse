@@ -90,7 +90,7 @@ namespace CodePulse
             }
             catch (WebException ex)
             {
-                codePulse.Logger.Error("Are you behind a proxy? Try setting a proxy in WakaTime Settings with format https://user:pass@host:port", (Exception)ex);
+                codePulse.Logger.Error("Are you behind a proxy? Try setting a proxy in CodePulse Settings with format https://user:pass@host:port", (Exception)ex);
             }
             catch (Exception ex)
             {

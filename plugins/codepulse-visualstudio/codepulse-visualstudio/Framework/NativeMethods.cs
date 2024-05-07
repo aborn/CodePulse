@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CodePulse
 {
-    public static class GuidList
-    {
-        public static readonly Guid GuidWakatimeOutputPane = new Guid("c74266cb-ac06-4f69-915e-503598095b0e");
-    }
-
     internal static class NativeMethods
     {
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]

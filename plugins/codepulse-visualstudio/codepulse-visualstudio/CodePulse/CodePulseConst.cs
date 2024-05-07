@@ -15,7 +15,6 @@ namespace CodePulse
         public static string LOG_FILE = Path.Combine(ROOT_PATH, CODE_PULSE.ToLower() + ".log");
 
         public const string PackageGuidString = "c74266cb-ac06-4f69-915e-503598095b0e";
-        public const string GuidWakaTimeUIString = "d74266cb-ac06-4f69-915e-503598095b0f";
 
         public const string CONFIG_KEY_URL = "api_url";
         public const string CONFIG_KEY_TOKEN = "api_key";
