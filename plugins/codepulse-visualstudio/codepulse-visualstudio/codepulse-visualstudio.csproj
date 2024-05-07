@@ -49,8 +49,8 @@
     <Compile Include="CodePulse\CodePulse.cs" />
     <Compile Include="CodePulse\CodePulseConst.cs" />
     <Compile Include="CodePulse\ConfigFile.cs" />
-    <Compile Include="CodePulse\tc\DateSlotUtils.cs" />
-    <Compile Include="CodePulse\tc\DayBitSet.cs" />
+    <Compile Include="CodePulse\TimeTrace\DateSlotUtils.cs" />
+    <Compile Include="CodePulse\TimeTrace\DayBitSet.cs" />
     <Compile Include="Framework\Network\DataSenderHelper.cs" />
     <Compile Include="CodePulse\Heartbeat.cs" />
     <Compile Include="Framework\Logger\Logger.cs" />
@@ -60,11 +60,11 @@
     <Compile Include="Framework\Network\SimpleResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodePulsePackage.cs" />
-    <Compile Include="CodePulse\ui\SettingCommand.cs" />
-    <Compile Include="CodePulse\ui\TokenSettingForm.cs">
+    <Compile Include="CodePulse\UI\SettingCommand.cs" />
+    <Compile Include="CodePulse\UI\TokenSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CodePulse\ui\TokenSettingForm.Designer.cs">
+    <Compile Include="CodePulse\UI\TokenSettingForm.Designer.cs">
       <DependentUpon>TokenSettingForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <Content Include="Resources\SettingCommand.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CodePulse\ui\TokenSettingForm.resx">
+    <EmbeddedResource Include="CodePulse\UI\TokenSettingForm.resx">
       <DependentUpon>TokenSettingForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
