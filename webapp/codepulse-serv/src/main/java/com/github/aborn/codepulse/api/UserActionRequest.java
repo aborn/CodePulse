@@ -11,12 +11,10 @@ import java.io.Serializable;
  * @date 2023/02/10 09:54
  */
 @Data
-public class UserActionRequest implements Serializable {
-
-    @NonNull
-    String token;
+public class UserActionRequest extends UserRequest implements Serializable {
+    public UserActionRequest() {
+    }
 
     @NonNull byte[] dayBitSetArray;
 
-    @NonNull String day;
 }
