@@ -46,6 +46,7 @@ namespace CodePulse
         private DebuggerEvents _debuggerEvents;
         private BuildEvents _buildEvents;
         private TextEditorEvents _textEditorEvents;
+        private SelectionEvents _selectionEvents;
         private ILogger _logger;
         private TokenSettingForm _settingsForm;
         private CodePulse _codepulse;
@@ -122,6 +123,7 @@ namespace CodePulse
                 _debuggerEvents = _dte.Events.DebuggerEvents;
                 _buildEvents = _dte.Events.BuildEvents;
                 _textEditorEvents = _dte.Events.TextEditorEvents;
+                _selectionEvents = _dte.Events.SelectionEvents;
 
                 // Settings Form
                 // _settingsForm = new TokenSettingForm(new ConfigFile(CodePulse.CONFIG_FILE), _logger);
@@ -137,11 +139,17 @@ namespace CodePulse
                 _buildEvents.OnBuildProjConfigBegin += BuildEventsOnBuildProjConfigBegin;
                 _buildEvents.OnBuildProjConfigDone += BuildEventsOnBuildProjConfigDone;
                 _textEditorEvents.LineChanged += TextEditorEventsLineChanged;
+                _selectionEvents.OnChange += SelectionEventsOnChange;
             }
             catch (Exception ex)
             {
                 _logger.Error("Error Initializing CodePulse", ex);
             }
+        }
+
+        private void SelectionEventsOnChange()
+        {
+            _logger.Info("SelectionEventsOnChange");
         }
 
         #endregion
