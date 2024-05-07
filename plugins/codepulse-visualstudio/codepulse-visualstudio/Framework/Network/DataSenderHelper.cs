@@ -83,7 +83,7 @@ namespace CodePulse
             return simpleResult;
         }
 
-        public static string Post(string url, string postData)
+        private static string Post(string url, string postData)
         {
             string result = "";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

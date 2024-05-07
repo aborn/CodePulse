@@ -14,6 +14,12 @@ namespace CodePulse
         private BitArray codingBitSet;
         public static int SLOT_SIZE = 24 * 60 * 2;
 
+        public DayBitSet()
+        {
+            this.day = DateTime.Now.ToString("yyyy-MM-dd");
+            codingBitSet = new BitArray(SLOT_SIZE);
+        }
+
         public DayBitSet(string day)
         {
             this.day = day;

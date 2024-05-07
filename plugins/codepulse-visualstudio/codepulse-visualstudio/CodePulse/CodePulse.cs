@@ -39,8 +39,9 @@ namespace CodePulse
     {
         public static string CONFIG_FILE = "D:\\temp\\codepulse.cfg";
         public static string LOG_FILE = "D:\\temp\\codepulse.log";
+        public static string WINDOWN_ACTIVED_EVENT = "WindowEventsOnWindowActivated";
         private string _lastFile;
-        private DateTime _lastHeartbeat;
+
         public readonly ConcurrentQueue<Heartbeat> HeartbeatQueue;
         private readonly Timer _heartbeatsProcessTimer;
         private readonly Timer _totalTimeTodayUpdateTimer;
@@ -49,6 +50,10 @@ namespace CodePulse
         public ILogger Logger { get; }
         public readonly ConfigFile Config;
         private string _token;
+
+        private DateTime _lastHeartbeat;  // 上一次的心跳时间
+        private DateTime _ideOpendedTime; // IDE最近一次打开的时间
+        private DayBitSet _currentDayBitSet;
 
         public CodePulse(ILogger logger)
         {
@@ -60,6 +65,7 @@ namespace CodePulse
             this._totalTimeTodayUpdateTimer = new Timer(60000.0);
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
             this._cliParameters = new CliParameters();
+            this._currentDayBitSet = new DayBitSet();
         }
 
         public async Task InitializeAsync()
@@ -85,7 +91,7 @@ namespace CodePulse
             }
         }
 
-        public void HandleActivity(string currentFile, bool isWrite, string project, HeartbeatCategory? category = null, EntityType? entityType = null)
+        public void HandleActivity(string currentFile, bool isWrite, string project, HeartbeatCategory? category = null, EntityType? entityType = null, string eventName = "")
         {
             if (currentFile == null)
                 return;
@@ -94,7 +100,51 @@ namespace CodePulse
                 return;
             this._lastFile = currentFile;
             this._lastHeartbeat = utcNow;
+            if (WINDOWN_ACTIVED_EVENT.Equals(eventName))
+            {
+                this._ideOpendedTime = utcNow;
+            }
             this.AppendHeartbeat(currentFile, isWrite, utcNow, project, category, entityType);
+            this.Record();
+        }
+
+        // 记录
+        private void Record()
+        {
+            this._currentDayBitSet.clearIfNotToday();
+            int currentSlot = this._currentDayBitSet.setSlotByCurrentTime();
+
+            string today = DateTime.Now.ToString("yyyy-MM-dd");
+            if (this._ideOpendedTime == null)
+            {
+                return;
+            }
+
+            if (today.Equals(this._ideOpendedTime.ToString("yyyy-MM-dd")))
+            {
+                int slotMinus = (currentSlot - 1) >= 0 ? currentSlot - 1 : 0;
+                if (this._currentDayBitSet.get(slotMinus)) return;  // 说明前一个已经打好点了，不需要再向前trace
+
+                int openedSlot = DateBitSlotUtils.getSlotIndex(this._ideOpendedTime);
+                int findVerIndex = -1;
+                for (int i = currentSlot - 1; i >= openedSlot; i--)
+                {
+                    if (_currentDayBitSet.get(i))
+                    {
+                        findVerIndex = i;
+                        break;
+                    }
+                }
+
+                // 只往前追踪5分钟，间隔10个Slot
+                if (findVerIndex >= 0 && findVerIndex < currentSlot && (currentSlot - findVerIndex) < 10)
+                {
+                    for (int j = findVerIndex + 1; j < currentSlot; j++)
+                    {
+                        _currentDayBitSet.set(j);
+                    }
+                }
+            }
         }
 
         private bool EnoughTimePassed(DateTime now) => this._lastHeartbeat < now.AddMinutes(-2.0);
@@ -120,6 +170,7 @@ namespace CodePulse
                 while (this.HeartbeatQueue.TryDequeue(out result2))
                     instance.Add(result2);
                 bool flag = instance.Count > 0;
+
                 this._cliParameters.File = result1.Entity;
                 this._cliParameters.Time = result1.Timestamp;
                 this._cliParameters.IsWrite = result1.IsWrite;
@@ -130,9 +181,10 @@ namespace CodePulse
                 string currentToken = _token;
                 string stdin = (string)null;
 
-                if (flag)
+                if (flag && !string.IsNullOrEmpty(this._token))
                 {
                     // 处理中
+                    DataSenderHelper.Post(_currentDayBitSet, this._token);
                 }
 
             }
@@ -149,6 +201,7 @@ namespace CodePulse
             {
                 Entity = fileName,
                 Timestamp = ToUnixEpoch(time),
+                DT = time,
                 IsWrite = isWrite,
                 Project = project,
                 Category = category,
@@ -160,7 +213,7 @@ namespace CodePulse
 
         private void UpdateTotalTimeToday()
         {
-           
+
         }
 
         public void Dispose()

@@ -178,7 +178,7 @@ namespace CodePulse
                             ? HeartbeatCategory.Debugging
                             : HeartbeatCategory.Coding;
 
-                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category);
+                    _codepulse.HandleActivity(document.FullName, false, GetProjectName(), category, null, CodePulse.WINDOWN_ACTIVED_EVENT);
                 }
             }
             catch (Exception ex)

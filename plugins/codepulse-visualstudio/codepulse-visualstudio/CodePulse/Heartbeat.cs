@@ -12,6 +12,8 @@ namespace CodePulse
 
         public string Timestamp { get; set; }
 
+        public DateTime DT { get; set; }
+
         public string Project { get; set; }
 
         public bool IsWrite { get; set; }
