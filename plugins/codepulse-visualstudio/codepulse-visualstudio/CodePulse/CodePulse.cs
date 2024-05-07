@@ -129,6 +129,7 @@ namespace CodePulse
                 return;
             }
 
+            // 往前追加：有这种场景，打开了ide，打了一个点；过了2分钟，又打了个点，中间的点没打上，需要追加
             if (today.Equals(this._ideActivedTime.ToString("yyyy-MM-dd")))
             {
                 int slotMinus = (currentSlot - 1) >= 0 ? currentSlot - 1 : 0;
