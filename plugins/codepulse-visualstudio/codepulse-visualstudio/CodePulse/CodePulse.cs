@@ -105,10 +105,7 @@ namespace CodePulse
 
             this.Record();
             DateTime utcNow = DateTime.UtcNow;
-            if (WINDOWN_ACTIVED_EVENT.Equals(eventName))
-            {
-                this._ideActivedTime = utcNow;
-            }
+            this._ideActivedTime = utcNow;
 
             if (!isWrite && this._lastFile != null && !this.EnoughTimePassed(utcNow) && currentFile.Equals(this._lastFile))
                 return;
@@ -129,7 +126,7 @@ namespace CodePulse
                 return;
             }
 
-            // 往前追加：有这种场景，打开了ide，打了一个点；过了2分钟，又打了个点，中间的点没打上，需要追加
+            // 往前追加：有这种场景，打开了ide，打了一个点；过了2分钟，又打了个点，中间的点没打上，需要追加。但这里有个问题，IDE处于前台的事件没有??
             if (today.Equals(this._ideActivedTime.ToString("yyyy-MM-dd")))
             {
                 int slotMinus = (currentSlot - 1) >= 0 ? currentSlot - 1 : 0;
@@ -146,7 +143,7 @@ namespace CodePulse
                     }
                 }
 
-                // 只往前追踪5分钟，间隔10个Slot
+                // 只往前追加5分钟，间隔10个Slot
                 if (findVerIndex >= 0 && findVerIndex < currentSlot && (currentSlot - findVerIndex) < 10)
                 {
                     for (int j = findVerIndex + 1; j < currentSlot; j++)
