@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Timers;
+using CodePulse.Framework.Network;
 
 namespace CodePulse
 {
@@ -113,7 +114,7 @@ namespace CodePulse
         {
             this._currentDayBitSet.clearIfNotToday();
             int currentSlot = this._currentDayBitSet.setSlotByCurrentTime();
-
+            this.Logger.Info("记录...count:" + this._currentDayBitSet.countOfCodingSlot());
             string today = DateTime.Now.ToString("yyyy-MM-dd");
             if (this._ideOpendedTime == null)
             {
@@ -145,6 +146,7 @@ namespace CodePulse
                     }
                 }
             }
+            this.Logger.Info("记录完成eee...count:" + this._currentDayBitSet.countOfCodingSlot());
         }
 
         private bool EnoughTimePassed(DateTime now) => this._lastHeartbeat < now.AddMinutes(-2.0);
@@ -185,7 +187,9 @@ namespace CodePulse
                 {
                     // 处理中
                     this.Logger.Info("上报处理...count:" + this._currentDayBitSet.countOfCodingSlot());
-                    DataSenderHelper.Post(_currentDayBitSet, this._token);
+                    SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token);
+                    this.Logger.Info("上报结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" + 
+                                     simpleResult.msg + ", data:" + simpleResult.data);
                 }
 
             }
