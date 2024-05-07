@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,8 +39,7 @@ namespace CodePulse
 
     public class CodePulse : IDisposable
     {
-        public static string CONFIG_FILE = "D:\\temp\\codepulse.cfg";
-        public static string LOG_FILE = "D:\\temp\\codepulse.log";
+        
         public static string WINDOWN_ACTIVED_EVENT = "WindowEventsOnWindowActivated";
         private string _lastFile;
 
@@ -59,7 +59,8 @@ namespace CodePulse
         public CodePulse(ILogger logger)
         {
             this.Logger = logger != null ? logger : throw new ArgumentNullException(nameof(logger));
-            this.Config = new ConfigFile(CONFIG_FILE);
+
+            this.Config = new ConfigFile(CodePulseConsts.CONFIG_FILE);
             this.HeartbeatQueue = new ConcurrentQueue<Heartbeat>();
             this._token = this.Config.GetSetting("api_key");
             this._heartbeatsProcessTimer = new Timer(10000.0);

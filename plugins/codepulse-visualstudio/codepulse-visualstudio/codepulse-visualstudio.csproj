@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CodePulse\CliParameters.cs" />
     <Compile Include="CodePulse\CodePulse.cs" />
+    <Compile Include="CodePulse\CodePulseConsts.cs" />
     <Compile Include="CodePulse\ConfigFile.cs" />
     <Compile Include="CodePulse\tc\DateBitSlotUtils.cs" />
     <Compile Include="CodePulse\tc\DayBitSet.cs" />

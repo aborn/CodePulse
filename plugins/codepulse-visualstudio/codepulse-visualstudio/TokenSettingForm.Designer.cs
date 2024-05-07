@@ -9,6 +9,8 @@ namespace CodePulse
     {
         private System.Windows.Forms.Label lblAPIKey;
         private System.Windows.Forms.TextBox txtAPIKey;
+        private System.Windows.Forms.Label lblAPIURL;
+        private System.Windows.Forms.TextBox txtAPIURL;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label2;
@@ -42,6 +44,8 @@ namespace CodePulse
         {
             this.lblAPIKey = new System.Windows.Forms.Label();
             this.txtAPIKey = new System.Windows.Forms.TextBox();
+            this.lblAPIURL = new System.Windows.Forms.Label();
+            this.txtAPIURL = new System.Windows.Forms.TextBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,7 +54,7 @@ namespace CodePulse
             // lblAPIKey
             // 
             this.lblAPIKey.AutoSize = true;
-            this.lblAPIKey.Location = new System.Drawing.Point(12, 45);
+            this.lblAPIKey.Location = new System.Drawing.Point(14, 92);
             this.lblAPIKey.Name = "lblAPIKey";
             this.lblAPIKey.Size = new System.Drawing.Size(143, 25);
             this.lblAPIKey.TabIndex = 0;
@@ -58,17 +62,34 @@ namespace CodePulse
             // 
             // txtAPIKey
             // 
-            this.txtAPIKey.Location = new System.Drawing.Point(161, 42);
+            this.txtAPIKey.Location = new System.Drawing.Point(161, 89);
             this.txtAPIKey.MaxLength = 41;
             this.txtAPIKey.Name = "txtAPIKey";
             this.txtAPIKey.Size = new System.Drawing.Size(394, 31);
             this.txtAPIKey.TabIndex = 1;
             // 
+            // lblAPIURL
+            // 
+            this.lblAPIURL.AutoSize = true;
+            this.lblAPIURL.Location = new System.Drawing.Point(12, 45);
+            this.lblAPIURL.Name = "lblAPIURL";
+            this.lblAPIURL.Size = new System.Drawing.Size(124, 25);
+            this.lblAPIURL.TabIndex = 0;
+            this.lblAPIURL.Text = "数据上报API :";
+            // 
+            // txtAPIURL
+            // 
+            this.txtAPIURL.Location = new System.Drawing.Point(161, 42);
+            this.txtAPIURL.MaxLength = 41;
+            this.txtAPIURL.Name = "txtAPIURL";
+            this.txtAPIURL.Size = new System.Drawing.Size(394, 31);
+            this.txtAPIURL.TabIndex = 1;
+            // 
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(468, 87);
+            this.btnOk.Location = new System.Drawing.Point(468, 144);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(87, 35);
             this.btnOk.TabIndex = 2;
@@ -102,12 +123,14 @@ namespace CodePulse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(587, 134);
+            this.ClientSize = new System.Drawing.Size(583, 191);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.txtAPIKey);
             this.Controls.Add(this.lblAPIKey);
+            this.Controls.Add(this.txtAPIURL);
+            this.Controls.Add(this.lblAPIURL);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

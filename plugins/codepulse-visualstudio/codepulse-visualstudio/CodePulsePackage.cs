@@ -65,10 +65,16 @@ namespace CodePulse
             var objDte = await GetServiceAsync(typeof(DTE));
             _dte = objDte as DTE;
 
-            _logger = new Logger(CodePulse.CONFIG_FILE);
+            string rootPath = CodePulseConsts.ROOT_PATH;
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
+
+            _logger = new Logger(CodePulseConsts.CONFIG_FILE);
             _codepulse = new CodePulse(_logger);
 
-            _logger.Info("Goooooooood");
+            _logger.Info("初始化CodePulse插件...");
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             // await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);

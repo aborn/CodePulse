@@ -77,7 +77,7 @@ namespace CodePulse
         {
             string strlog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ": " + str + "\r\n";
             
-            using (FileStream fs = new FileStream(CodePulse.LOG_FILE, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            using (FileStream fs = new FileStream(CodePulseConsts.LOG_FILE, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {

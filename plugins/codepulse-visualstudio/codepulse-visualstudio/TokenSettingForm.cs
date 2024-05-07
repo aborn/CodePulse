@@ -30,6 +30,8 @@ namespace CodePulse
             try
             {
                 txtAPIKey.Text = _configFile.GetSetting("api_key");
+                string apiURL = _configFile.GetSetting("api_url");
+                txtAPIURL.Text = string.IsNullOrWhiteSpace(apiURL) ? DataSenderHelper.API : apiURL;
             }
             catch (Exception ex)
             {
@@ -46,6 +48,7 @@ namespace CodePulse
                 if (matched)
                 {
                     _configFile.SaveSetting("settings", "api_key", txtAPIKey.Text.Trim());
+                    _configFile.SaveSetting("settings", "api_url", txtAPIURL.Text.Trim());
                 }
                 else
                 {
