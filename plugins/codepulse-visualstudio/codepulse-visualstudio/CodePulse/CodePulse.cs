@@ -45,7 +45,7 @@ namespace CodePulse
 
         public readonly ConcurrentQueue<Heartbeat> HeartbeatQueue;
         private readonly Timer _heartbeatsProcessTimer;
-        private readonly Timer _totalTimeTodayUpdateTimer;
+        private readonly Timer _postDataTimer; // 数据上报的Timer
         private readonly CliParameters _cliParameters;
 
         public ILogger Logger { get; }
@@ -63,7 +63,8 @@ namespace CodePulse
             this.HeartbeatQueue = new ConcurrentQueue<Heartbeat>();
             this._token = this.Config.GetSetting("api_key");
             this._heartbeatsProcessTimer = new Timer(10000.0);
-            this._totalTimeTodayUpdateTimer = new Timer(60000.0);
+            this._postDataTimer = new Timer(30000.0);  // 每30s上报一次数据
+
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
             this._cliParameters = new CliParameters();
             this._currentDayBitSet = new DayBitSet();
@@ -71,24 +72,26 @@ namespace CodePulse
 
         public async Task InitializeAsync()
         {
-            CodePulse wakaTime = this;
-            wakaTime.Logger.Info("Initializing CodePulse...");
+            CodePulse codePulse = this;
+            codePulse.Logger.Info("Initializing CodePulse...");
             try
             {
-                wakaTime._heartbeatsProcessTimer.Elapsed += new ElapsedEventHandler(wakaTime.ProcessHeartbeats);
-                wakaTime._heartbeatsProcessTimer.Start();
-                wakaTime.UpdateTotalTimeToday((object)null, (ElapsedEventArgs)null);
-                wakaTime._totalTimeTodayUpdateTimer.Elapsed += new ElapsedEventHandler(wakaTime.UpdateTotalTimeToday);
-                wakaTime._totalTimeTodayUpdateTimer.Start();
-                wakaTime.Logger.Info("Finished initializing CodePulse.");
+                codePulse._heartbeatsProcessTimer.Elapsed += new ElapsedEventHandler(codePulse.ProcessHeartbeats);
+                codePulse._heartbeatsProcessTimer.Start();
+
+                codePulse._postDataTimer.Elapsed += new ElapsedEventHandler(codePulse.PostCodingTimeToServer);
+                codePulse._postDataTimer.Start();
+
+
+                codePulse.Logger.Info("Finished initializing CodePulse.");
             }
             catch (WebException ex)
             {
-                wakaTime.Logger.Error("Are you behind a proxy? Try setting a proxy in WakaTime Settings with format https://user:pass@host:port", (Exception)ex);
+                codePulse.Logger.Error("Are you behind a proxy? Try setting a proxy in WakaTime Settings with format https://user:pass@host:port", (Exception)ex);
             }
             catch (Exception ex)
             {
-                wakaTime.Logger.Error("Error installing dependencies", ex);
+                codePulse.Logger.Error("Error installing dependencies", ex);
             }
         }
 
@@ -183,13 +186,9 @@ namespace CodePulse
                 string currentToken = _token;
                 string stdin = (string)null;
 
-                if (flag && !string.IsNullOrEmpty(this._token))
+                if (flag)
                 {
-                    // 处理中
-                    this.Logger.Info("上报处理...count:" + this._currentDayBitSet.countOfCodingSlot());
-                    SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token);
-                    this.Logger.Info("上报结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" + 
-                                     simpleResult.msg + ", data:" + simpleResult.data);
+                   
                 }
 
             }
@@ -214,10 +213,18 @@ namespace CodePulse
             });
         }
 
-        private void UpdateTotalTimeToday(object sender, ElapsedEventArgs e) => Task.Run((Action)(() => this.UpdateTotalTimeToday()));
+        private void PostCodingTimeToServer(object sender, ElapsedEventArgs e) => Task.Run((Action)(() => this.PostCodingTimeToServer()));
 
-        private void UpdateTotalTimeToday()
+        private void PostCodingTimeToServer()
         {
+            if (!string.IsNullOrWhiteSpace(_token))
+            {
+                // 处理中
+                this.Logger.Info("上报处理...count:" + this._currentDayBitSet.countOfCodingSlot());
+                SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token);
+                this.Logger.Info("上报结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" +
+                                 simpleResult.msg + ", data:" + simpleResult.data);
+            }
 
         }
 
@@ -229,11 +236,11 @@ namespace CodePulse
                 this._heartbeatsProcessTimer.Elapsed -= new ElapsedEventHandler(this.ProcessHeartbeats);
                 this._heartbeatsProcessTimer.Dispose();
             }
-            if (this._totalTimeTodayUpdateTimer != null)
+            if (this._postDataTimer != null)
             {
-                this._totalTimeTodayUpdateTimer.Stop();
-                this._totalTimeTodayUpdateTimer.Elapsed -= new ElapsedEventHandler(this.UpdateTotalTimeToday);
-                this._totalTimeTodayUpdateTimer.Dispose();
+                this._postDataTimer.Stop();
+                this._postDataTimer.Elapsed -= new ElapsedEventHandler(this.PostCodingTimeToServer);
+                this._postDataTimer.Dispose();
             }
             this.ProcessHeartbeats();
         }
