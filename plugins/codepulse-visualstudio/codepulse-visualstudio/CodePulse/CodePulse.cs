@@ -59,6 +59,7 @@ namespace CodePulse
             this._heartbeatsProcessTimer = new Timer(10000.0);
             this._totalTimeTodayUpdateTimer = new Timer(60000.0);
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
+            this._cliParameters = new CliParameters();
         }
 
         public async Task InitializeAsync()
