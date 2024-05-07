@@ -61,7 +61,7 @@ namespace CodePulse
 
         public int setSlotByCurrentTime()
         {
-            int slot = DateBitSlotUtils.getSlotIndex(DateTime.Now);
+            int slot = DateSlotUtils.GetSlotIndex(DateTime.Now);
             this.set(slot);
             return slot;
         }

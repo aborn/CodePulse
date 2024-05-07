@@ -39,7 +39,6 @@ namespace CodePulse
 
     public class CodePulse : IDisposable
     {
-
         public static string WINDOWN_ACTIVED_EVENT = "WindowEventsOnWindowActivated";
         private string _lastFile;
 
@@ -53,7 +52,9 @@ namespace CodePulse
         private string _token;
 
         private DateTime _lastHeartbeat;  // 上一次的心跳时间
-        private DateTime _ideOpendedTime; // IDE最近一次打开的时间
+        private DateTime _lastPostTime;   // 上一次数据上报成功的时间
+        private int _lastPostCountOfCoding = 0;  // 上一次上报数据的count数
+        private DateTime _ideActivedTime;        // IDE最近一次打开的时间，但当前没这个事件
         private DayBitSet _currentDayBitSet;
 
         public CodePulse(ILogger logger)
@@ -65,7 +66,6 @@ namespace CodePulse
             this._token = this.Config.GetSetting("api_key");
             this._heartbeatsProcessTimer = new Timer(10000.0);
             this._postDataTimer = new Timer(30000.0);  // 每30s上报一次数据
-
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
             this._cliParameters = new CliParameters();
             this._currentDayBitSet = new DayBitSet();
@@ -107,7 +107,7 @@ namespace CodePulse
             DateTime utcNow = DateTime.UtcNow;
             if (WINDOWN_ACTIVED_EVENT.Equals(eventName))
             {
-                this._ideOpendedTime = utcNow;
+                this._ideActivedTime = utcNow;
             }
 
             if (!isWrite && this._lastFile != null && !this.EnoughTimePassed(utcNow) && currentFile.Equals(this._lastFile))
@@ -124,17 +124,17 @@ namespace CodePulse
             int currentSlot = this._currentDayBitSet.setSlotByCurrentTime();
             this.Logger.Info("--> 记录...count:" + this._currentDayBitSet.countOfCodingSlot());
             string today = DateTime.Now.ToString("yyyy-MM-dd");
-            if (this._ideOpendedTime == null)
+            if (this._ideActivedTime == null)
             {
                 return;
             }
 
-            if (today.Equals(this._ideOpendedTime.ToString("yyyy-MM-dd")))
+            if (today.Equals(this._ideActivedTime.ToString("yyyy-MM-dd")))
             {
                 int slotMinus = (currentSlot - 1) >= 0 ? currentSlot - 1 : 0;
                 if (this._currentDayBitSet.get(slotMinus)) return;  // 说明前一个已经打好点了，不需要再向前trace
 
-                int openedSlot = DateBitSlotUtils.getSlotIndex(this._ideOpendedTime);
+                int openedSlot = DateSlotUtils.GetSlotIndex(this._ideActivedTime);
                 int findVerIndex = -1;
                 for (int i = currentSlot - 1; i >= openedSlot; i--)
                 {
@@ -203,7 +203,6 @@ namespace CodePulse
             }
         }
 
-
         private void AppendHeartbeat(string fileName, bool isWrite, DateTime time, string project, HeartbeatCategory? category, EntityType? entityType)
         {
             this.HeartbeatQueue.Enqueue(new Heartbeat()
@@ -224,13 +223,29 @@ namespace CodePulse
         {
             if (!string.IsNullOrWhiteSpace(_token))
             {
-                // 处理中
-                this.Logger.Info("上报处理...count:" + this._currentDayBitSet.countOfCodingSlot());
+                int count = this._currentDayBitSet.countOfCodingSlot();
+                if (count <= 0) return;
+
+                // 没有变化不，不再频繁上报
+                DateTime nowTime = DateTime.Now;
+                if (_lastPostCountOfCoding == count && _lastPostTime != null && DateSlotUtils.DiffSeconds(_lastPostTime, nowTime) < 300)
+                {
+                    double timeDiff = DateSlotUtils.DiffSeconds(_lastPostTime, nowTime);
+                    this.Logger.Info("不上报，时差：" + timeDiff + ", LastCount:" + _lastPostCountOfCoding + ", CurrentCount:" + count);
+                    return;
+                }
+
+                this.Logger.Info("上报处理...count:" + count);
                 SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token);
+                if (simpleResult.status && simpleResult.code == 200)
+                {
+                    _lastPostCountOfCoding = count;
+                    _lastPostTime = DateTime.Now;
+                }
+
                 this.Logger.Info("上报结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" +
                                  simpleResult.msg + ", data:" + simpleResult.data);
             }
-
         }
 
         public void Dispose()

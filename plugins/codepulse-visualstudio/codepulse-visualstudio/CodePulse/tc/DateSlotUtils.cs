@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CodePulse
 {
-    public class DateBitSlotUtils
+    public class DateSlotUtils
     {
-        public static int getSlotIndex(DateTime dateTime)
+        public static int GetSlotIndex(DateTime dateTime)
         {
             DateTime dt = dateTime == null ? DateTime.Now : dateTime;
             // 获取小时数
@@ -18,6 +18,12 @@ namespace CodePulse
             // 获取秒数
             int second = dt.Second;
             return hour * 60 * 2 + minute * 2 + (second / 30);
+        }
+
+        public static double DiffSeconds(DateTime startTime, DateTime endTime)
+        {
+            TimeSpan secondSpan = new TimeSpan(endTime.Ticks - startTime.Ticks);
+            return secondSpan.TotalSeconds;
         }
     }
 }

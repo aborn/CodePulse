@@ -49,7 +49,7 @@
     <Compile Include="CodePulse\CodePulse.cs" />
     <Compile Include="CodePulse\CodePulseConsts.cs" />
     <Compile Include="CodePulse\ConfigFile.cs" />
-    <Compile Include="CodePulse\tc\DateBitSlotUtils.cs" />
+    <Compile Include="CodePulse\tc\DateSlotUtils.cs" />
     <Compile Include="CodePulse\tc\DayBitSet.cs" />
     <Compile Include="Framework\Network\DataSenderHelper.cs" />
     <Compile Include="CodePulse\Heartbeat.cs" />
