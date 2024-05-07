@@ -2,6 +2,7 @@ package com.github.aborn.codepulse.api.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.github.aborn.codepulse.api.UserActionRequest;
+import com.github.aborn.codepulse.api.UserRequest;
 import com.github.aborn.codepulse.api.service.CodePulseDataService;
 import com.github.aborn.codepulse.api.service.DayBitSetsDataManager;
 import com.github.aborn.codepulse.common.datatypes.BaseResponse;
@@ -48,15 +49,16 @@ public class CodePulseApiController {
             log.warn("上报参数错误！！");
             return BaseResponse.fail("参数错误", 501);
         }
-        UserInfo userInfo = userInfoService.queryUserInfo(request.getToken());
-        if (userInfo == null) {
-            log.warn("非法上报，该用户不存在, token: {}", request.getToken());
-            return BaseResponse.fail("非法上报，该用户不存在", 502);
-        }
 
         DayBitSet dayBitSet = new DayBitSet(request.getDay(), request.getDayBitSetArray(), request.getToken());
         if (dayBitSet.isEmptySlot()) {
             return BaseResponse.fail("编程数据为空slotCount=0", 502);
+        }
+
+        UserInfo userInfo = userInfoService.queryUserInfo(request.getToken());
+        if (userInfo == null) {
+            log.warn("非法上报，该用户不存在, token: {}", request.getToken());
+            return BaseResponse.fail("非法上报，该用户不存在", 502);
         }
 
         // 用户上报数据存储
@@ -64,9 +66,26 @@ public class CodePulseApiController {
     }
 
     /**
+     * 用于测试
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "userAction2")
+    @ResponseBody
+    public BaseResponse<String> postUserAction2(@RequestBody UserRequest request) {
+        log.info("Request, content{}", JSONObject.toJSONString(request));
+        if (StringUtils.isBlank(request.getToken()) || StringUtils.isBlank(request.getDay())) {
+            log.warn("上报参数错误！！");
+            return BaseResponse.fail("参数错误", 501);
+        }
+
+        return BaseResponse.success("GOOD");
+    }
+
+    /**
      * 服务器运行状态
      * http://127.0.0.1:8001/api/v1/codepulse/status
-     * http://192.168.25.86:8001/api/v1/codepulse/status
+     * http://192.168.31.154:8001/api/v1/codepulse/status
      *
      * @return
      */

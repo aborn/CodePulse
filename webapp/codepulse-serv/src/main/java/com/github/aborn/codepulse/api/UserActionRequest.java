@@ -11,12 +11,15 @@ import java.io.Serializable;
  * @date 2023/02/10 09:54
  */
 @Data
-public class UserActionRequest implements Serializable {
-
-    @NonNull
-    String token;
+public class UserActionRequest extends UserRequest implements Serializable {
+    public UserActionRequest() {
+    }
 
     @NonNull byte[] dayBitSetArray;
 
-    @NonNull String day;
+    // IDE类型， 0:未知，1:表示 intellij, 2:表示 vscode, 3:表示 visual studio
+    int ide = 0;
+
+    // 扩展参数，留着以后用
+    String ext;
 }
