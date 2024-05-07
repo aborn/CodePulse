@@ -1,12 +1,10 @@
-﻿using System;
+﻿using CodePulse.Framework.Network;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using CodePulse.Framework.Network;
-using Newtonsoft.Json.Linq;
 
 namespace CodePulse
 {
@@ -59,20 +57,20 @@ namespace CodePulse
             }
         }
 
-        public static SimpleResult Post(DayBitSet dayBitSet, string token)
+        public static SimpleResult Post(DayBitSet dayBitSet, string token, string url)
         {
             SimpleResult simpleResult = new SimpleResult();
             try
             {
+                string api = string.IsNullOrWhiteSpace(url) ? API : url;
                 string postJSONData = dayBitSet.toJSONString(token);
-                string result = Post(API, postJSONData);
+                string result = Post(api, postJSONData);
                 Console.WriteLine(result);
                 JObject jObject = JObject.Parse(result);
                 simpleResult.data = (string)jObject.GetValue("data");
-                simpleResult.status = (bool)jObject.GetValue("status");   // true表示成功
-                simpleResult.msg = (string)jObject.GetValue("msg");     // 
+                simpleResult.status = (bool)jObject.GetValue("status");    // true表示成功
+                simpleResult.msg = (string)jObject.GetValue("msg");        // 消息
                 simpleResult.code = (int)jObject.GetValue("code");         // 200表示成功
-
             }
             catch (Exception e)
             {
@@ -116,6 +114,5 @@ namespace CodePulse
 
             return result;
         }
-
     }
 }

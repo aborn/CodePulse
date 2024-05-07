@@ -1,14 +1,13 @@
-﻿using System;
+﻿using CodePulse.Framework.Network;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Timers;
-using CodePulse.Framework.Network;
 
 namespace CodePulse
 {
@@ -50,6 +49,7 @@ namespace CodePulse
         public ILogger Logger { get; }
         public readonly ConfigFile Config;
         private string _token;
+        private string _url;
 
         private DateTime _lastHeartbeat;  // 上一次的心跳时间
         private DateTime _lastPostTime;   // 上一次数据上报成功的时间
@@ -61,9 +61,10 @@ namespace CodePulse
         {
             this.Logger = logger != null ? logger : throw new ArgumentNullException(nameof(logger));
 
-            this.Config = new ConfigFile(CodePulseConsts.CONFIG_FILE);
+            this.Config = new ConfigFile(CodePulseConst.CONFIG_FILE);
             this.HeartbeatQueue = new ConcurrentQueue<Heartbeat>();
-            this._token = this.Config.GetSetting("api_key");
+            this._token = this.Config.GetSetting(CodePulseConst.CONFIG_KEY_TOKEN);
+            this._url = this.Config.GetSetting(CodePulseConst.CONFIG_KEY_URL);
             this._heartbeatsProcessTimer = new Timer(10000.0);
             this._postDataTimer = new Timer(30000.0);  // 每30s上报一次数据
             this._lastHeartbeat = DateTime.UtcNow.AddMinutes(-3.0);
@@ -234,7 +235,7 @@ namespace CodePulse
                 }
 
                 this.Logger.Info("上报处理...count:" + count);
-                SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token);
+                SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token, this._url);
                 if (simpleResult.status && simpleResult.code == 200)
                 {
                     _lastPostCountOfCoding = count;

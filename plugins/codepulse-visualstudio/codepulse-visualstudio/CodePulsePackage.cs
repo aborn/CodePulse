@@ -27,7 +27,7 @@ namespace CodePulse
     /// To get loaded into VS, the package must be referred by &lt;Asset Type="Microsoft.VisualStudio.VsPackage" ...&gt; in .vsixmanifest file.
     /// </para>
     /// </remarks>
-    [Guid(CodePulseConsts.PackageGuidString)]
+    [Guid(CodePulseConst.PackageGuidString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideService(typeof(CodePulsePackage), IsAsyncQueryable = true)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
@@ -69,13 +69,13 @@ namespace CodePulse
             var objDte = await GetServiceAsync(typeof(DTE));
             _dte = objDte as DTE;
 
-            string rootPath = CodePulseConsts.ROOT_PATH;
+            string rootPath = CodePulseConst.ROOT_PATH;
             if (!Directory.Exists(rootPath))
             {
                 Directory.CreateDirectory(rootPath);
             }
 
-            _logger = new Logger(CodePulseConsts.CONFIG_FILE);
+            _logger = new Logger(CodePulseConst.CONFIG_FILE);
             _codepulse = new CodePulse(_logger);
 
             _logger.Info("初始化CodePulse插件...");

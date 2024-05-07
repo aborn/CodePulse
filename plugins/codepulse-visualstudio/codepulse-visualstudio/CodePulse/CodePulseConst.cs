@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CodePulse
 {
-    public class CodePulseConsts
+    public class CodePulseConst
     {
         public static string CODE_PULSE = "CodePulse";
         public static string ROOT_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), CODE_PULSE);
@@ -16,5 +16,8 @@ namespace CodePulse
 
         public const string PackageGuidString = "c74266cb-ac06-4f69-915e-503598095b0e";
         public const string GuidWakaTimeUIString = "d74266cb-ac06-4f69-915e-503598095b0f";
+
+        public const string CONFIG_KEY_URL = "api_url";
+        public const string CONFIG_KEY_TOKEN = "api_key";
     }
 }
