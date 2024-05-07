@@ -184,6 +184,7 @@ namespace CodePulse
                 if (flag && !string.IsNullOrEmpty(this._token))
                 {
                     // 处理中
+                    this.Logger.Info("上报处理...count:" + this._currentDayBitSet.countOfCodingSlot());
                     DataSenderHelper.Post(_currentDayBitSet, this._token);
                 }
 

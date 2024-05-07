@@ -66,6 +66,16 @@ namespace CodePulse
             return slot;
         }
 
+        public int countOfCodingSlot()
+        {
+            int count = 0;
+            for (int i = 0; i < SLOT_SIZE; i++)
+            {
+                if (this.codingBitSet.Get(i)) count++;
+            }
+            return count;
+        }
+
         public byte[] getDayBitSetByteArray()
         {
             byte[] ret = new byte[(codingBitSet.Length - 1) / 8 + 1];
