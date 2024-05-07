@@ -70,6 +70,7 @@ namespace CodePulse
             this._currentDayBitSet = new DayBitSet();
         }
 
+
         public async Task InitializeAsync()
         {
             CodePulse codePulse = this;
@@ -97,6 +98,7 @@ namespace CodePulse
 
         public void HandleActivity(string currentFile, bool isWrite, string project, HeartbeatCategory? category = null, EntityType? entityType = null, string eventName = "")
         {
+            this.Logger.Info("HandleActivity...:" + eventName);
             if (currentFile == null)
                 return;
             DateTime utcNow = DateTime.UtcNow;
@@ -117,7 +119,7 @@ namespace CodePulse
         {
             this._currentDayBitSet.clearIfNotToday();
             int currentSlot = this._currentDayBitSet.setSlotByCurrentTime();
-            this.Logger.Info("记录...count:" + this._currentDayBitSet.countOfCodingSlot());
+            this.Logger.Info("--> 记录...count:" + this._currentDayBitSet.countOfCodingSlot());
             string today = DateTime.Now.ToString("yyyy-MM-dd");
             if (this._ideOpendedTime == null)
             {
@@ -149,7 +151,7 @@ namespace CodePulse
                     }
                 }
             }
-            this.Logger.Info("记录完成eee...count:" + this._currentDayBitSet.countOfCodingSlot());
+            this.Logger.Info("--> 记录完成eee...count:" + this._currentDayBitSet.countOfCodingSlot());
         }
 
         private bool EnoughTimePassed(DateTime now) => this._lastHeartbeat < now.AddMinutes(-2.0);
