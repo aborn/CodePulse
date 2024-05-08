@@ -3,7 +3,10 @@
     <Metadata>
         <Identity Id="a635ec18-1b8f-468d-832e-8e5eda489815" Version="1.0" Language="en-US" Publisher="Company" />
         <DisplayName>CodePulse</DisplayName>
-        <Description xml:space="preserve">Empty VSIX Project.</Description>
+        <Description xml:space="preserve">CodePulse visual studio extension.</Description>
+        <MoreInfo>https://github.com/aborn/CodePulse</MoreInfo>
+        <Icon>Resources\logo.png</Icon>
+        <Tags>CodePulse, time tracker, productivity, reports</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
