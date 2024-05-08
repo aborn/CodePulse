@@ -92,6 +92,7 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\logo.png" />
     <Content Include="Resources\SettingCommand.png" />
   </ItemGroup>
   <ItemGroup>

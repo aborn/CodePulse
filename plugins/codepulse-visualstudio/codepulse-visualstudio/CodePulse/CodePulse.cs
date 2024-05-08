@@ -120,7 +120,7 @@ namespace CodePulse
         {
             this._currentDayBitSet.clearIfNotToday();
             int currentSlot = this._currentDayBitSet.setSlotByCurrentTime();
-            this.Logger.Info("--> 记录...count:" + this._currentDayBitSet.countOfCodingSlot());
+            this.Logger.Info("--> 记录开始...count:" + this._currentDayBitSet.countOfCodingSlot());
             string today = DateTime.Now.ToString("yyyy-MM-dd");
             if (this._ideActivedTime == null)
             {
@@ -153,7 +153,7 @@ namespace CodePulse
                     }
                 }
             }
-            this.Logger.Info("--> 记录完成eee...count:" + this._currentDayBitSet.countOfCodingSlot());
+            this.Logger.Info("--> 往前追回完成...count:" + this._currentDayBitSet.countOfCodingSlot());
         }
 
         private bool EnoughTimePassed(DateTime now) => this._lastHeartbeat < now.AddMinutes(-2.0);
@@ -231,7 +231,7 @@ namespace CodePulse
                 int count = this._currentDayBitSet.countOfCodingSlot();
                 if (count <= 0) return;
 
-                // 没有变化不，不再频繁上报
+                // 没有变化不，不再频繁上报，时间间隔要达到5分钟以上
                 DateTime nowTime = DateTime.Now;
                 if (_lastPostCountOfCoding == count && _lastPostTime != null && DateSlotUtils.DiffSeconds(_lastPostTime, nowTime) < 300)
                 {
@@ -240,15 +240,14 @@ namespace CodePulse
                     return;
                 }
 
-                this.Logger.Info("上报处理...count:" + count);
+                this.Logger.Info("数据上报到服务器...count:" + count);
                 SimpleResult simpleResult = DataSenderHelper.Post(_currentDayBitSet, this._token, this._url);
                 if (simpleResult.status && simpleResult.code == 200)
                 {
                     _lastPostCountOfCoding = count;
                     _lastPostTime = DateTime.Now;
                 }
-
-                this.Logger.Info("上报结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" +
+                this.Logger.Info("服务器返回结果：" + simpleResult.status + ", code:" + simpleResult.code + ", msg:" +
                                  simpleResult.msg + ", data:" + simpleResult.data);
             }
         }
