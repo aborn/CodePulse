@@ -32,6 +32,11 @@ namespace CodePulse
             codingBitSet = new BitArray(bytes);
         }
 
+        public string GetDay()
+        {
+            return this.day;
+        }
+
         public void set(int slot)
         {
             this.codingBitSet.Set(slot, true);

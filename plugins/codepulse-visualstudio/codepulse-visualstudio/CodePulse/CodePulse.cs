@@ -222,6 +222,12 @@ namespace CodePulse
         {
             if (!string.IsNullOrWhiteSpace(_token))
             {
+                if (!this._currentDayBitSet.isToday())
+                {
+                    this.Logger.Info("非当天数据，不上报...day:" + this._currentDayBitSet.GetDay());
+                    return;
+                }
+
                 int count = this._currentDayBitSet.countOfCodingSlot();
                 if (count <= 0) return;
 
