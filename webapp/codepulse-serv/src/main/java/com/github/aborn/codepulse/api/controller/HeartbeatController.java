@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2023/02/10 10:21
  */
 @RestController
-@RequestMapping(value = "/api/codepulse/v1/")
+@RequestMapping(value = "/api/v1/codepulse/")
 public class HeartbeatController {
 
     // http://localhost:8001/api/codepulse/v1/live
