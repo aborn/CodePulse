@@ -19,9 +19,11 @@ Config this extension as following steps:
 
 After finished, your can view your code time in admin.  
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## Development
+Install deps.
+```
+npm install
+```
 
 ## Release Notes
 

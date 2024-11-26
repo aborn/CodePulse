@@ -30,7 +30,7 @@ export class TimeTrace {
 
     public record(): void {
         if (!this.isActive) {
-            Logger.debug('vscode window deactived, do not record.');
+            // Logger.debug('vscode window deactived, do not record.');
             return;
         }
 

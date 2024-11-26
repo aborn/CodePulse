@@ -21,6 +21,12 @@ export class DayBitSet {
         return slot;
     }
 
+    public getSlotValue(): number {
+        this.clearIfNotToday();
+        let slot = dateutils.getSlotIndex();
+        return this.bitset.get(slot);
+    }
+
     public clearIfNotToday(): void {
         if (dateutils.isToday(this.day)) {
             return;

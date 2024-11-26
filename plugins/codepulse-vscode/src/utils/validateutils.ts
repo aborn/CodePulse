@@ -5,7 +5,7 @@ export class ValidateUtils {
     public static isLegalFileName(fileName: string): boolean {
         if (fileName
             && fileName.trim().startsWith("extension-output")
-            && (!fileName.trim().includes("."))) {
+            && fileName.trim().endsWith("CodePulseLog")) {
             return false;
         }
 
