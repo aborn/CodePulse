@@ -15,5 +15,19 @@ else
     echo "Network $network_name already exists."
 fi
 
+# 容器存在，则删除
+container_name="codepulse_db"
+if [ "$(docker ps -qa -f name=$container_name)" ]; then
+    echo ":: Found container - $container_name"
+    if [ "$(docker ps -q -f name=$container_name)" ]; then
+        echo ":: Stopping running container - $container_name"
+        docker stop $container_name;
+    fi
+    echo ":: Removing stopped container - $container_name"
+    docker rm $container_name;
+else
+    echo ":: container - $container_name doesnot exists!"
+fi
+
 # 创建数据库容器
 docker run -itd --name codepulse_db -p 3308:3306  --net=codepulse_net codepulse_db:v1
