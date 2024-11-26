@@ -3,8 +3,17 @@
 # 构建数据库的docker镜像 （含有初始化数据）
 docker build -t codepulse_db:v1 .
 
-# 创建一个网络
-docker network create codepulse_net
+# 创建虚拟网络
+network_name="codepulse_net"
+
+# 检查网络是否存在
+if ! docker network ls | grep -q "$network_name"; then
+    # 如果网络不存在，则创建网络
+    echo "Creating network: $network_name"
+    docker network create "$network_name"
+else
+    echo "Network $network_name already exists."
+fi
 
 # 创建数据库容器
 docker run -itd --name codepulse_db -p 3308:3306  --net=codepulse_net codepulse_db:v1
